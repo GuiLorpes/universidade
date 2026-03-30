@@ -1,0 +1,75 @@
+\documentclass[12pt]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{indentfirst}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[letterpaper,
+            top=1.5cm,
+            bottom=1.5cm,
+            left=2.75cm,
+            right=2.75cm,
+            marginparwidth=1.75cm]{geometry}
+
+\title{Resolução Lista 1 -- ORD}
+\author{Guilherme Lopes}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+    % \begin{itemize}[label=R:]
+    %     \item 
+    % \end{itemize}
+Supondo um disco com as características abaixo, responda as questões a seguir
+\begin{itemize}
+    \item 8 superficies
+    \item 4096 trilhas/superficie
+    \item 110 setores/trilha
+    \item 512 bytes/setor
+    \item Velocidade de rotação = 5400RPM
+    \item Tempo médio de seek = 12ms
+    \item Latência média = 5,6ms
+\end{itemize}
+\begin{enumerate}[label=\arabic*.]
+    \item Quantos cilindros o disco possui?
+    \begin{itemize}[label=R:]
+        \item A quantia de cilindros em um disco é igual ao numero de 
+        trilhas/superfície, ou seja, nesse disco temos 4096 cilindros.
+    \end{itemize}
+    \item Quantos cilindros serão necessários para armazenar um arquivo com 
+    80.000 registros de 128 bytes cada?
+    \begin{itemize}[label=R:]
+        \item Considerando que a capacidade do cilindro é dada por:
+        \[\textbf{capacidade das trilhas $\times$ número de trilhas do cilindro}\]
+        E a capacidade da trilha é dada por:
+        \[\textbf{número de bytes por setor $\times$ número de setores por 
+        trilha}\]
+        Visto que temos 110 setores por trilha e 512 bytes por setor, a 
+        capacidade das trilhas é igual a \[512 \times 110 = 56320\]
+        Para armazenar um arquivo de 80.000 registros de 128 bytes cada, 
+        precisaremos armazenar 10240000 bytes, por cilindro iremos conseguir 
+        armazenar cerca de \[56320 \times 8 = 450560\]
+        Para armazenar 10240000 bytes, precisaremos de 
+        \[\frac{10240000}{450560} = 22,72\]
+        Ou seja, para armazenar um arquivo de 80000 registros de 128 bytes cada, 
+        precisaremos de 23 cilindros
+        
+    \end{itemize}
+    \item Sabendo que o tempo de transferência de uma trilha é igual ao tempo 
+    de rotação, qual é o tempo (em milissegundos) de transferência de uma trilha?
+    \begin{itemize}[label=R:]
+        \item Visto que a velocidade de rotação é de 5400 RPM, o tempo necessário 
+        (em milissegundos) para fazer uma rotação será dado pela razão 
+        \[\frac{5400}{1}=\frac{60000}{x} \Rightarrow 5400x=60000 \Rightarrow 
+        x=\frac{60000}{5400} = 11.1ms\]
+        Logo, o tempo de transfencia é de 11.1ms
+    \end{itemize}
+    \item Qual o tempo médio (em milissegundos) estimado para a leitura de uma 
+    trilha aleatória do disco
+\end{enumerate}
+\end{document}

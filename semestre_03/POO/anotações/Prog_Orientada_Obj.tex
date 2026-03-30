@@ -1,0 +1,121 @@
+\documentclass[12pt]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{indentfirst}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[letterpaper,
+            top=1.5cm,
+            bottom=1.5cm,
+            left=2.75cm,
+            right=2.75cm,
+            marginparwidth=1.75cm]{geometry}
+
+\title{Programação Orientada a Objetos}
+\author{Prof. João Choma Neto}
+\date{\today}
+
+\begin{document}
+\maketitle
+GitHub do Professor: \url{https://github.com/JoaoChoma/}
+
+\tableofcontents
+\addcontentsline{toc}{section}{Apresentação da Matéria}
+\section*{Apresentação da Matéria}
+    \subsection{O que vamos estudar?}
+    \begin{itemize}
+        \item Programação orientada a objetos: abstração, encapsulamento, 
+        herança e polimorfismo
+        \item Implementação de aplicações em linguagem orientada a objetos
+        \item Interface grafica do usuário e a programação orientada a eventos
+        \item Presistência de objetos e integração com banco de dados
+    \end{itemize}
+    \subsection{Por que esta disciplina é importante?}
+    \begin{itemize}
+        \item Organização do código -- A orientação a objetos ajuda a 
+        estruturar melhor responsabilidades, reduzir acoplamento e favorecer 
+        manutenção.
+        \item Modelagem mais próxima do problema -- Classes e objetos permitem 
+        representar entidades, comportamentos e relacionamentos de forma mais 
+        natural.
+        \item Base do desenvolvimento moderno -- Muitas aplicações reais usam 
+        POO em conjunto com interface, eventos, bancos de dados, frameworks.
+        \item Aprendizagem progressiva -- O semestre evolui da base conceitual 
+        para uma aplicação semestral mais completa.
+        \item Integração de camadas -- A disciplina não para nas classes: ela 
+        chega à interface grafica e à persistência de dados. 
+    \end{itemize}
+
+    \subsection{Fluxo do Semestre}
+    \begin{enumerate}
+        \item Fundamentos -- Classes, objetos, encapsulamento, heranla e 
+        polimorfismo.
+        \item Implementação -- Variaveis, estruturas, coleções, exceções, 
+        classes abstratas e interfaces.
+        \item Interface Gráfica -- MVC, componentes, layouts, e tratamento de 
+        eventos.
+        \item Persistência -- Acesso a banco, mapeamento objeto-relacional, 
+        POJO e DAO.
+        \item Projetos semestral -- Aplicação evoluída ao longo do semestre.
+    \end{enumerate}
+
+\section{Conceitos}
+\begin{itemize}
+    \item Objetos
+    \begin{itemize}
+        \item Qualquer elemento concreto ou abstrato que existe no mundo real, 
+        que se pode individualizar por possuir comportamentos e caracteristicas 
+        proprios.
+        \item Qualquer coisa do mundo real que pode ser representada no mundo 
+        virtual.
+        \item Objetos abstratos
+        \begin{itemize}
+            \item Coisas que não são visiveis, uma ideia, como contas 
+            bancárias e transações financeiras.
+        \end{itemize}
+        \item Objetos concretos
+        \begin{itemize}
+            \item Coisas que são palpaveis, como um carro ou uma pessoa.
+        \end{itemize}
+    \end{itemize}
+    \item Classe
+    \begin{itemize}
+        \item Representa a abstração de um conjunto de objetos do mundo real 
+        que possui comportamentos e caracteristicas comuns.
+        \item Atributos: Caracteristicas particulares que os objetos de uma 
+        classe possuem, assumindo valores diferentes para cada objeto.
+        \item Métodos/Operações: Ordens que fazem o objeto executar ações. As 
+        operações são tudo o que os objetos de uma calsse fazem. O método é a 
+        lógica interna de uma operação. 
+    \end{itemize}
+    \item Instância
+    \begin{itemize}
+        \item É cada umas das ocorrências de um objeto formado a partir da 
+        sua classe.
+    \end{itemize}
+    \item Atributos
+    \begin{itemize}
+        \item É uma caracteristica particular que os objetos de uma classe 
+        possuem, assumindo valores diferentes para cada objeto.
+    \end{itemize}
+    \item Operações
+    \begin{itemize}
+        \item É uma ordem que faz um objeto executar uma ação. As operações são 
+        tudo o que os objetos de uma classe fazem e nada além do que esses objetos 
+        podem fazer.
+    \end{itemize}
+    \item Métodos
+    \begin{itemize}
+        \item É o algoritmo (conjunto de passos) que um objeto executa quando 
+        reage a uma operação. O método é a lógica interna de uma operação.
+        \item Dentro da programação orientada a objetos nós não acessamos as 
+        variáveis diretamente, acessamos ela por meio de métodos.
+    \end{itemize}
+    
+\end{itemize}
+
+\end{document}

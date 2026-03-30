@@ -1,0 +1,657 @@
+\documentclass[12pt]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{indentfirst}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[letterpaper,
+            top=1.5cm,
+            bottom=1.5cm,
+            left=2.75cm,
+            right=2.75cm,
+            marginparwidth=1.75cm]{geometry}
+
+\title{Organização e Recuperação de Dados}
+\author{Prof. Jonathan}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Memória Secundária}
+\begin{itemize}
+    \item Por que discos e fitas são lentos?
+    \begin{itemize}
+        \item Por que eles são dispositivos eletromagnéticos que envolvem 
+        partes mecânicas, enquanto outros tipos de memoria são eletrônicas.
+    \end{itemize}
+    \item SSDs não possuem partes mecânicas, por isso são dispositivos 
+    secundários mais rápidos
+    \begin{itemize}
+        \item Mas ainda são milhares de vezes mais lentos do que a memória RAM
+    \end{itemize}
+    \item Fitas são dispositivos seriais, enquanto isso, HDs e SSDs são 
+    dispositivos de acesso aleatorio
+\end{itemize}
+
+\subsection{Discos Magnéticos}
+    \begin{itemize}
+        \item Composição:
+        \begin{itemize}
+            \item Um ou mais pratos circulares sobrepostos atravessados por um 
+            eixo que os rotaciona
+            \item Os pratos são construidos com materiais não magnéticos e 
+            revestidos por uma cobertura magnetica extremamente fina
+            \item Cabeças de leitura/escrita posicionadas sovre as superficies 
+            do prato sçao responsaveis pela leitura e gravação dos dados
+            \item \textbf{SEEKING} é um termo importante
+        \end{itemize}
+        \item Funcionamento
+        \begin{itemize}
+            \item Durante uma leitura/gravação a cabeça permanece parada 
+            enquanto o prato gira sob ela
+            \begin{itemize}
+                \item Esta diposição da origem a organizalçao dos dados no 
+                prato como um conjunto de aneis concentricos chamados de trilhas
+            \end{itemize}
+            \item Pulsos magneticos enviados a uma bobina na cabeça de L/E 
+            produzem campos magneticos que alteram a polaridade de pequenas 
+            regioes de uma trilha do prato
+            \begin{itemize}
+                \item A diferença no sentido da polaridade entre cada região 
+                codifica a informação binaria (0s e 1s) da trila 
+            \end{itemize}
+            \item Durante a leitura, quando as regioes magnetiadas passam sob 
+            a cabeça, mudanças de polaridade induzem pulsos elétricos na bobina 
+            da cabeca são convertidos novamente para a informação binária 
+            equivalente
+        \end{itemize}
+        \item Organização dos discos
+        \begin{itemize}
+            \item Os dados são armazenados em trilhas sucessivas na superfície 
+            de um prato
+            \item Cada trilha é dividida em setores
+            \begin{itemize}
+                \item Um setor é a menor parte endereçável do disco (512B/4KB)
+            \end{itemize}
+            \item Quando é realizada uma chamada READ() por um bit específico
+            \begin{itemize}
+                \item O disco localiza a superficie, a trilha e o setor corretos
+                \item Os dados de um setor inteiros são copiados para um buffer
+                \item A partir do buffer, se encontra o byte especifico que foi 
+                requisitado
+            \end{itemize}
+            \item Normalmente os discos vêm setorizados de fabrica (formatação 
+            física)
+            \item OBS.: É importante notar que, lógicamente, o disco é visto 
+            como um vetor continuo de setores, i.e, a organização fisica é 
+            transparente para o sistema
+            \item Lacunas:
+            \begin{itemize}
+                \item Lacunas entre setores: Evitam que seja imposta uma precisão 
+                absurda para a cabeça de L/E
+                \item Lacunas entre trilhas: Evitam, ou pelo menos minimizam, 
+                erros devido ao desalinhamento da cabeça ou simplesmente à 
+                interferencia de campos magnéticos 
+            \end{itemize}
+            \item Em um disco formado por diversos pratos, o conjunto de 
+            trilhas na mesma direção (sobrepostas em pratos diferentes) forma 
+            um cilindro
+            \begin{itemize}
+                \item Um prato possui o mesmo número de trilhas na parte de 
+                cima, e na parte de baixo. (Na hora de contar as trilhas de um 
+                prato, se contar só pela parte de cima, lembrar de multiplicar 
+                por 2)
+            \end{itemize}
+            \item Toda a informação adicional em um cilindro pode ser acessada 
+        \end{itemize}
+        \item Estimativa de capacidade
+        \begin{itemize}
+            \item A quantidade de dados que pode ser armazenada em uma trilha 
+            depende do quão densamente os bits podem ser armazenados
+            \item A densidade depende da qualidade da midia e da precisão das 
+            cabeças de leitura/escrita
+            \begin{itemize}
+                \item Ex.: Um disco rigido de 1TB Seagate 7200RPM ($\pm$ R\$300,00)
+                \begin{itemize}
+                    \item 16383 trilhas/superfície e 63 setores (de 4k) por 
+                    trilha (256KB/trilha)
+                \end{itemize}
+            \end{itemize}
+            \item Sendo que: 
+            \begin{itemize}
+                \item Números de Cilindros = Número de trilhas/superfície
+                \item Número de Trilhas do Cilindro = 2x o número de pratos 
+            \end{itemize}
+            \item Temos que:
+            \begin{itemize}
+                \item Capacidade da trilha = 
+                \[
+                \text{Numero de bytes por setor} \times \text{Números de setor 
+                por trilha} 
+                \]
+                \item Capacidade do cilindro = 
+                \[
+                \text{Capacidade da trilha} \times \text{Números de trilhas do 
+                cilindro} 
+                \]
+                \item Capacidade do disco = 
+                \[
+                \text{Capacidade do cilindro} \times \text{Número de cilindros} 
+                \]
+            \end{itemize}
+            \item Exemplo
+            \begin{itemize}
+                \item Propriedades do disco:
+                \begin{itemize}
+                    \item 512 byts/setor
+                    \item 63 setores/trilha
+                    \item 16 trilhas/cilindro
+                    \item 4080 cilindros
+                \end{itemize}
+                \item Quantos cilindros são necessários para armazenar um 
+                arquivo de 50000 registros de 256 bytes cada
+                \begin{itemize}[label=R:]
+                    \item \dots
+
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+        \item Clusters
+        \begin{itemize}
+            \item Organização lógica que visa aumentar o desempenho e mantida 
+            pelo gerenciador de arquivos, presente no S.O
+            \begin{itemize}
+                \item Quando um arquivo é acessado por uma aplicalçao é o 
+                gerenciador de arquivos quem associa o arquivo lógico às suas 
+                posições fisicas
+                \item O arquivo é visto como uma série de clusters
+            \end{itemize}
+            \item Para fazer esse mapeamento, o gerenciador de arquivos
+            utiliza uma tabela de alocação de arquivos (chamada de File 
+            Allocation Table (FAT) em alguns S.Os.)
+            \item Em vez da tabela de alocação endereçar setores, endereça 
+            clusters
+            \begin{itemize}
+                \item Um cluster é um conjunto de um ou mais setores contíguos 
+                do disco
+                \begin{itemize}
+                    \item Todos os setores de um cluster podem ser lidos sem 
+                    seeks adicionais e sem a necessidade de consultas adicionais 
+                    à tabela de alocação
+                \end{itemize}
+                \item A tabela de alocação contem uma lista de todos os 
+                clusters de um arquivo, ordenados de acordo com a ordem lógica 
+                dos setores que eles contém
+            \end{itemize}
+            \item Cada cluster do disco é usado para um unico arquivo, ou seja, 
+            em um mesmo cluster não haverá informações sobre mais de um arquivo. 
+        \end{itemize}
+        \item Custos de acesso a disco
+        \begin{itemize}
+            \item Em termos de tempo, o custo de um acesso ao disco é a soma 
+            de três tempos:
+            \begin{itemize}
+                \item Posicionamento (Seeking) -- Tempo necessário para mover a 
+                cabeça de L/E até a trilha correta (Depende da distância a ser 
+                percorrida)
+                \item Latência (Rotational Delay ou Latency) -- Tempo necessário 
+                para a cabeça de L/E se posicionar no setor correto.
+                \item Transferência (Transfer Time) -- Tempo necessário para um 
+                byte ser lido na superfície do disco e transferido para o buffer 
+                interno da controladora
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+
+    \subsection{Custo de Acesso ao Disco}
+    \begin{itemize}
+        \item Seek Time -- Posicionamento
+        \begin{itemize}
+            \item É impossivel saber exatamente quantas trilhas serão 
+            percorridas durante as buscas
+            \item O que se faz é estimar um tempo médio, assumindo que as 
+            posições iniciais e finais para cada acesso são aleatórias
+            \item Por meio de estudos empiricos, estumou-se que uma busca 
+            percorre, em média, 1/3 do total de trilhas, sendo que o tempo 
+            gasto para percorrer esse numero de trilhas tem sido usado 
+            pelos fabricantes como indicador do tempo medio de busca (seek 
+            time).
+            \item O que ocorre quando um arquivo está armazenado em 
+            cilindros consecutivos e é acessado sequencialmente?
+            \begin{itemize}
+                \item O seek time é reduzido! (Melhor situação)
+            \end{itemize}
+            \item O que ocorre quando dois arquivos, localizados em
+            extremos opostos do disco (um no cilindro mais externo e
+            outro no mais interno), são acessados alternadamente?
+            \begin{itemize}
+                \item O seek time é alto! (Pior situação)
+            \end{itemize}
+            \item O tempo de seek tende a ser mais caro em sistemas
+            multiusuários em que vários processos concorrem pelo uso do 
+            disco
+        \end{itemize}
+        \item Latência
+        \begin{itemize}
+            \item Tempo gasto para a cabeça de L/E encontre o setor desejado
+            \begin{itemize}
+                \item Estima-se que o tempo medio seja a metade do tempo 
+                de uma rotação (na pratica, esse tempo costima ser menor)
+                \item Tambem chamado de Avarage Latency
+                \item No inicio dos anos 90, com discos de 3600rpm, a 
+                metade do tempo de rotação era de 8,3ms 
+                \item Atualmente os discos de 7200rpm tem latencia media 
+                de 4,16ms
+            \end{itemize}
+            \item Em uma leitura/escrita sequencial envolvendo trilhas de 
+            um mesmo cilindro, não há latencia na alternânacia entre as 
+            trilhas
+            \begin{itemize}
+                \item Existe apenas um tempo (muito pequeno) de comutação 
+                entre as cabe-ças de leitura/escrita
+            \end{itemize}
+        \end{itemize}
+        \item Tempo de Transferência
+        \begin{itemize}
+            \item Uma vez que a cabeça de L/E está sob o setor desejado, 
+            ele pode ser transferido
+            \item O tempo de transferencia é dado por:
+            \begin{itemize}
+                \item O tempo para transferir uma trilha inteira normalmente
+                é o tempo de rotação
+                \item ($\mathrm{n^o}$ bytes transferidos/$\mathrm{n^o}$ 
+                bytes na trilha) $\times$ tempo de rotação
+                \item Exemplo: 
+                \begin{itemize}
+                    \item Tempo de transferencia de 1KB em disco com 
+                    32 setores de 512 bytes por trilha (16.384b) e tempo de 
+                    rotação de 8,2ms \[(1024/16384) \times 8,2 = 0,51ms\]
+                    \item Neste exemplo o tempo está expresso em 
+                    bytes/ms. Os fabricantes costumam utilizar MB/s
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+        \item O modo de acesso  ao arquivo pode afetar drasticamente os 
+        custos de tempo de acesso
+        \begin{itemize}
+            \item Dois modos de acesso:
+            \begin{itemize}
+                \item Sequencial: o máximo do arquivo é processo em cada 
+                acesso
+                \item Aleatório: apenas um registro é processado por vez
+            \end{itemize}
+            \item Exemplo:
+            \begin{itemize}
+                \item Determinar o tempo necessário para ler um arquivo com 
+                40000 registros de 256 bytes para cada um
+                \begin{itemize}
+                    \item Vamos calcular o tempo de leitura do arquivo com 
+                    acesso sequencial e aleatório e comparar resultados
+                \end{itemize}
+                \item Vamos considerar as seguintes especificações do disco:
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{|c|c|}
+                        \hline
+                        Tempo médio de seek & 13 ms \\ \hline
+                        Tempo de latência & 8.3 ms \\ \hline
+                        Tempo de transferencia & 16.7 ms ou 1229 bytes/ms \\
+                        \hline
+                        Bytes por setor & 512 \\ \hline
+                        Setores por trilha & 100 \\ \hline
+                        Trilhas por cilindro & 12 \\ \hline
+                        Trilhas por superficie & 1748 \\ \hline
+                        Tamanho do cluster & 10 setores (5120 bytes) \\ \hline
+                    \end{tabular}
+                \end{table}
+                \item Tamanho do arquivo $Rightarrow$ 40.000 registros de 256 
+                bytes
+                \begin{itemize}
+                    \item Se cada cluster tem 5120 bytes (10 setores), podemos 
+                    armazenar 20 registros por cluster (5120/256)
+                    \item Será necessário um total de 2000 clusters para 
+                    armazenar todos os registros (40000/20)
+                    \item Como cada trilja possui 10 clusters (100 setores), 
+                    serão necessárias 200 trilhas
+                \end{itemize}
+                \item Vamos assumir o pior caso, no qual as 200 trilhas que 
+                armazenam o arquivo estão espalhadas aleatoriamente no disco
+                \begin{itemize}
+                    \item Situação extrema, mas que pode ocorrer em discos no 
+                    limite da capacidade, especialmente com muitos arquivos 
+                    pequenos
+                \end{itemize}
+                \item Custo com acesso sequencial
+                \begin{itemize}
+                    \item Para cada trilha em que são lidos setores consecutivos, 
+                    o processo de leitura envolve os seguintes custos: Tempo 
+                    médio de seek, tempo de latência e tempo de transferencia de 
+                    uma trilha.
+                    \item Para 200 trilhas: 
+                    \[(13 + 8,3 + 16,7) \times 200 = 7600ms = 7,6s\]
+                \end{itemize}
+                \item Custo com acesso aleatório
+                \begin{itemize}
+                    \item Para cada trilha em que são lidos setores consecutivos, 
+                    o processo de leitura envolve os seguintes custos: Tempo 
+                    médio de seek, tempo de latência e tempo de transferencia de 
+                    um cluster.
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    
+    \subsection{SSD}
+    \begin{itemize}
+        \item Solid-state drives(SSD) são compostos por componentes eletrônicos
+        \begin{itemize}
+            \item O armazenamento geralmente é feito em módulos de memória flash.
+        \end{itemize}
+        \item Devido a essa caracteristica, o custo de acesso a qualquer 
+        posição do SSD será o mesmo
+        \begin{itemize}
+            \item Não há tempo de seek, nem latencia rotacional
+            \item Mas existe uma latência (tempo para se iniciar uma operação) 
+            e um tempo de transferencia (throughput)
+            \begin{itemize}
+                \item Esses tempos dependem do tipo de memória usada, da 
+                controladora e da interface do SSD
+            \end{itemize}
+        \end{itemize}
+        \item A menor unidade endereçável de um SSD é uma página.
+        \begin{itemize}
+            \item O tamanho de uma página muda de um SSD para outro, variando 
+            entre 2KB e 16KB.
+            \item Assim como acontece com os setores de um disco, a pagina é a 
+            menor unidade de leitura e escrita.
+        \end{itemize}
+        \item As paginas são agrupadas em blocos.
+        \begin{itemize}
+            \item O tamanho dos blocos tambem varia de um SSD para outro, 
+            entre 256KB e 4MB 
+            \begin{itemize}
+                \item Por exemplo, o Samsung SSD 840 EVO tem blocos de 2048KB 
+                (256 páginas de 8KB cada)
+            \end{itemize}
+        \end{itemize}
+        \item Diferentemente dos setores de um HD, as paginas de um SSD não 
+        podem ser sobrescritas.
+        \begin{itemize}
+            \item Quando uma alteração é necessaria, a pagina é copiada para um 
+            buffer, alterada a escrita em uma nova página livre.
+            \item A página antiga é marcada como "velha" e ficará assim até o 
+            seu bloco ser apagado e a página fique livre novamente.
+        \end{itemize}
+        \item Essa operação faz com que as escritas sejam mais lentas que as 
+        leituras.
+        \item Alem disso, apenas blocos podem ser apagados.
+        \begin{itemize}
+            \item Para que um bloco com alguma página "velha" seja apagado, o 
+            coletor de lixo copiará as paginas ativas para um novo bloco, 
+            deixando o bloco pronto para ser apagado por completo.
+            \item Uma vez apagado, as páginas do bloco ficam livres novamente.
+        \end{itemize} 
+        \item Além de não poderem ser sobrescritas, memórias flash também têm 
+        um numero máximo de escritas possiveis.
+        \begin{itemize}
+            \item Elas desgastam conforme são escritas e apagadas
+            \item Por conta disso, a controladora distribuirá o uso dos blocos 
+            de memoria para que o desgaste não seja maior em uma região do que 
+            em outra.
+        \end{itemize}
+        \item Todos esses fatores fazem com que as controladoras sejam complexas 
+        e adicionem custo nas operações em termos de tempo, especialmente nas 
+        escritas.
+        \item Ainda assim, os SSDs são centenas de vezes mais rapidos do que os 
+        HDs, especialmente quando se trata de acesso aleatório.
+    \end{itemize}
+\vspace{24pt}
+Independente do tipo de dispositivo usado para como memória secundária, ele será
+o gargalo do sistema.
+\begin{itemize}
+    \item Gargalo $\rightarrow$ Quando um dispositivo mais lento afeta afeta o 
+    desempenho de outros mais rapidos, se tornando um fator limitante do sistema.
+\end{itemize}
+Por isso é importante que acessos à memória secundária sejam feitos de forma 
+eficiente.
+
+\section{Operações em Arquivos}
+    \subsection{Arquivos}
+    \begin{itemize}
+        \item Um arquivo é uma estutura criada em uma unidade de armazenamento 
+        secundário
+        \begin{itemize}
+            \item Permite o armazenamento permanecente dos dados, ao contratio 
+            das variáveis, que são armazenadas em RAM
+        \end{itemize}
+        \item Do ponto de vista físico, um arquivo corresponde a uma sequencia 
+        de bytes armazenados em um dispositivo secundário
+        \begin{itemize}
+            \item Mas os aspectos fisicos dos arquivos são transparentes para 
+            as aplicações
+        \end{itemize}
+    \end{itemize}
+        \subsubsection{Diferentes Visões do Arquivo}
+        \begin{itemize}
+            \item Arquivo físico e arquivo lógico
+            \begin{itemize}
+                \item Arquivo físico: é o arquivo do ponto de vista do 
+                armazenamento
+                \begin{itemize}
+                    \item Corresponde a uma sequencia particularde bytes 
+                    armazenados no dispositivo
+                \end{itemize}
+                \item Arquivo lógico: é o arquivo do ponto de vista da aplicação 
+                que o acessa
+                \begin{itemize}
+                    \item Cada arquivo manipulado pela aplicação é tratado como 
+                    um canal de comunicação estabelecido entre a aplicação e o 
+                    arquivo físico
+                \end{itemize}
+            \end{itemize}
+            \item O sistema operacional é quem faz a interface entre o arquivo 
+            lógico e o arquivo físico.
+            \item Apesar de um dispositivo secundário poder conter milhares de 
+            arquivos físicos, as aplicações, em geral, só podem abrir um número 
+            pré-definido de arquivos lógicos de forma simultânea
+            \item Um arquivo lógico pode estar associado a um arquivo físico ou 
+            a outros dispositivos de E/S, como o teclado (stdin) e o vídio 
+            (stdout e stderr)
+            \item Para os sistemas operacionais, um dispositivo de E/S é 
+            visto da mesma forma que um arquivo!
+        \end{itemize}
+        \subsubsection{Conectando Arquivo Lógico ao Físico}
+        \begin{itemize}
+            \item A aplicação solicita que um nome lógico seja associado a um 
+            arquivo físico específico e o S.O estabelece a associação
+
+
+        \end{itemize}
+    \subsection{Arquivo Lógico}
+    \begin{itemize}
+        \item Do ponto de vista da aplicação, um arquivo é uma entidade 
+        lógica vista como uma sequência de bytes
+        \begin{itemize}
+            \item Podemos enviar bytes para o arquivo indefinidamente
+            \item De fomra análoga, podemos ler bytes do arquivo enquanto 
+            houverem bytes a serem lidos
+        \end{itemize}
+        \item Para todo arquivo lógico, é mantido um ponteiro de L/E que 
+        indica a posição do próximo byte a ser lido/escrito
+        \begin{itemize}
+            \item Esse ponteiro se move automáticamente conforme operações 
+            de leitura e escrita são realizadas e também pode ser movido 
+            por comandos de reposicionamento.
+        \end{itemize}
+        \item Quando um arquivo é aberto, o ponteiro de L/E é posicionado 
+        no início (byte 0)
+
+        \item Se for feita a leitura de 9 bytes, o ponteiro de L/E se move 
+        automaticamente para a proxima posição de L/E (byte 9) 
+
+        \item Se for feita uma escita de 8 bytes na sequencia, o ponteiro 
+        de L/E se moverá para a próxima posição de L/E (byte 17)
+
+        \item O arquivo lógico é identificado pelo S.O por um número 
+        inteiro chamado de descritor
+        \item É comum que as linguagens encapsulem o descritor do arquivo 
+        em estruturas mais complexas, que armazenam outras informações úteis 
+        para a manipulação do arquivo
+        \begin{itemize}
+            \item O tipo dessa estrutura descritora é dependente da linguagem
+            \item Em Python, essas informações ficam em um objeto de arquivo
+        \end{itemize}
+    \end{itemize}
+    \subsection{Tipos de Arquivos}
+    \begin{itemize}
+        \item Basicamente são dois tipos de arquivos
+        \begin{itemize}
+            \item Texto
+            \begin{itemize}
+                \item Os caracteres são armazenados sequencialmente
+                \item É possivel determinar o primeiro, segundo, terceiro, 
+                $n$ caractéres que com-põem o arquivo
+                \item Nesse tipode arquivo, a sequencia 123 correspode à string 
+                "123"
+            \end{itemize}
+            \item Binário
+            \begin{itemize}
+                \item Formado por uma sequencia de bytes sem correspondencia 
+                direta com um tipo de dado
+                \item Cabe ao programador fazer essa correspondencia quando lê 
+                e escreve nesses programas
+                \item Nesse tipo de arquivo, o valor 123 será gravado como um 
+                numero binario com uma quantidade pré-definida de bytes
+            \end{itemize}
+            \item Exemplo:
+            \begin{itemize}
+                \item As figuras mostram um arquivo binário e um arquivo texto 
+                em um editor hexadecimal
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    \subsection{Operações em arquivos}
+    \begin{itemize}
+        \item Basicamente as operações em arquivos são as seguintes:
+        \begin{enumerate}[label=\arabic*.]
+            \item Criar um arquivo
+            \item Abrir um arquivo
+            \item Ler de um arquivo
+            \item Escrever em um arquivo
+            \item Movimentar o ponteiro de L/e
+            \item Fechar um arquivo
+        \end{enumerate}
+        \item Veremos como essas operações são feitas em Python
+        \item As funções da linguagem Python para manipular arquivos são 
+        implementadas de duas formas
+        \begin{itemize}
+            \item Como função nativa
+            \item Como métodos de objetos de arquivo
+        \end{itemize}
+        \item A função open é nativa e utilizada para abrir/criar um arquivo 
+        retornando um objeto de arquivo
+        \begin{itemize}
+            \item A classe desse objeto varia de acordo com o tipo de arquivo a 
+            ser manipulado (leitura/escrita textual, leitura/escrita binária, 
+            etc.)
+            \item A partir do objeto de arquivo é possivel acessar métodos para 
+            leitura, escrita, posicionamento, etc.
+        \end{itemize}
+        \item A associaão entre arquivo lógico e íssico é feita no momento da 
+        abertura/criação do arquivo.
+        \begin{itemize}
+            \item O modo como associação se dará depende do parametro utilizado 
+            para especificar o modo de abertura
+            \item O modo de abertura também especifica se um novo arquivo será 
+            criado ou se um arquivo existente será aberto
+        \end{itemize}
+    \end{itemize}
+        \subsubsection{Criar e abrir arquivos}
+        \begin{itemize}
+            \item \verb|def open(filename:str, mode:str) -> file object|
+            \begin{itemize}
+                \item filename é uma string contendo o nome do arquivo físico
+                \item mode também é uma string e define o modo de abertura
+                \item \textbf{Caso a operação falhe, um erro ocorrerá e abortará 
+                a execução!}
+                \item Exemplo: \verb|arq = open('meuarq.txt','w')|
+                \item Flags/modos da função \verb|open()|
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{|c| p{10cm}|}
+                        \hline
+                        Caractere & Descrição do comportamento \\ \hline
+                        'r' & Abre para leitura. O arquivo deve existir. 
+                        \textbf{É o modo padrão}. \\ \hline
+                        'w' & Abre para escrita. Se o arquivo existir ele será 
+                        truncando. Senão, será criado. \\ \hline
+                        'x' & Abre um novo arquivo para escrita. O arquivo não 
+                        deve existir. \\ \hline
+                        'a' & Abre para escrita no final do arquivo. Operações 
+                        de reposicionamento do ponteiro de L/E são ignoradas. 
+                        Se não existir, o arquivo será criado. \\ \hline
+                        't' & Abre em modo texto. Admite apenas dados do tipo 
+                        \verb|str|. \textbf{É o modo padrão}. \\ \hline
+                        'b' & Abre em modo binário. Admite apenas dados do tipo 
+                        bytes/bytearray. \\ \hline
+                        '+' & Altera o comportamento da flag inicial para 
+                        permitir leitura e escrita. \\ \hline
+                    \end{tabular}
+                \end{table}
+                \begin{itemize}
+                    \item As flags 't','b' e '+' só podem ser utilizadas em 
+                    conjunto de outras!
+                    \item Por padrão os arquivos são abertos em modo texto 
+                    (flag 't')
+                \end{itemize}
+            \end{itemize}
+            \item Como tratar um erro na abertura do arquivo?
+            \begin{itemize}
+                \item Em Python, erros de execução são chamados de exceções
+                \item As exceções podem ser capturadas e tratadas utilizando a 
+                instrução try-except
+                \begin{verbatim}
+    try:
+        ''' código a ser executado '''
+    except:
+        ''' código a ser executado caso uma exceção ocorra '''
+                \end{verbatim}
+                \item Exemplo:
+                \begin{verbatim}
+    try:
+        arq = open('meuArq.txt','r')
+        print('abertura OK')
+    except:
+        print('Erro na abertura')
+        exit()
+                \end{verbatim}
+            \end{itemize}
+        \end{itemize}
+        \subsubsection{Fechamento de arquivos}
+        \begin{itemize}
+            \item Uma vez que o arquivo foi aberto, seu fechamento se dá pela 
+            chamada do método \verb|close()|
+            \begin{itemize}
+                \item Todos os objetos de arquivo possuem esse método
+                \item Encerra a associação entre o arquivo lógico e o físico
+                \item O descritor fica disponível para uso por outro arquivo
+                \item Garante que todas as informações do arquivo foram 
+                atualizadas (o fechamento garante que o conteudo bufferizado 
+                foi enviado para o dispositivo físico) 
+                \item O S.O normalmente fecha qualquer arquivo que ficou aberto 
+                quando um programa termina corretamente, mas o ideal é fechar 
+                arquivos que não estão mais sendo utilizados
+                \begin{itemize}
+                    \item Previne a perda de dados bufferizados no caso de erro
+                    \item Libera a estrutura descritora para novos arquivos
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+        Ao utilizar o -1, será lido até o final do arquivo
+\end{document}

@@ -1,0 +1,158 @@
+\documentclass[12pt]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{indentfirst}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[letterpaper,
+            top=1.5cm,
+            bottom=1.5cm,
+            left=2.75cm,
+            right=2.75cm,
+            marginparwidth=1.75cm]{geometry}
+
+\title{Lista 1 -- Conceitos Básicos de LFA}
+\author{Guilherme Lopes}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+    % \begin{itemize}[label=R:]
+    %     \item 
+    % \end{itemize}
+    
+\begin{enumerate}
+    \item O que é alfabeto?
+    \begin{itemize}[label=R:]
+        \item Um alfabeto é um conjunto de simbolos finito e não vazio
+    \end{itemize}
+    \item Defina o conceito de cadeia.
+    \begin{itemize}[label=R:]
+        \item Cadeia ou palavra é uma sequência de simbolos presentes em um 
+        alfabeto
+    \end{itemize}
+    \item Defina o conceito de linguagem e mostre um exemplo.
+    \begin{itemize}[label=R:]
+        \item Linguagem é um conjunto de cadeias presentes dentro de um 
+        fechamento de alfabeto
+    \end{itemize}
+    \item O que é fechamento de um alfabeto?
+    \begin{itemize}[label=R:]
+        \item O fechamento de um alfabeto é a união de todas as infinitas 
+        exponenciações desse alfabeto (a partir de $\Sigma^0$). 
+    \end{itemize}
+    \item Como se pode descrever uma linguagem formal?
+    \begin{itemize}[label=R:]
+        \item É um subconjunto de cadeias presente dentro do fechamento de um 
+        alfabeto.
+
+    \end{itemize}
+    Resposta do professor: Uma linguagem formal pode ser descrita 
+    por um modelo reconhecedor ou por um modelo gerador. Um modelo reconhecedor 
+    é um modelo matemático capaz de percorrer (“varrer”) uma cadeia de símbolos 
+    construída a partir de um alfabeto e, ao final desta “varredura”, identificar 
+    se esta cadeia faz parte ou não da linguagem descrita por ele. Neste 
+    contexto, a linguagem descrita pelo modelo corresponde ao conjunto formado 
+    por todas as cadeias que ele aceita. Já um modelo gerador é um modelo capaz 
+    de gerar (produzir) as cadeias que fazem parte de uma linguagem definida a 
+    partir de um alfabeto. Neste contexto, a linguagem descrita pelo modelo 
+    corresponde ao conjunto de todas as cadeias que ele é capaz de gerar 
+    (produzir). 
+    \item Fale sobre aplicações de LFA.
+    \begin{itemize}[label=R:]
+        \item LFA pode ser aplicada na \dots
+    \end{itemize}
+    Resposta do professor: É difícil descrever todo o universo de aplicações 
+    nas quais se pode utilizar os modelos estudados em LFA. Entretanto, entre 
+    as principais aplicações, pode-se destacar:
+    \begin{itemize}
+        \item análise de linguagens de programação
+        \begin{itemize}
+            \item léxica;
+            \item sintática;
+        \end{itemize}
+        \item modelos de sistemas biológicos;
+        \item desenho de hardware;
+        \item relacionamentos com linguagens naturais;
+        \item processamento de imagens ou visão computacional (reconhecimento de \\
+    padrões);
+    \end{itemize}
+
+    \item Defina o conceito de subpalavra.
+    \begin{itemize}[label=R:]
+        \item Subpalavra é uma cadeia que está no meio de outras duas, um 
+        exemplo, é a palavra $x$, que é uma subpalavra em $txw$. 
+    \end{itemize}
+    \item Prove que se uma cadeia $x$ é prefixo de uma cadeia $y$ e $y$ também é 
+    prefixo de $x$, então $x$ e $y$ são iguais.
+    \begin{itemize}[label=R:]
+        \item Vamos considerar as palavras $x=yz$ e $y=xu$, com $x,y,z, u \in 
+        \Sigma^*$.
+
+        Por substituição, podemos dizer que $x=xuz$. 
+
+        Como $x=xuz$, consideramos $uz=\lambda$, assim, $x=x\lambda=x$.
+
+        Se $uz=\lambda$, $u=z=\lambda$, e $y=xu$, logo $y=x\lambda=x$.
+
+        Assim, para $x$ ser prefixo de $y$ e $y$ ser prefixo de $x$, $y=x$.
+
+    \end{itemize}
+    \item Prove que se uma cadeia $x$ é prefixo de uma cadeia $y$ e $y$ é prefixo 
+    de uma cadeia $z$, então $x$ é prefixo de $z$.
+    \begin{itemize}[label=R:]
+        \item Considerando $y=xa$, $z=yb$, com $x,y,z,a,b \in \Sigma^*$.
+        
+        Substituindo o $y$ na palavra $z$, obtemos $z=xab$.
+
+        Como $x$ também é uma cadeia, podemos dizer que $x$ também é prefixo de 
+        $z$.
+    \end{itemize}
+    \item Dados $L_1={a, ab}$ e $L_2={\lambda, a, ba}$, linguagens sobre 
+    ${a, b}$, determine:
+    \begin{enumerate}[label=\alph*.]
+        \item $L_1 \cup L_2$
+        \begin{itemize}[label=R:]
+            \item $\{\lambda,a,ab,ba\}$
+        \end{itemize}
+        \item $L_1 \cap L_2$
+        \begin{itemize}[label=R:]
+            \item $\{a\}$
+        \end{itemize}
+        \item $L_1 - L_2$
+        \begin{itemize}[label=R:]
+            \item $\{ab\}$
+        \end{itemize}
+        \item $L_2 - L_1$
+        \begin{itemize}[label=R:]
+            \item $\{\lambda,ba\}$
+        \end{itemize}
+        \item $L_1.L_2$
+        \begin{itemize}[label=R:]
+            \item $\{a,aa,aba,ab,aba,abba\}$
+        \end{itemize}
+        \item $L_2.L_1$
+        \begin{itemize}[label=R:]
+            \item $\{a,ab,aa,aab,baa,baab\}$
+        \end{itemize}
+        \item $(L_1)^2 = L_1.L_1$
+        \begin{itemize}[label=R:]
+            \item $\{aa,aab,aba,abab\}$
+        \end{itemize}
+        \item $(L_2)^2 = L_2.L_2$
+        \begin{itemize}[label=R:]
+            \item $\{\lambda,a,ba,aa,aba,baa,baba\}$
+        \end{itemize}
+        \item $\bar{L_1}$
+        \begin{itemize}[label=R:]
+            \item $\bar{L_1}=\Sigma^*-L_1={a,b}^*-{a,ab}$
+        \end{itemize}
+    \end{enumerate}
+\end{enumerate}
+
+\end{document}

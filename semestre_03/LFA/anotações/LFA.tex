@@ -1,0 +1,414 @@
+\documentclass[12pt]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage{float}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{indentfirst}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[letterpaper,
+            top=1.5cm,
+            bottom=1.5cm,
+            left=2.75cm,
+            right=2.75cm,
+            marginparwidth=1.75cm]{geometry}
+
+\title{Linguagens Formais e Autômatos}
+\author{Prof. Yandre Costa}
+\date{\today}
+
+\begin{document}
+\maketitle
+Site do Professor: \url{http://www.din.uem.br/yandre} 
+\section{Teoria da Computação}
+\begin{itemize}[label=$\rightarrow$]
+    \item Ciência da Computação
+    \begin{itemize}
+        \item Ênfase teórica: ideias fundamentais e modelos computacionais.
+        \item Ênfase prática: projeto de sistemas computacionais.
+    \end{itemize}
+    \item A teoria da computação possui duas grandes vertentes.
+    \begin{enumerate}
+        \item Linguagens Formais e Autômatos.
+        \item Máquinas Universais e Computabilidade.
+    \end{enumerate}
+    \item O que é Teoria da Computação?
+    \begin{itemize}
+        \item Estudos teóricos acerca da capacidade de resolução de problemas 
+        das máquinas.
+        \item Estudo de modelos formais que:
+        \begin{itemize}
+            \item Caracterizam em nível conceitual: programas, máquinas e enfim, 
+            a computação.
+            \item Especificam o que é computável ou não.
+            \item Ajudam na especificação de linguagens artificiais entre outras 
+            aplicações.
+        \end{itemize}
+    \end{itemize}
+    \item Histórico da Computação
+    \begin{itemize}
+        \item Computar, do latim "computare", que significa calcular, avaliar, 
+        contar.
+    \end{itemize}
+\end{itemize}
+
+\section{Conceitos Básicos}
+\begin{itemize}
+    \item Introdução
+    \begin{itemize}
+        \item Problema: definir um conjunto de cadeias de símbolos
+        \item Exemplo: conjunto \(M\) dos números bínários que têm 2 digitos
+        \[ M=\{00,01,10,11\} \]
+        \item Porém, se fosse o conjunto \(N\) de todas as combinações de 
+        dígitos binários, poderiamos tentar o seguinte:
+        \[ N=\{0,1,00,01,10,11,000,\dots\} \]
+        \begin{itemize}
+            \item Percebe-se que este conjunto é infinito
+        \end{itemize}
+        \item Representação clara: humanos x computador
+        \item Representação formal: computador
+        \item Um objetivo de LFA pe estudar uma maneira precisa e formal de 
+        descrever sequencias de simbolos pertencentes a um determinado conjunto.
+        \item Em especial conjuntos que não podem ser trivialmente enumerados.
+        \item Os estudos iniciais foram em torno de Linguagens Naturais (LN).
+        \item Algumas caracteristicas de LN introduziram dificuldades no 
+        tratamento computacional das mesmas.
+        \begin{itemize}
+            \item LN é extensa, complexa, não tem sintaxe rígida e semântica 
+            bem determinada (rica em ambiguidade)
+        \end{itemize}
+        \item As maneiras sistematicas de descrever uma linguagem de programação 
+        são:
+        \begin{itemize}
+            \item Um método que permite construir programas sintaticamente 
+            corretos - geração (Gramática)
+            \item Um método que permite verificar se um programa escrito está 
+            sintaticamente correto - reconhecimento (Autômatos)
+        \end{itemize}
+        \item Hierarquia de Chomsky
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\linewidth]{imagens/hierarquia_chomsky.png}
+        \end{figure}
+        \item Pesquisas já demonstraram o uso destas tecnicas em:
+        \begin{itemize}
+            \item Análise de linguagens de programação
+            \begin{itemize}
+                \item Léxica
+                \item Sintática
+            \end{itemize}
+            \item Modelos de sistemas biologicos
+            \item Desenho de hardware
+            \item Relacionamentos com linguagens Naturais
+            \item Reconhecimento de padões (em visão computacional por exemplo)
+        \end{itemize}
+    \end{itemize}
+    \item Alfabeto
+    \begin{itemize}
+        \item Conjunto de simbolos finito e não vazio
+        \item Normalmente denotado por \(\Sigma\)
+        \item Exemplos
+        \begin{itemize}
+            \item \(\Sigma=\{a,b\}\)
+            \item \(\Sigma=\{1,2,3\}\)
+            \item \(\Sigma=\{00,11\}\)
+        \end{itemize}
+    \end{itemize}
+    \item Simbolo ou letra
+    \begin{itemize}
+        \item É todo elemento pertencente a um alfabeto
+        \item \(a\) é um simbolo de \(\Sigma\)
+    \end{itemize}
+    \item Cadeia ou palavra
+    \begin{itemize}
+        \item É uma concatenação de simbolos do alfabeto justapostos.
+        \item Assim, dado um alfabeto \(\Sigma\) e uma sequencia de simbolos 
+        \(x=a_1a_2a_3\ldots a_n\), \(x\) é uma cadeia sobre \(\Sigma\) se, e 
+        somente se, \(a_i\in\Sigma\) para \(i=1,2,\dots,n\).
+        \item Comprimento de Cadeia ou Tamanho de Palavra
+        \begin{itemize}
+            \item É o numero de simbolos que compoem uma dada cadeia (ou palavra)
+            \item O comprimento de uma cadeia $x$ é denotado por $|x|$
+            \item Então, a cadeia \(x=a_1a_2a_3\ldots a_n\) tem seu comprimento 
+            \(|x|=n\)
+            \item Cadeia nula ou palavra vazia: é o caso especial, ela é 
+            denotada por \(\lambda\) (ou \(\varepsilon\)) e tem o tamanho igual 
+            a zero
+            \item Exercicio: dado o alfabeto \(\Sigma={a,b,c,de}\), verifique 
+            se as cadeias a seguir são formadas sobre este alfabeto, e se for, 
+            verifique qual o comprimento 
+        \end{itemize}
+    \end{itemize}
+    \item Exponenciação de Alfabetos
+    \begin{itemize}
+        \item \(\Sigma^k\) é o conjunto de todas as cadeias com tamanho \(k\) 
+        formadas sobre o alfabeto \(\Sigma\)
+        \item Exemplo: Considere \(\Sigma=\{0,1\}\)
+        \begin{itemize}
+            \item \(\Sigma^0 = \lambda\)
+            \item \(\Sigma^1 = \{0,1\}\)
+            \item \(\Sigma^2 = \{00,01,10,11\}\)
+            \item \(\Sigma^3 = \{000,001,010,011,100,101,110,111\}\)
+        \end{itemize}
+    \end{itemize}
+    \item Fechamento de um Alfabeto
+    \begin{itemize}
+        \item Seja $\Sigma$ um alfabeto, então, o fechamento de $\Sigma$ 
+        descrito por $\Sigma^*$ é definido como
+        \[ \Sigma^*= \Sigma^0 \cup \Sigma^1 \cup \Sigma^2 \cup \ldots \cup 
+        \Sigma^n \cup \ldots\] 
+    \end{itemize}
+    \item Concatenação de cadeias
+    \begin{itemize}
+        \item Dado o alfabeto \(\Sigma\) e as cadeias \(x,y \in \Sigma^*\), a 
+        concatenação de \(x\) e \(y\), indicada por \(xy\), produz uma cadeia 
+        formada pelos simbolos de \(x\) seguidos pelos simbolos de \(y\).
+        \item Se \(x=a_1a_2a_3 \ldots a_n \in \Sigma^* \) e \(y=b_1b_2b_3 
+        \ldots b_m \in \Sigma^* \) então: 
+        \[xy=a_1a_2a_3 \ldots a_nb_1b_2b_3 \ldots b_m \]
+        \item Exemplos:
+        \begin{itemize}[label=]
+            \item \(\Sigma=\{a,b\}\)
+            \item \(x=abaa, y=ba, z=\lambda\)
+            \item \(xy=abaaba\)
+            \item \(yx=baabaa\)
+            \item \(yz=ba=zy=y\)
+        \end{itemize}
+        \item A cadeia nula (\(\lambda\)) é o elemento neutro da concatenação
+        \item Concatenação Sucessiva -- Concatenação de uma palavra com ela 
+        mesma.
+        \begin{itemize}
+            \item Representada através de um expoente: \(w^n\) -- Onde \(w\) é 
+            uma palavra e \(n\) indica o número de concatenações sucessivas.
+        \end{itemize}
+    \end{itemize}
+    \item Dado um alfabeto $\Sigma$ e $x,y\in\Sigma^*$, diz-se que:
+    \begin{itemize}
+        \item $x$ é um prefixo de $y$, se e somente se, $\exists w\in\Sigma^*$ 
+        tal que $y=xw$
+        \item $x$ é um sufixo de $y$, se e somente se, $\exists w\in\Sigma^*$ 
+        tal que $y=wx$
+        \item $x$ é uma subpalavra de $y$, se e somente se, $\exists w,u\in
+        \Sigma^*$ tal que $y=wxu$
+    \end{itemize}
+    \item Linguagem
+    \begin{itemize}
+        \item Dado o alfabeto $\Sigma$, o conjunto de palavras $L$ é uma 
+        linguagem sobre $\Sigma$ se e somente se $L \subset \Sigma^*$.
+        \item Operações sobre linguagens:
+        \begin{itemize}
+            \item Considere \(L_1\) e \(L_2\) linguagens definidas sobre 
+            \(\Sigma\)
+            \begin{itemize}
+                \item União: \(L_1 \cup L_2 = \{x|x\in L_1 \vee x \in L_2\}\)
+                \item Interseção: \(L_1 \cap L_2 = \{x|x\in L_1 \wedge x \in 
+                L_2\}\)
+                \item Diferença: \(L_1 - L_2 = \{x|x\in L_1 \wedge x \notin 
+                L_2\}\)
+                \item Concatenação: \(L_1L_2 = \{x|x=yz, y \in L_1 \wedge z \in 
+                L_2\}\)
+                \item Complemento: \(\bar{L_1} = \{x|x\in \Sigma^* \wedge x 
+                \notin L_1\}\)
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    \item Comparando as definições:
+    \begin{itemize}
+        \item Linguagem Natural:
+        \begin{itemize}
+            \item Uma palavra em portugues equivale a um simbolo
+            \item Uma sentença da lingua portuguesa é uma cadeia composta de 
+            vários simbolos.
+        \end{itemize}
+        \item Linguagem computacional
+        \begin{itemize}
+            \item Cada programa escrito numa linguagem computacional corresponde 
+            a uma cadeia de simbolos que podem ser:
+            \begin{itemize}
+                \item Identificadores;
+                \item Palavras reservadas;
+                \item Simbolos especiais e operadores;
+                \item Constantes numéricas.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+\section{Autômatos Finitos}
+\begin{itemize}
+    \item AFD -- Modelo matmático para definição de linguagem
+    \item Caráter reconhecedor
+    \item Modelam também sistemas de estados finitos
+    \item Exemplo clássico: problema HLCR (Hopcroft e Ullman)
+    \vspace{32pt}
+    \item Problema: um homem quer atravessar um rio levando consigo um lobo, uma 
+    cabra e um repolho, e no bote, só cabem ele e mais um dos outros três.
+    \item Exemplos de possiveis estados do sistema:
+    \begin{itemize}
+        \item <HLCR-0> -- todos na margem esquerda
+        \item <L-HCR> -- lobo na margem esquerda, cabra e repolho na direita
+    \end{itemize}
+    \item Entradas do sistema:
+    \begin{itemize}
+        \item h -- Homem atravessa o rio sozinho
+        \item l -- Homem atravessa o rio com o lobo
+        \item c -- Homem atravessa o rio com a cabra
+        \item r -- Homem atravessa o rio com o repolho
+    \end{itemize}
+    \item Objetivo: <HLCR-0> $\Rightarrow$ <0-HLCR>
+    \item Representação por diagrama:
+    \begin{itemize}
+        \item Circulos representam estados
+        \item Arcos representam ação ou transição (de um estado para o outro)
+        \item O estado final é marcado por um circulo duplo
+        \item As respostas para o problema são as sequências de ações que 
+        levam do estado inicial para o final
+    \end{itemize}
+\end{itemize}
+    \subsection{Autômato Finito Determinístico}
+    \begin{itemize}
+        \item Exemplo de sistema que pode ser representado desta forma: 
+        \begin{itemize}
+            \item Forno de micro-ondas
+            \begin{itemize}
+                \item Entradas: porta aberta ou fechada, comandos fornecidos 
+                pelo cozinheiro através do painel, sinal do "timer" que expira 
+                \item Estados: aberto, esperando por comandos, cozinhando, 
+                desligado
+            \end{itemize}
+        \end{itemize}
+        \item Definições Básicas
+        \begin{itemize}
+            \item Um AFD $A$ define uma linguagem $L(A)$ sobre um alfabeto $\Sigma$
+            \item Caráter reconhecedor, ao contrário das gramáticas estudadas 
+            que tinham caráter gerador
+            \begin{itemize}
+                \item Dada uma cadeia $x$, ela pertence a $L(A)$
+            \end{itemize}
+            \item Uma abstração de um AFD
+            \begin{itemize}
+                \item Uma cabeça de leitura extrai sequencialmente o conteúdo 
+                de uma fita (string)
+                \item Uma luz de aceitação que acende somente se a cadeia 
+                pertencer a linguagem representada pela AFD
+                \item Exemplos de cadeias aceitas em HLCR
+                \begin{itemize}
+                    \item chrclhc, ccchllrclllhccc, \ldots
+                \end{itemize}
+            \end{itemize}
+            \item Definição Matemática de um AFD
+            \begin{itemize}
+                \item Uma AFD é uma quintupla $<\Sigma, S, S_0, \delta, F>$, 
+                onde:
+                \begin{itemize}
+                    \item $\Sigma$ é o alfabeto de Entradas
+                    \item $S$ é um conjunto finito não vazio de estados
+                    \item $S_0$ é o estado inicial, $S_0 \in S$
+                    \item $\delta$ é a funçã de transição de estados, definida 
+                    $\delta:S \times \Sigma \rightarrow S $
+                    \item $F$ é o conjunto de estados finais, $F \subseteq S$
+                \end{itemize}
+                \item Uma cadeia $x$ para ser aceito, deve levar do estado $S_0$ 
+                para algum estado pertencente a $F$
+                \item A função $\delta$ determina como são as transições de 
+                estados. Ela leva um par $<s,a>$ onde $s$ é um estado e $a$ uma 
+                letra do alfabeto num estado $s'$ 
+                \begin{itemize}
+                    \item $\delta(s,a)=s'$
+                \end{itemize}
+                \item Então, dado um AFD $A=<\Sigma, S, S_0, \delta, F>$ e a 
+                cadeia $x=a_1a_2a_3\ldots a_n \in \Sigma^*$, o autômato parte 
+                de $S_0$. Ao processar $a_1$ passa para o estado $\delta 
+                (S_0,a_1)$, ao processar $a_2$ passa para o estado $\delta 
+                (S_0,a_2)$, e assim por diante até processar $a_n$. Nesse ponto, 
+                o autômato estará num estado $R$ qualquer. Se $R \in F$, então 
+                a cadeia $x \in L(A)$.
+                \item Finito: númeto de estados envolvidos no sistema é finito
+                \item Determinístico: Estabelece que para uma cadeia $x \in 
+                L(A)$, só existe uma única sequencia de estados no AFD $A$ para 
+                preocessá-la.
+            \end{itemize}
+        \end{itemize}
+        \item Exercicios
+        \begin{itemize}
+            \item Dados os seguintes autômatos:
+            
+            \item Identifique a linguagem associada a cada um
+            \begin{itemize}[label=R:]
+                \item Autômato 1: $L=\{a^nbc^m \vee a^ncb^m | n \geq 0, m \geq 0\}$ \\
+                Autômato 2: $L=\{aa^nbb^m | n \geq 0, m \geq 0\}$ \\
+                Autômato 3: $L=\{a..zA..Z(a..zA..Z0..9)^n | n \geq 0\}$
+            \end{itemize}
+            \item Descreva as funções de transição de cada um (exceto para o 
+            terceiro diagrama)
+            \begin{itemize}[label=R:]
+                \item Autômato 1: 
+                \[\delta(S_0,a)=S_0; \delta(S_0,b)=S_1; \delta(S_1,c)=S_1\] 
+                \begin{center}OU\end{center} 
+                \[\delta(S_0,a)=S_0; \delta(S_0,c)=S_2; \delta(S_2,b)=S_2\] \\
+                Autômato 2: \[ \delta(S_0, a)=S_1; \delta(S_1, a)=S_1; 
+                \delta(S_1, b)=S_2; \delta(S_2,b)=S_2 \]
+            \end{itemize}
+        \item Exemplo:
+        \begin{itemize}
+            \item Modelagem de uma "vending machine" que aceita moedas de 5, 
+            10 e 25 centavos. O preço do produto que ela entrega é 30 centavos.
+            \item Partindo do estado inicial (0 centavos), deveremos reconhecer 
+            sequencias que nos levem a estados finais (valor inserido $\geq$ 30 
+            centavos)
+            \item Podemos chamar o autômato de $V$
+            \item Assim:
+            \begin{itemize}
+                \item $V=<\Sigma, S, S_0, \delta, F>$ onde:
+                \item $\Sigma=\{5,10,25\}$ -- Cada um destes símbolos (ou letras) 
+                representa uma ação.
+                \item $S=\{<0c>,<5c>,<10c>,<15c>,<20c>,<25c>,<30c>,<35c>,<40c>,
+                <45c>,<50c>\}$ -- Cada estado indica quanto foi depositado.
+                \item $S_0 = <0c>$ -- estado inicial.
+                \item $F = \{<30c>,<35c>,<40c>,<45c>,<50c>\}$ -- estado onde a 
+                entrada é válida e o produto pode ser liberado.
+                \item Delta é definido como: 
+                \begin{center}
+                        $\delta(<0c>, 5)=<5c>$ \\
+                        $\delta(<0c>, 10)=<10c>$ \\
+                        $\delta(<0c>, 25)=<25c>$ \\
+                        $\delta(<5c>, 5)=<10c>$ \\
+                        $\delta(<5c>, 10)=<15c>$ \\
+                        $\delta(<5c>, 25)=<30c>$ \\
+                        $\delta(<10c>, 5)=<15c>$ \\
+                        \dots
+                \end{center}
+                \item Tabela de transição de estados
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{|c|ccc|}
+                        \hline
+                        $\delta$ & 5 & 10 & 25 \\ \hline 
+                        $<0c>$ & $<5c>$ & $<10c>$ & $<25c>$ \\
+                        $<5c>$ & $<10c>$ & $<15c>$ & $<30c>$ \\ 
+                        $<10c>$ & $<15c>$ & $<20c>$ & $<35c>$ \\ 
+                        $<15c>$ & $<20c>$ & $<25c>$ & $<40c>$ \\ 
+                        $<20c>$ & $<25c>$ & $<30c>$ & $<45c>$ \\ 
+                        $<25c>$ & $<30c>$ & $<35c>$ & $<50c>$ \\ 
+                        $<30c>$ & - & - & - \\ 
+                        $<35c>$ & - & - & - \\ 
+                        $<40c>$ & - & - & - \\ 
+                        $<45c>$ & - & - & - \\ 
+                        $<50c>$ & - & - & - \\ 
+                        \hline
+                    \end{tabular}
+                \end{table}
+                A tabela de transição é boa para demonstrar transições 
+                grandes, e tambem para implementar em codigos, usando uma 
+                matriz para descrever a tabela de transição!! \\
+                Para descrevermos que a quantia de itens é a definição de 
+                um AFD, podemos dizer, por exemplo, que 
+                $L=\{x \in \Sigma^* | |x|_a \text{condição} \}$
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    
+\end{document}

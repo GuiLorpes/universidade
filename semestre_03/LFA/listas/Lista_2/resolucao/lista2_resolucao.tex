@@ -1,0 +1,76 @@
+\documentclass[12pt]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{indentfirst}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[letterpaper,
+            top=1.5cm,
+            bottom=1.5cm,
+            left=2.75cm,
+            right=2.75cm,
+            marginparwidth=1.75cm]{geometry}
+
+\title{Lista 2 -- Autômato Finito Determinístico (AFD)}
+\author{Guilherme Lopes}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+    % \begin{itemize}[label=R:]
+    %     \item 
+    % \end{itemize}
+
+\begin{enumerate}
+    \item Descreva a definição de AFD
+    \begin{itemize}[label=R:]
+        \item AFD é um automato que define uma linguagem sobre um alfabeto, que 
+        reconhece entradas e altera o estado do sistema dependendo das mesmas.
+    \end{itemize}
+    Resposta do professor: AFD é uma quintupla $<\Sigma, S, S_0, \delta, F>$, 
+    onde:
+    \begin{itemize}
+        \item $\Sigma$ é o alfabeto de Entradas
+        \item $S$ é um conjunto finito não vazio de estados
+        \item $S_0$ é o estado inicial, $S_0 \in S$
+        \item $\delta$ é a funçã de transição de estados, definida 
+        $\delta:S \times \Sigma \rightarrow S $
+        \item $F$ é o conjunto de estados finais, $F \subseteq S$
+    \end{itemize}
+
+    \item Dado o alfabeto $\Sigma = {a,b}$ construa AFDs para as seguintes 
+    linguagens:
+    \begin{enumerate}[label=\alph*)]
+        \item ${b(ab)^nba | n \geq 0}$
+        \begin{itemize}[label=R:]
+            \item 
+        \end{itemize}
+        \item ${ba^nba | n \geq 0}$
+        \begin{itemize}[label=R:]
+                \item 
+        \end{itemize}
+        \item ${a^mb^n | m+n \text{ é par}}$
+        \begin{itemize}[label=R:]
+            \item 
+        \end{itemize}
+        \item ${ab^mba(ab)^n | m,n \geq 0}$
+        \begin{itemize}[label=R:]
+            \item 
+        \end{itemize}
+    \end{enumerate} 
+    \item Seja $\Sigma = \{0,1,2,3,4,5,6,7,8,9\}$, construa AFDs para as 
+    seguintes linguagens:
+    \begin{enumerate}[label=\alph*)]
+        \item $\{x \in \Sigma | \text{A sequencia descrita por } x \text{ 
+            corresponda a um valor inteiro par}\}$ 
+    \end{enumerate}
+    \item Descreva um algoritmo de um AFD
+    \item Qual é a linguagem definida pelo seguinte autômato?0
+\end{enumerate}
+
+\end{document}

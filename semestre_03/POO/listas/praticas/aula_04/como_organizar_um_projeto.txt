@@ -1,0 +1,6 @@
+Um projeto Java é organizado da seguinte maneira
+
+nome_projeto/src/main/java/com/google/model
+
+Onde, após a pasta java é colocado uma pasta com o URL ao contrario, e após o 
+URL, as pastas necessárias para o projeto
