@@ -1,0 +1,934 @@
+Sequências Numéricas
+
+Definição: 
+    Uma sequência de números reais é uma função f a valores reais cujo domínio é o conjunto dos números inteiros positivos, ou seja: f: Z+*R; n ↦ f(n) 
+    Os números da imagem da sequência são chamados de elementos da sequência. 
+
+Ex 1:
+    A sequência dada pela expressão: 
+        f(n)=n2n + 1
+    é tal que:
+        f(1) =13; f(2)=25; f(3)=37; . . . 
+    ou:
+        13, 25, 37, ...
+
+Notação:
+    {f(n)} : sequência determinada por f
+    Denotando f(n)=an, os elementos de uma sequência também podem ser representados por:
+        {an}n = 1+∞ ou {an}
+    E diremos que a sequência possui um termo geral an.
+    Ex 2:
+    Ex 3:
+
+Progressão aritmética (PA)
+    Uma PA é uma sequência numérica {an}n = 1+∞ definida recursivamente por:
+        an=an-1+r, n>1
+    onde o primeiro termo a1 é um número dado e o número r é chamado de razão PA.
+    Termo Geral:
+        an=a1+(n-1) . r
+    Tipos de PA:
+PA constante: se r = 0
+PA crescente: se r > 0
+PA decrescente: se r < 0
+
+Progressão Geométrica (PG)
+    Uma PG é uma sequência em que cada termo, a partir do segundo, é o produto do termo anterior por uma constante q, chamada de razão da PG
+        an+1=an.q
+    Termo geral:
+        an=a1.qn-1
+    Tipos de PG:
+PG constante: q = 1
+PG crescente: a1>0 e q>1 ou se a1<0 e 0<q<1
+PG decrescente: a1<0 e q>1 ou se a1>0 e 0<q<1
+PG oscilante: q < 0
+
+Limite de uma sequência:
+    Definição
+        Uma sequência {an} tem limite L e escrevemos n+∞an=L se, para cada >0 existir um inteiro correspondente N tal que se n > N, então an-L<.
+        Se n+∞an existe, dizemos que a sequência {an} converge (ou é convergente). Caso contrário, dizemos que {an} diverge (ou é divergente).
+
+    Teorema 1:
+        Se x+∞f(x)=L e f(n)=an quando nZ+*, entãon+∞an=L. 
+        Obs.: Se an aumentar quando n aumentar, dizemos quen+∞an= +∞. Neste caso, a sequência {an} é divergente (diverge para +∞).
+
+    Dado o teorema 1, temos que os teoremas sobre limites de funções de uma variável real podem ser utilizados para calcular o limite de uma sequência 
+
+    Teorema 2:
+        Sejam {an} e {bn} sequências convergentes e c uma constante.
+        I. n+∞(anbn)=n+∞ann+∞bn
+        II. n+∞(anbn)=n+∞ann+∞bn, desde que n+∞bn0
+        III. n+∞an.bn=n+∞an . n+∞bn
+        IV. n+∞c . an=c .n+∞an
+        V. n+∞c=c
+        VI. n+∞(an)p=[n+∞an]p, p>0 e an>0
+
+    Teorema do Confronto para funções de uma variável real.
+
+
+
+
+
+
+
+
+        xI, h(x)g(x)f(x), se xaf(x)=L=xah(x), então xag(x)=L
+
+    Teorema 3: Teorema do Confronto
+        Sejam an,bn e cn sequências. Se anbncn, para nn0 e n+∞an=L=n+∞cn, então n+∞bn=L
+
+
+
+
+
+    Teorema 4: 
+        Se n+∞|an|=0, então n+∞an=0
+        Ex.:
+            a) an=1n
+                n+∞an=n+∞1n=0
+                Logo, an é convergente. Esta sequência converge para 0
+            b) an=1nr
+                - Se r>0: n+∞1nr=0 (Converge)
+                - Se r>0: n+∞1nr=﹢∞ (Diverge)
+            c) an=nn+1
+                n+∞an=n+∞nn+1
+                              =n+∞11+1n=1
+                Logo, an converge para 1
+            d) an=ln nn
+                n+∞an=n+∞ln nn (Regra de L’Hôspital)
+                              =n+∞1n1
+                              =n+∞1n=0
+                Logo, an é convergente.
+
+    Regra de L’ Hôspital:
+        I. Seja f e g funções tais que:
+            xaf(x)=0 e xag(x)=0.
+            Se f e g são deriváveis em a:
+            xaf(x)g(x)=xaf'(x)g'(x)
+        II. A regra também é válida se 
+            xaf(x)= +∞ e xag(x)= +∞
+            ou
+            xaf(x)= -∞ e xag(x)= -∞
+        Ex.:
+            a) an=(﹣1)n
+                n+∞an=n+∞(﹣1)n=∄, 
+                Pois os valores da sequência alternam entre -1 e 1. Logo an é divergente.
+
+
+
+
+             b) an=(﹣1)nn
+	     Usando o teorema 4:
+	     n+∞|an|=n+∞|(﹣1)nn|=0 
+	     Logo, an é convergente
+             c) an=sen(n.)n
+                 Note que:
+                 ﹣1sen(n.)1
+                 0|sen(n.)|10|sen(n.)n|1n
+                 Como o n+∞0=0 e n+∞1n=0, segue pelo Teorema do Confronto, que 
+                 n+∞|sen(n.)n|=0, logo n+∞sen(n.)n=0 e a sequência é convergente
+
+Teorema 5:
+    Se n+∞an=L e a função f for contínua em L, então:
+        n+∞f(an)=f(L) ou n+∞f(an)=f(n+∞an)
+    Ex.: an=sen(n)
+            n+∞sen(n)=sen(n+∞n)=sen(0)=0
+            n+∞an=0 (converge)
+
+
+Teorema 6:
+    A sequência {rn} é convergente se -1<r1 e é divergente para todos os outros valores de r. Além disso:
+    n+∞rn=0, se -1<r<1
+                   =1, se r=1
+
+Definição:
+    Seja {an} uma sequência.
+        i ) A sequência é crescente se an<an+1, n1
+        ii ) A sequência é decrescente se an>an+1, n1
+    Obs.: Uma sequência é monótona se ela for sempre crescente ou decrescente.
+
+Definição:
+    Seja uma sequência {an}:
+        i ) {an} é limitada superiormente se existir um número m tal que anm, n1.
+        ii ) {an} é limitada inferiormente se existir um número m tal que anm, n1.
+    Obs.: Se {an} for limitada superiormente ou inferiormente, então {an} é uma sequência limitada
+
+Teorema 7 - Sequência monótona:
+    Toda sequência monótona e limitada é convergente
+
+
+Séries numéricas
+
+Definição:
+    Seja {an} uma sequência. Defina:
+        Sn=a1+a2+a3+ . . . +an
+    Então a sequência {Sn} será chamada de série infinita, a qual é denotada por:
+        n=1+∞an=a1+a2+a3+ . . . +an+ . . .
+    Os números a1, a2, a3, . . ., an são os termos da série e os números S1, S2, S3,  . . . ,Sn são denominados somas parciais da sequência.
+    O limite da série, quando existir, denomina-se soma da série, ou seja:
+        n=1+∞an=n+∞Sn
+    Se a soma for finita diremos que a série é convergente. Se a soma for infinita ou o limite não existir diremos que a série é divergente.
+    
+Teorema 8:
+    Se a série n=1+∞an for convergente, então:
+        n+∞an=0
+    Obs.: 
+        Deste teorema, temos o seguinte resultado:
+            Se n+∞an0, então a série an é divergente
+
+Definição - Série geométrica:
+    A série geométrica é dada por:
+        n=1+∞arn-1, com a= constante
+    Note que n=1+∞arn-1=a+ar+ar2+ . . .
+    A n-ésima soma, Sn, dessa série:
+        Sn=a+ar+ar2+ . . . +arn-1
+        Sn=a(1+r+r2+ . . . +rn-1) ( 1 )
+    Agora, considere:
+        rSn=a(r+r2+r3+ . . . +rn) ( 2 )
+    Tome ( 1 ) - ( 2 )
+        Sn-rSn=a(1+r+r2+ . . . +rn-1)-(a(r+r2+r3+ . . . +rn))
+        Sn(1-r)=a(1-rn)
+        Sn=a(1-rn)1-r
+
+
+
+
+    Lembremos que uma série é convergente se o limite de Sn, quando n﹢∞, existe. Então, neste caso:
+        n﹢∞Sn=n﹢∞a(1-rn)1-r
+        n﹢∞Sn=n﹢∞[a1-r-a1-rrn]
+        n﹢∞Sn=(a1-r-a1-r)n﹢∞rn
+    Note que n﹢∞rn=0, se |r|<1
+    Assim, se |r|<1, n﹢∞a1-r. 
+    Portanto, se |r|<1, a série geométrica converge
+
+. . .
+
+    Ex.: Determine se a série n=1+∞22n31-n é convergente.
+            Note que: 22n31-n=4n3-(n-1)
+                                           =44n-1(13)(n-1)
+                                           =4(43)(n-1)
+            Assim, n=1+∞22n31-n=n=1+∞4(43)(n-1), note que a=4 e r=43. Como 43>1, então a série é divergente 
+
+Teorema 9
+    Sejam n=1+∞an e n=1+∞bn séries convergentes e c uma constante. Então:
+        i ) n=1+∞can é convergente e n=1+∞can=cn=1+∞an.
+        ii ) n=1+∞an n=1+∞bn é convergente
+        Ex.: Determine se a série n=1+∞(3n(n+1)+12n) é convergente.
+            Note que n+∞(3n(n+1)+12n)=0, logo é inconclusivo pelo teorema 7.
+            Mas: n=1+∞(3n(n+1))=3n=1+∞(1n(n+1)). Logo, a série n=1+∞(1n(n+1)) é convergente (Como visto no exemplo da aula passada)
+            Além disso:
+                12n=(12)n=(12)(12)n-1
+            Assim:
+                n=1+∞12n=n=1+∞(12)(12)n-1
+            É uma série geométrica com r=12<1, convergente.
+            Portanto, n=1+∞(3n(n+1)+12n)=n=1+∞(1n(n+1))+n=1+∞(12)(12)n-1 é uma série convergente
+
+Teorema 10
+    Sejam n=1+∞an uma série divergente, e n=1+∞bn uma série convergente e c uma constante, c0. Então:
+        i ) n=1+∞can é divergente.
+        ii ) n=1+∞(an+bn)  é divergente.
+
+Teorema 11: Testes de comparação
+    Suponha que an e bn sejam séries de termos positivos.
+    1. Se bn for convergente e anbnn, então an também será convergente.
+    2. Se bn for divergente e anbnn, então an também será divergente.
+    Ex.: Determine se a série é convergente ou divergente.
+        a) n=1+∞43n+1
+            Note que, para n1:
+                3n<3n+113n>13n+143n>43n+1
+            Além disso: 
+                43n=4313n-1=43(13)n-1
+
+
+            Além disso, temos a série geométrica: 
+                n=1+∞43(13)n-1, que é convergente pois r=13<1
+            Como 43n+1<43n=43(13)n-1, para todo n1, segue que a série n=1+∞43n+1 é convergente (pelo teste da comparação)
+
+        b) n=1+∞1n
+            Para n1:
+                nn1n1n
+            Como a série harmônica n=1+∞1n é divergente, pelo teste da comparação temos que a série n=1+∞1n, também é divergente.
+
+Definição: Série p (Série hiper-harmônica)
+    A série:
+        n=1+∞1np
+    Teorema 12:
+        A série p:
+            1. Converge, se p>1
+            2. Diverge, se p1
+        Demonstração:
+            1. Se p=1, temos a série harmônica, que é divergente
+            2. Se p=0: n=1+∞1np=n=1+∞1, n+∞1=10. Logo esta série é divergente.
+            3. Se p<0: n=1+∞1np, n+∞1np=﹢∞, pois p<0. Esta série diverge também.
+            4. Se p>1: n=1+∞1np=11p+12p+13p+14p+15p+16p+17p+18p+ . . .
+                Note se que se n1:
+                    - 2p<3p12p>13p
+                    - 4p<5p14p>15p
+                Assim:
+                    n=1+∞1np<11p+12p+12p+14p+14p+14p+14p+18p+ . . .
+                    n=1+∞1np<11p+22p+44p+88p+ . . . n=1+∞1np<20(20)p+21(21)p+22(22)p+23(23)p+ . . . 
+                    n=1+∞1np<n=1+∞2n-1(2n-1)p=n=1+∞2n-1(2p)n-1 
+                    n=1+∞1np<n=1+∞(22p)n-1=n=1+∞(12p-1)n-1 
+
+                Temos que:
+                    n=1+∞(12p-1)n-1 é uma série geométrica com a=1 e r=12p-1, se p>1, p-1>0, então r=12p-1<1 e esta série é convergente. 
+                Pelo teste de comparação, como n=1+∞1np<n=1+∞(12p-1)n-1, temos que a série p é convergente para n>1
+
+Teorema 13 - Teste de comparação de limite:
+    Suponha que an e bn sejam séries de termos positivos.
+        i ) Se n+∞anbn=c>0, então ambas as séries são convergentes ou divergentes.
+        ii ) Se n+∞anbn=0 e se bn converge, então an também converge.
+        iii ) Se n+∞anbn=﹢∞ e se bn diverge, então an também diverge.
+
+Séries alternadas
+    n=1+∞an é uma série alternada se an=(﹣1)nbn ou an=(﹣1)n-1bn, onde bn é um número positivo (|an|=bn)
+
+
+
+Teorema 14 - Teste da série alternada
+    Se a série é alternada n=1+∞(﹣1)n-1bn=b1-b2+b- . . . , com bn>0, satisfaz:
+        i ) bn+1<bn, n (decrescente)
+        ii ) n+∞bn=0
+    Então a série é convergente.
+
+Convergência absoluta
+    Seja an, uma série qualquer. Temos que:
+        |an|=|a1|+|a2|+ . . .
+    É a série cujos termos são os valores absolutos da série original.
+
+    Definição:
+        Uma série an é dita absolutamente convergente se a série de valores absolutos |an| for convergente.
+    Definição:
+         Uma série é denominada condicionalmente convergente se ela for convergente, mas não absolutamente convergente.
+
+Teorema 15:
+    Se a série for absolutamente convergente, então an é convergente
+Teorema 16 - Teste da razão:        (Mais recomendado quando tem algum fatorial)
+    Seja a série an e considere que exista o limite:
+        n+∞|an+1an|=L
+    1. Se L<1, a série é absolutamente convergente, e portanto é convergente.
+    2. Se L>1, a série é divergente.
+    3. Se L=1, o teste é inconclusivo
+    Obs.: Se n+∞|an+1an|=﹢∞, então a série an é divergente.
+    Ex.: Use o teste da razão para determinar se a série dada é convergente ou divergente
+            a) n=1+∞(﹣1)nn33n
+                 (Resolução na foto do dia 17/09)
+                 . . . Portanto, a série dada é absolutamente convergente e, consequentemente, convergente
+            b) n=1+∞1n
+                (Resolução na foto do dia 17/09)
+                . . . Neste caso o teste é inconclusivo (Sabemos que esta série é divergente por exemplos anteriores)
+            c) n=1+∞1n2
+                (Resolução na foto do dia 17/09)
+                . . . Neste caso o teste é inconclusivo (Sabemos que esta série é convergente por ser uma série p com p>1)
+            d) n=1+∞nnn!
+                (Resolução na foto do dia 17/09)
+                . . . e>1, portanto, esta série é divergente
+
+Teorema 17 (Teste da Raiz):                  (Mais recomendado quando toda a expressão está elevada a n)
+    Seja an uma série e considere que exista o limite:
+        n+∞n|an|=L
+    1. Se L<1, a série é absolutamente convergente e, portanto, convergente.
+    2. Se L>1, a série é divergente.
+    3. Se L=1, o teste é inconclusivo
+    Obs.: Se n+∞n|an| não existir, então a série é divergente.
+    Ex.: Use o teste da raiz para determinar se a série é convergente ou divergente.
+            n=1+∞(2n + 33n + 2)n
+            (Resolução foto do dia 17/09)
+            . . . Pelo teste da raiz, a série dada é convergente
+
+
+Apêndice -> Integral imprópria:
+    . . . Gráfico
+    A(t)=1t1x2dx=﹣1x|x=1x=t=﹣1t-(﹣11)
+    A(t)=1-1t      A(t)<1
+    t+ ∞A(t)=t+ ∞(1-1t)=1
+   A área abaixo da curva de f(x)=1x2, para x>1, se aproxima de 1 quando t﹢∞. Assim:
+        1+∞1x2 dx=t+∞1t1x2 dx
+    Definição:
+        i ) Se atf(x) dx existe para cada número ta, então
+                a+∞f(x) dx=t+∞atf(x) dx, desde que este limite exista
+
+        ii ) Se tbf(x) dx existe para cada tb, então:
+                -∞bf(x) dx=t-∞tbf(x) dx, desde que este limite exista
+        As integrais impróprias a+∞f(x) dx e -∞bf(x) dx são chamadas de convergentes se os correspondentes existirem e divergentes se não existirem.
+
+
+        iii ) Se ambas as integrais a+∞f(x) dx e tbf(x) dx forem convergentes, então definimos:
+                -∞+∞f(x) dx=-∞af(x) dx+a+∞f(x) dx
+
+Teorema 18 - Teste da Integral: 
+    Suponha que f seja uma função contínua positiva e decrescente em [1, ﹢∞[ e seja an=f(n). Então:
+    1) Se 1+∞f(x) dx for convergente, então n=1+∞an é convergente
+    2) Se 1+∞f(x) dx for divergente, então n=1+∞an é divergente
+    Obs.:
+        i ) Se n=k+∞an, k>1, então teremos a integral k+∞f(x) dx.
+        ii ) Não é necessário que f seja sempre decrescente, o importante é que ela seja a partir de algum N>1. Se n=N+∞an é convergente, então n=1+∞an é convergente. Logo é possível aplicar o teste da integral
+    Ex.: Usando teste da integral
+        a) n=1+∞1n2+1
+            Seja f(x)=1x2+1
+            Note que f é contínua e positiva, x1. Além disso, para x1: 
+                x2<x2+11x2>1x2+1
+            Logo, f é decrescente.
+            Outra forma de mostrar que f é decrescente:
+                f(x)=1x2+1=(x2+1)-1
+                f'(x)=﹣(x2+1)-2(2x)
+                f'(x)=﹣2x(x2+1)2
+            Como x1 (positivo), então ﹣2x é negativo x1. Como (x2+1)2 é sempre positivo, que 
+            f'(x)<0 (f é decrescente), para x1. Assim, o teste da integral é aplicável.
+                1+∞1x2+1 dx=t+∞1t1x2+1 dx
+                                 =t+∞[tg-1 (x)| x=1x=t ]
+                                 =t+∞[tg-1(t)-tg-1(1)]
+                                 =t+∞[tg-1(t)-4]=t+∞tg-1(t)-t+∞4
+
+                                 =2-4=4
+         Logo, 1+∞1x2+1 dx=4, a integral imprópria é convergente.
+         Portanto, a série dada é convergente.
+
+
+        b) n=1+∞ln nn
+            Seja f(x)=ln xx. Para x1, f é contínua e positiva.
+                f'(x)=(ln x)'  x - (ln x)  x'x2
+                f'(x)=1x  x - (ln x)  1x2=1 - ln xx2
+                f'(x)<01-ln x <01<ln x
+                e1<eln xe<xx>e
+            Logo, f é decrescente para x>e. Assim, pela observação ii, é possível aplicar o Teste da Integral
+                1+∞ln xx dx=t+∞1tln xx dx
+             Vamos calcular a integral I
+                 I=1tln xx dx    { du = 1x dxu = ln x
+                 I*=u du=u22+C1
+                 I=[ln x]22 |  x = 1x = t=[ln t]22-[ln 1]22
+             Assim:
+                 I=1tln xx dx=[ln t]22
+             Logo:
+                 1+∞ln xx dx=t+∞[ln t]22=﹢∞
+             Como a integral imprópria é divergente, segue que a série dada diverge.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Limite
+Definição:
+    Seja f uma função de duas variáveis que está definida em uma bola aberta B((a,b),r), exceto possivelmente em (a,b). Então o limite de f(x,y) quando (x,y) tendem a (a,b) é L, e escrevemos 
+            (x,y)(a,b)f(x,y)=L
+    Se >0, >0; 0<||(x,y)-(a,b)||<, então |f(x,y)-L|<, 
+    onde ||(x,y)-(a,b)||=(x-a)2+(y-b)2
+    Outras notações para limite:
+        yxbaf(x,y)=L com duas setinhas (xa e yb)
+      ou
+        f(x,y)L quando (x,y)(a,b)
+
+
+            Gráfico
+
+
+
+Teorema:
+    Se f(x,y)=L1 quando (x,y)(a,b) ao longo do caminho C1 e f(x,y)=L2 quando (x,y)(a,b) ao longo do caminho C2, com L1L2, então (x,y)(a,b)f(x,y) ∄ 
+    ex.: Mostre que
+        a) (x,y)(0,0)x2 - y2x2 + y2 não existe
+            Caminho C1: y=0
+                (x,y)(0,0)x2 - 0x2 + 0=x2x2=1
+            Caminho C2: x=0
+                (x,y)(0,0)0 - y20 + y2=-y2y2=﹣1
+
+            Logo, o limite não existe
+    
+
+
+
+
+
+
+
+Os teoremas sobre limites de funções de uma variável podem ser estendidos para as funções de duas variáveis. Em particular:
+    (x,y)(a,b)x=a
+    (x,y)(a,b)y=b
+    (x,y)(a,b)c=c, com c=constante
+
+Teorema do Confronto:
+    Se f(x,y)g(x,y)h(x,y), (x,y)B((a,b),r) e se 
+            (x,y)(a,b)f(x,y)=(x,y)(a,b)h(x,y)=L
+    então:
+            (x,y)(a,b)g(x,y)=L
+
+Teorema - Função Limitada:             ↱g é uma função limitada
+    Se (x,y)(a,b)f(x,y)=0 e se |g(x,y)|<M, (x,y)B((a,b),r), onde r>0 e M>0 são números reais fixos, então
+            (x,y)(a,b)f(x,y)g(x,y)=0
+
+Teorema:
+    (x,y)(a,b)f(x,y)=0(x,y)(a,b)|f(x,y)|=0  
+
+   exercícios
+
+Continuidade:
+    Dizemos que uma função f de duas variáveis x e y é contínua no ponto (a,b) se, e somente se, as seguintes condições forem satisfeitas:
+        i ) f(a,b) , ou seja, (a,b)Dm(f)
+        ii ) (x,y)(a,b)f(x,y) existe
+        iii ) (x,y)(a,b)f(x,y)=f(a,b)
+    Se pelo menos uma dessas não for satisfeita, então dizemos que f é descontínua em (a,b)
+    Obs.: Se uma função f for descontínua em (a,b), mas (x,y)(a,b)f(x,y) , então f possui uma 
+              descontinuidade removível em (a,b), pois se redefinirmos f como segue:
+              f1(x,y)={ (x,y)(a,b)f(x,y) se (x,y) = (a,b)f(x,y), se (x,y)  (a,b), então f1 será contínua em (a,b). 
+
+              Caso contrário, dizemos que f possui uma descontinuidade essencial em (a,b).
+    ex.: f(x,y)=x3x2 + y2
+            Note que (0,0)Dm(f). Assim, f(0,0) não existe, e portanto, f é descontínua em (0,0). Mas, em 
+            um exemplo anterior, vimos que:
+            (x,y)(a,b)x3x2 + y2=0
+            Neste caso, a descontinuidade é removível
+            f1(x,y)={ 0 se (x,y) = (0,0)x3x2 + y2, se (x,y)  (0,0)
+
+Derivada parcial
+Definição
+    Se f é uma função de duas variáveis x e y, suas derivadas parciais são as funções fx e fy, definidas por:
+        i ) fx(x,y)=h0f(x+h, y) - f(x, y)h
+        ii )fy(x,y)=h0f(x, y+h) - f(x, y)h
+Notação para derivadas parciais: se z=f(x,y)
+    i ) fx(x,y)=fx=𝜕f𝜕x=𝜕𝜕xf(x,y)=𝜕z𝜕x=f1=D1f=Dxf
+    ii ) fy(x,y)=fy=𝜕f𝜕y=𝜕𝜕yf(x,y)=𝜕z𝜕y=f2=D2f=Dyf
+
+ex.:
+
+
+
+
+
+
+
+
+
+
+
+Derivadas de ordem superior
+    Se z=f(x,y) as derivadas parciais de 2a ordem de f são as derivadas parciais de fx e fy.
+
+    Usamos a seguinte notação:
+        i ) (fx)x=fxx=𝜕𝜕x(𝜕f𝜕x)=𝜕2f𝜕x2=𝜕2z𝜕x2
+        ii ) (fy)y=fyy=𝜕𝜕y(𝜕f𝜕y)=𝜕2f𝜕y2=𝜕2z𝜕y2
+        iii ) (fx)y=fxy=𝜕𝜕y(𝜕f𝜕x)=𝜕2f𝜕y𝜕x=𝜕2z𝜕y𝜕x
+        iv ) (fy)x=fyx=𝜕𝜕x(𝜕f𝜕y)=𝜕2f𝜕x𝜕y=𝜕2z𝜕x𝜕y
+
+Teorema de Clairaut:
+    Suponha que f seja definida em uma bola aberta D que contenha o ponto (a,b). Se as funções fxy e fyx forem ambas contínuas em D, então:
+        fxy(a,b)=fyx(a,b)
+
+    ex.:
+
+    Derivadas de 3a ordem também podem ser definidas. 
+    Por exemplo:
+        fxxy=𝜕𝜕y(𝜕2f𝜕x2)=𝜕3f𝜕y𝜕x2
+    O Teorema de Clairaut é aplicável a derivadas parciais de ordem maior ou igual a 3
+    ex.: Seja a função . . .
+
+
+Plano Tangente
+Definição:
+    Suponha que f tenha derivadas parciais de 1a ordem contínuas. Uma equação do plano tangente a superfície z=f(x,y), no ponto P(a,b,f(a,b)) é dada por:
+        z=f(a,b)+fx(a,b)(x-a)+fy(a,b)(y-b)
+    ex.: Determine a equação do plano tangente a superfície da função f(x,y)=4-x2-2y2, no ponto P(1,1,1) . . . 
+
+
+Aproximação Linear
+A função linear L1 dada por: 
+        L(x,y)=f(a,b)+fx(a,b)(x-a)+fy(a,b)(y-b)
+    é denominada linearização de f em (a,b) e a aproximação:
+        f(x,y)L(x,y)
+    é chamada de aproximação linear ou aproximação pelo plano tangente de f em (a,b).
+    ex.: Determine a linearização L de f em (1,4), onde f(x,y)=yln x
+
+questão da prova: especificar o domínio e fazer o esboço
+
+   . . . . . .
+
+
+Diferenciais
+Seja f uma função de duas variáveis, tal que z=f(x,y). Suponha que x varie de a para a+x e y varie de b para b+y. Então, o incremento de z é z, dado por:
+    z=f(a+x, b+y)-f(a,b)
+
+Definição:
+    Se z=f(x,y), então f é diferenciável em (a,b) se z pode ser expresso na forma:
+        z=fx(a,b)x+fy(a,b)y+1x+2y
+    onde 10 e 20 quando (x,y)(0,0)
+    Obs.: Esta definição afirma que uma função diferenciável é aquela para a qual a aproximação linear é uma 
+              boa aproximação quando (x,y) está próximo de (a,b)
+
+
+
+Teorema 1:
+    Seja f uma função de duas variáveis. Se f for diferenciável em (a,b) então f é uma função contínua em (a,b)
+    Sejam f:AR2R, A uma bola aberta e (a,b)A
+
+Teorema 2:
+    Se f for diferenciável em (a,b), então f admitirá derivadas parciais nesse ponto.
+
+Teorema 3:
+    Se as derivadas parciais fx e fy existirem em A e forem contínuas em (a,b), então f será diferenciável em (a,b)
+
+Obs.:
+    i ) Se f não for contínua em (a,b), então f não será diferenciável em (a,b)
+    ii ) Se fx ou fy não existir em (a,b), então f não será diferenciável em (a,b)
+
+ex.: Seja f(x,y)=xexy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Seja f uma função de duas variáveis z=f(x,y). Definimos as diferenciais dx e dy como variáveis independentes e a diferencial dz, chamada de diferencial total, dada por:
+    dz=fx(x,y)dx+fy(x,y)dy
+Notação: dz=df
+Se tomarmos:
+    dx=x=x-a
+    dy=y=y-b
+Então:
+    dz=fx(a,b)(x-a)+fy(a,b)(y-b)
+Assim, com a notação de diferencial, a aproximação linear pode ser escrita como:
+    f(x,y)f(a,b)+dz
+
+ex.:
+
+
+
+
+
+
+Derivada direcional e o vetor gradiente
+Definição:
+    A derivada direcional de f em (x0,y0) na direção do vetor unitário u=(a,b) é:
+            Duf(x0,y0)=h0f(x0 + ha, yo + hb) - f(x0, y0)h
+    se este limite existir
+
+Notação:
+    Duf(x0,y0)= ∂f∂u(x0,y0)
+    obs.: 
+        i ) A derivada direcional de f na direção de u no ponto (x0,y0) é o coeficiente angular da reta tangente à 
+            curva C no ponto (a,b,f(a,b)) do gráfico f
+        ii ) As derivadas parciais fx e fy são casos particulares da derivadas direcionais quando u=e1=(1,0) 
+            e u=e2=(0,1)
+ex.: Seja f(x,y)=3x2-y2+4x e u o vetor unitário direcionado na direção 6. Determine Duf(x0,y0), com (x0,y0)ℝ
+
+…
+
+Definição:
+    Se f é uma função diferenciável de x e y, o gradiente de f é a função vetorial ∇f, definida por:
+            ∇f(x,y)=(fx(x,y),fy(x,y)) ou seja, ∇f(x,y)=fx(x,y)i+fy(x,y)j
+
+Teorema:
+    Se f é uma função diferenciável em x e y, então f possui derivada direcional na direção de qualquer vetor u=(a,b) e:
+        Duf(x,y)=∇f(x,y)u
+
+ex.:
+
+
+
+
+
+
+
+
+
+
+
+
+Teorema:
+    Suponha que f seja uma função de 2 ou 3 variáveis e xDom(f). O valor máximo da derivada direcional Duf(x,y) é ||∇f(x,y)|| e ocorre quando o vetor u tem a mesma direção do vetor gradiente ∇f(x)
+    Demonstração:
+        Duf(x)=∇f(x)u
+                   =||f(x)||||u|| . cos()
+        Como 0 (entre vetores), o maior valor de cos()=1, quando =0 e se =0, ∇f(x) e u têm as mesma direção e Duf(x)=||f(x)|| é o valor máximo da derivada direcional
+
+Regra da Cadeia (Seção 14.5)
+Para funções de uma variável real, se y=f(u) e u=g(x), então:
+    dydx=dydududx
+ou
+    Dx[f(g(x))]=f'(g(x))g'(x)
+
+Para funções com mais de uma variável real há várias versões da Regra da Cadeia.
+
+Caso 1:
+    Seja z=f(x,y) uma função diferenciável de x e y, onde x=g(t) e y=h(t) são funções diferenciáveis de t. Então z é uma função diferenciável de t e:
+        dzdt=∂z∂xdxdt+∂z∂ydydt
+
+    Ex.: Se z=x2y+3xy4, onde x=sen(2t) e y=cos(t), determine dzdt quando t=0
+            dzdt=∂z∂xdxdt+∂z∂ydydt
+                =((2xy+3y4)2(cos(2t)))+((x2+12xy3))﹣sen(t))
+                =(4xy+6y4)cos(2t)-(x2+12xy3))sen(t)
+            Quando t=0:
+                cos(20)=cos(0)=1
+                sen(0)=0
+                dzdt=(4xy+6y4)cos(2t)-(x2+12xy3))sen(t)
+                    =(4xy+6y4)1-(x2+12xy3))0
+                    =4xy+6y4      x=sen(20)=0;y=cos(0)=1
+                    =401+614=6
+            Logo, quando t=0, dzdt=6
+
+Caso 2:
+    Seja z=f(x,y) uma função diferenciável de x e y, onde x=g(s,t) e y=h(s,t) são funções diferenciáveis de s e t. Então z é uma função diferenciável de s e t e:
+        i ) ∂z∂s=∂z∂x∂x∂s+∂z∂y∂y∂s
+        ii ) ∂z∂t=∂z∂x∂x∂t+∂z∂y∂y∂t
+    Neste caso, há 3 tipos de variáveis: s e t são as variáveis independentes, x e y são as variáveis intermediárias e z é a variável dependente.
+
+
+
+Caso geral:
+    Suponha que u seja uma função diferenciável de n variáveis x1,x2,x3, . . . ,xn, onde cada xj é uma função diferenciável de m variáveis t1,t2,t3, . . . ,tm. Então u é uma função diferenciável de t1,t2,t3, . . . ,tm e:
+        ∂u∂ti=∂u∂x1∂x1∂ti+∂u∂x2∂x2∂ti+∂u∂x3∂x3∂ti+ . . .+∂u∂xn∂xn∂ti, para i=1,2,3, . . . ,m
+    Ex.: Se u=x4y+y2z3, onde x=rset,y=rs2e-t e z=r2ssen(t), determine o valor de
+            ∂u∂s|r = 2, s = 1, t = 0
+            ∂u∂s=∂u∂x∂x∂s+∂u∂y∂y∂s+∂u∂z∂z∂s
+                =(4x3y)(ret)+(x4+2yz3)(2sre-t)+(3y2z2)(r2sen(t))
+            Para r=2,s=1 e t=0
+            ∂u∂s=4x3y2e0+(x4+2yz3)22e-0+3y2z222sen(0)
+                =8x3y+4x4+8yz3
+            x=21e0=2;y=212e-0=2; e z=221sen(0)=0
+            ∂u∂s=8232+424+8203
+                =128+64
+            Logo, ∂u∂s|r = 2, s = 1, t = 0=192
+
+Valores máximo e mínimo (Seção 14.7)
+Definição:
+    Uma função de duas variáveis tem máximo local (relativo) em (a,b) se f(x,y)f(a,b), (x,y) em uma bola aberta com centro (a,b), ou seja, quando (x,y) está próximo de (a,b). O número f(a,b) é chamado máximo local.
+    Se f(x,y)f(a,b) quando (x,y) está próximo de (a,b), então f tem um mínimo local em (a,b) e f(a,b) é um valor mínimo local.
+    Obs.: Se as inequações da definição anterior valerem (x,y)Dm(f) , então f tem máximo global (absoluto) ou tem máximo global (absoluto) em (a,b)
+
+Teorema:
+    Se f tem um máximo ou mínimo local em (a,b) e as derivadas parciais de 1a ordem de f existirem em (a,b) então ambas são nulas, ou seja fx(a,b)=0 e fy(a,b)=0
+Obs.: A interpretação geométrica do teorema acima é que o gráfico de  f tem um plano tangente horizontal em um máximo ou mínimo local
+
+    
+
+
+
+
+Definição:
+    Um ponto (a,b) é chamado ponto crítico de f se fx(a,b)=0 e fy(a,b)=0, ou se uma das derivadas de 1a ordem não existir
+    Ex.: f(x,y)=4-x2-y2
+            Derivadas parciais de f:
+                fx(x,y)=﹣2x
+                fy(x,y)=﹣2y
+            {fy(x,y) = 0fx(x,y) = 0{-2y = 0-2x = 0{y = 0x = 0
+            Logo, há somente um ponto crítico de f em (0,0)
+        Note que:
+            z=f(x,y)z=4-(x2+y2) e x2+y20
+        Assim, f assume valor máximo absoluto quando x2+y2=0, ou seja, em x=0 e y=0
+
+Teste da derivada segunda:
+    Seja f uma função de duas variáveis x e y e supunha que as suas derivadas parciais de 2a ordem sejam contínuas em uma bola aberta de centro em (a,b). Além disso, suponha que fx(a,b)=0 e fy(a,b)=0, ou seja, que (a,b) é um ponto crítico de f. Seja
+        D=D(a,b)=fxx(a,b)fyy(a,b)-[fxy(a,b)]2
+    i ) Se D>0 e fxx(a,b)>0, então f(a,b) é um mínimo relativo
+    ii ) Se D>0 e fxx(a,b)<0, então f(a,b) é um máximo relativo6cx
+    iii ) Se D<0, então f(a,b) não é mínimo relativo nem máximo relativo. Neste caso, (a,b) é denominado 
+          ponto de sela de f 
+    iv ) Se D=0, o teste é inconclusivo.
+
+    Obs.: Podemos escrever D como um determinante
+                D=D(a,b)= |fyxfxx   fyyfxy| =fxxfyy-[fxy(a,b)]2
+    Lembrando que:
+        fxy=fyx fxy e fyx forem contínuas
+
+    Ex.: 
+
+
+
+
+
+
+
+
+Teorema do valor extremo para funções de duas variáveis:
+    Seja f uma função de duas variáveis x e y, contínua no conjunto fechado Aℝ2. Então existem (x1,y1) e (x2,y2) em A tais que:
+        f(x1,y1)f(x,y)f(x2,y2),(x,y)A
+    Obs.:
+        Este teorema afirma que f possui um mínimo absoluto em (x1,y1) e um máximo absoluto em (x2,y2), no 
+        conjunto fechado A.
+    Para determinar os extremos absolutos de uma função contínua f em um conjunto fechado A, podemos seguir os passos abaixo:
+        1) Determine os valores de f nos pontos críticos de f em A.
+        2) Determine os valores externos de f na fronteira de A.
+        3) O maior valor dos passos 1 e 2 é o máximo absoluto de f, e o menor, é o mínimo absoluto.
+
+    Ex.: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Equação Diferencial Ordinária de 1ᵃ Ordem (Guidorrizzi, Volume 4)
+Uma equação diferencial ordinária (EDO) de 1ᵃ ordem é uma equação do tipo:
+    dydx=F(x,y)       (1)
+Onde F é uma função definida em um aberto Dℝ2.
+Dizemos que y=y(x), definida em um aberto Iℝ2, é uma redução da equação (1) se, xI, ocorrer:
+    y'(x)=F(x,y(x))
+
+Ex.: Verifique que y(x)=ex2, xℝ, é uma solução da EDO:
+          dydx=2xy
+
+EDO de 1ᵃ ordem de variáveis separáveis
+    Esse tipo de equação tem a forma:
+        dydx=g(x)h(y)       (2)
+    Onde g e h são funções definidas em intervalos abertos I1 e I2 respectivamente.
+    Ex.:
+        a) dydx=2xy2 → Separável: g(x)=x e y(x)=y2
+        b) dydx=x2+y2 → Não é separável
+    Soluções constantes de uma EDO de 1a ordem de variáveis separáveis
+        Suponha que g(x)0,xI1. A função constante y(x)=K, com xI2, será uma solução da equação (2) se K for raiz da equação h(y)=0
+        Ex.:
+
+        Ex.:
+
+    Soluções não constantes de uma EDO de 1a ordem de variáveis separáveis
+        dydx=g(x)h(x)1h(x)dy=g(x)dx1h(x)dy=g(x)dx+c, onde c é uma constante.
+        Ex.:
+
+        Ex.: PVC
