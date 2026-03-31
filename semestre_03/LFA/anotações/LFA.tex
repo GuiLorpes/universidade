@@ -410,5 +410,170 @@ Site do Professor: \url{http://www.din.uem.br/yandre}
             \end{itemize}
         \end{itemize}
     \end{itemize}
-    
+    \subsection{Autômato Finito Não Deterministico -- AFND}
+    \begin{itemize}
+        \item Modelo matemático semelhante ao AFD
+        \item Condições mais flexiveis
+        \item Podem haver multiplos caminhos para processar uma cadeia
+        \item Definição formal
+        \begin{itemize}
+            \item Uma AFD é uma quintupla $<\Sigma, S, S_0, \delta, F>$, 
+                    onde:
+            \begin{itemize}
+                \item $\Sigma$ é o alfabeto de entradas
+                \item $S$ é um conjunto finito não vazio de estados
+                \item $S_0$ é um conjunto não vazio de estados iniciais, $S_0 
+                \subseteq S$
+                \item $\delta$ é a função de transição de estados, definida 
+                $\delta:S \times \Sigma \rightarrow \rho(S)$
+                \begin{itemize}
+                    \item A função pode ativar todos os possiveis subconjuntos 
+                    dos estados
+                \end{itemize}
+                \item $F$ é o conjunto de estados finais, $F \subseteq S$
+            \end{itemize}
+            \item $\Sigma, S$ e $F$ são os mesmos do AFD;
+            \item $S_0$ era um unico estado em AFD. Em AFND é um conjunto com 
+            pelo menos um estado inicial
+            \begin{itemize}
+                \item Então em AFD, $S_0 \in S$, e em AFND, $S_0 \subseteq S$
+            \end{itemize}
+            \item Um AFND pode ter mais de um estado "ativo" (corrente) num 
+            instante;
+            \item Inicialmente, todo estado de $S_0$ são ativados;
+        \end{itemize}
+        \item "Alternativas" para processar uma unica cadeia;
+        \item Se o processamento de uma cadeia não levar ao estado final por um 
+        caminho, deve-se tentar por outros caminhos (se houverem);
+        \item Se algum dos caminhos possiveis levar a cadeia $x$ a um estado 
+        final, então ela faz parte da linguagem definida pelo automato.
+        \item A cadeia é rejeitada se a partir de nenhum estado inicial for 
+        possivel atingir um estado final ao termino do processamento;
+        \item A função $\delta$ agora é definida por $S \times\Sigma\rightarrow
+        \rho(S)$
+        \item Exemplo da função $\delta(S,a)={R,T}$
+        \item[] imagem
+        \item Se o estado $S$ estiver ativo e a letra $a$ for processada, então 
+        tanto $R$ quanto $T$ passaram a estar ativos;
+        \item Se seguirmos por $R$ e não chegarmos a um estado final, podemos 
+        tentar por $T$
+        \item Se alguma das alternativas levar a um estado final, a cadeia é 
+        reconhecida
+        \item Se nenhuma alternativa levar a um estado final, a cadeia é rejeitada;
+        \item Ao processar uma letra, todas as transições rotuladas com aquela 
+        letra, a partir de todos os estados ativos serão efetuadas
+        \item Então, podemos novamente observar que podemos ter vários estados 
+        ativos ao mesmo tempo, ao contrário dos AFDs
+    \end{itemize}
+    \subsection{Equivalência entre AFD e AFND}
+    \begin{itemize}
+        \item A classe dos AFDs é equivalente à classe doas AFNDs. Assim, para 
+        todo AFD existe um AFND equivalente e vice-versa.
+        \item Exemplo
+        \item[] imagem
+        \item Exercicio
+        \begin{itemize}
+            \item Construa um AFD e um AFND para a seguinte linguagem:
+            \begin{itemize}
+                \item \( L(A)=\{w|w \in {a,b}^* \wedge w\} \) possui $aa$ como 
+                subpalavra
+                \item[] imagem 
+            \end{itemize}
+        \end{itemize}
+        \item Transformação de AFND em AFD
+        \begin{itemize}
+            \item Para todo AFND existe um AFD equivalente
+            \item Dado um AFND $A = <\Sigma, S, S_0, \delta, F>$, define-se 
+            o AFD $A^d = <\Sigma, S^d, S^d_0, \delta^d_0, F^d>$ equivalente da 
+            seguinte forma:
+            \begin{itemize}
+                \item $S^d = \rho(S)$
+                \item $S^d_0=S_0$
+                \item $F^d$: Todas as combinações de estados de $S^d$ que possui 
+                como componente algum estado de $F$
+                \item Seja $Q\in S^d$, $\delta^d(Q,a)$ vai levar à um estado 
+                que corresponde à combinação de todos os estados que podem ser 
+                alcançados ao processar o simbolo '$a$' a partir de qualquer 
+                componente $Q$
+            \end{itemize}
+            \item Exemplo 1:
+            \begin{itemize}
+                \item Dado o AFND:
+                \item [] imagem
+                \item Cria um estado para cada combinação possivel de estados 
+                do AFND
+                \item Estabelece-se como estado inicial a combinação 
+                correspondente ao conjunto de estados iniciais do AFND
+                \item Estados finais: todos que possuem em sua combinação algum 
+                dos estado finais do AFND
+                \item Criação das transições:
+                \begin{itemize}
+                    \item $\delta^d(Q,a)$ será igual ao estado que corresponda 
+                    à combinação de todos os estados que formam o conjunto 
+                    $\delta(Q,a)$
+                    \item[] imagem
+                \end{itemize}
+            \end{itemize}
+            \item Durante a transformaçãp de um AFND em um AFD podem ser criados 
+            estados que fiquem "isolados" do(s) estado(s) inicial(is)
+            \item Exercicio: Transforme o AFND descrito a seguir em um AFD
+            \item [] imagem
+        \end{itemize}
+        \item Minimização de AFD
+        \begin{itemize}
+            \item Dois AFDs $A$ e $B$ são equivalentes, denotado por $A 
+            \equiv B$, se $L(A) = L(B)$
+            \item Um automato minimo para uma linguagem regular L é um 
+            automato com o menor numero de estados possivel que aceita $L$
+            \begin{itemize}
+                \item Um AFD $A = <\Sigma, S_A, S_{0A}, \delta_A, F_A>$ é 
+                dito minimo se para qualquer AFD $B = <\Sigma, S_B, S_{0B}, 
+                \delta_B, F_B>$ tal que $A \equiv B$, temos que $|S_A|\leq
+                |S_B|$
+            \end{itemize}
+            \item Pré-requisitos para a minimização:
+            \begin{itemize}
+                \item O automato deve ser Deterministico
+                \item Não pode ter estados inacessiveis a partir do estado 
+                inicial
+                \item A função de transição deve ser total (todas as saídas 
+                devem ser previstas para todos os estados)
+                \begin{itemize}
+                    \item Para este ultimo requisito muitas vezes é necessario 
+                    introduzir um estado $S_\text{trash}$ para lançar as 
+                    transições não previstas originalmente
+                \end{itemize}
+            \end{itemize}
+            \item A estratégia consiste em fundir estados equivalentes num mesmo 
+            estado
+            \begin{itemize}
+                \item Dois estados são equivalentes se, ao processarem uma mesma 
+                cadeia, ambos chegam a estados finais, ou ambos chegam a estados 
+                não finais
+            \end{itemize}
+            \item Para isto, são identificados estados não-equivalentes e, por 
+            exclusão, encontra-se os equivalentes
+            \item Utiliza-se uma tabela triangular que possui um cruzamento para 
+            cada par de estados distintos do automato (incluindo $S_\text{trash}$ 
+            quando este é acrescentado)
+            \item Supondo um autômato com $S=\{S_0,S_1, \dots, S_{n-1}, S_n, 
+            S_\text{trash}\}$ 
+            \item [] imagem
+            \begin{itemize}
+                \item Estados não equivalentes serão sinalizados, ao final do 
+                processo, os cruzamentos em branco deverão indicar estados 
+                equivalentes.
+            \end{itemize}
+            \item Inicia-se a marcação pelos estados trivialmente não-equivalentes
+            \begin{itemize}
+                \item Dois estados não trivialmente não-equivalentes se um é 
+                final e o outro não
+            \end{itemize}
+            \item Exemplo:
+            \begin{itemize}
+                \item Considere o seguinte AFD e sua tabela de cruzamento de estados
+                \item[] imagem
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
 \end{document}
