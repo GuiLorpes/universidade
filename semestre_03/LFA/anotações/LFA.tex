@@ -469,7 +469,8 @@ Site do Professor: \url{http://www.din.uem.br/yandre}
     \begin{itemize}
         \item A classe dos AFDs é equivalente à classe doas AFNDs. Assim, para 
         todo AFD existe um AFND equivalente e vice-versa.
-        \item Exemplo
+        \item Exemplo -- $L(A)=\{ w|w\in \{a,b\}^* \wedge w \text{possui aaa 
+        como sufixo} \}$
         \item[] imagem
         \item Exercicio
         \begin{itemize}
@@ -573,7 +574,57 @@ Site do Professor: \url{http://www.din.uem.br/yandre}
             \begin{itemize}
                 \item Considere o seguinte AFD e sua tabela de cruzamento de estados
                 \item[] imagem
+                \item[] \dots
             \end{itemize}
+            \item Critério usado para a marcação dos estados não equivalentes:
+            \begin{itemize}
+                \item Para cada par $\{S_u,S_v\}$ não marcado e para cada 
+                simbolo $a \in \Sigma$, suponha que $\delta(S_u,a)=R_u$ e 
+                $\delta(S_v,a)=R_v$
+                \begin{itemize}
+                    \item Se $R_u=R_v$, então $S_u$ e $S_v$ são equivalentes e, 
+                    para o simbolo $a$ não deve ser marcado
+                    \item \dots
+                \end{itemize}
+            \end{itemize}
+            \item Na unificação \dots
         \end{itemize}
     \end{itemize}
+\section{Expressões Regulares}
+\begin{itemize}
+    \item Formalismo de carater gerador
+    \begin{itemize}
+        \item A partir dee pode-se inferir como construir as cadeias da linguagem
+    \end{itemize}
+    \item Pode representar qualquer LR -- Linguagem Regular
+    \item Uma ER é definida a partir de conjuntos básicos e operadores de 
+    concatenação e união 
+    \item Formalismo adequado para comunicação homem $\times$ homem e homem 
+    $\times$ máquina
+    \item Uma ER sobre um alfabeto $\Sigma$ é definida como segue:
+    \begin{itemize}
+        \item $\varnothing$ é uma ER e denota a linguagem vazia
+        \item $\varepsilon$ é uma ER e denota a linguagem contendo exclusivamente 
+        a palavra vazia, ou seja, $\{\varepsilon\}$
+        \item Qualquer simbolo $x$ pertence a $\Sigma$ é uma ER e denota a 
+        linguagem contendo a palavra $x$, ou seja, $\{x\}$
+        \item Se $r$ e $s$ são ERs e denotam as linguagens $R$ e $S$, 
+        respectivamente, então:
+        \begin{itemize}
+            \item $(r+s)$ é ER e denota a linguagem $R \cup S$ (União)
+            \item $(rs)$ é ER e denota a linguagem $RS=\{uv|u\in R \text{ e } 
+            v \in S\}$ (Concatenação)
+            \item $(r^*)$ é ER e denota a linguagem $R^*$ (Fecho)
+        \end{itemize}
+        \item Pode-se utilizar parenteses ou não, mas deve-se considerar a 
+        seguinte convenção:
+        \begin{itemize}
+            \item A concatenação sucessiva (fechamento ou fecho de Kleene) tem 
+            precedencia sobre a concatenação
+            \item A concatenação tem precedência sobre a união
+        \end{itemize}
+    \end{itemize}
+    \item ERs podem ser usadas em buscas em editores de texto
+
+\end{itemize}
 \end{document}

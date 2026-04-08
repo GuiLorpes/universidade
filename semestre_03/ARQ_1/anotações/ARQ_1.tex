@@ -224,5 +224,56 @@ Exemplo de Decisão de Projeto
                     \end{itemize}
             \end{itemize}
         \end{itemize}
+        \item Interrupção
+        \begin{itemize}
+            \item Mecnismo pelo qual módulos (como E/S) podem interromper a 
+            sequencia de processamento normal
+            \item Interrupções podem ser ocasionadas por:
+            \begin{itemize}
+                \item Falaha de algum programa: divisão por zero, acesso à 
+                espaço de memória inválido, overflow
+                \item Timer: sinal para indicar o instante da execução de uma 
+                função especifica
+                \item E/S: sinalizar o termino de uma operação ou ocorrencia de 
+                erros
+                \item Falha de hardware: falta de energia
+            \end{itemize}
+            \item Ciclo de Interrupção
+            \begin{itemize}
+                \item Adicionado ao ciclo de instrução
+                \item Processador verifica Interrupção
+                \begin{itemize}
+                    \item Indicado por um sinal de Interrupção
+                \end{itemize}
+                \item Se não houver interrupção, busca próxima instrução
+                \item Se houver interrupção pendente:
+                \begin{itemize}
+                    \item Suspende execução do programa atual
+                    \item Salva contexto
+                    \item Define PC para endereço inicial da rotina de 
+                    tratamento de interrupção
+                    \item Interrupção do processo
+                    \item Restaura contexto e continua programa interrompido
+                \end{itemize}
+            \end{itemize}
+            \item Multiplas interrupções
+            \begin{itemize}
+                \item Desativar Interrupções
+                \begin{itemize}
+                    \item Processador ignorara outras interrupções enquanto 
+                    processa uma interrupção
+                    \item Interrupções permanecem pendentes e são verificadas 
+                    apos primeira interrupção ter sido processada
+                    \item Interrupções tratadas em sequencia enquanto ocorrem
+                \end{itemize}
+                \item Definir prioridades
+                \begin{itemize}
+                    \item Interrupções de baixa prioridade podem ser 
+                    interrompidas por interrupções de prioridade mais alta
+                    \item Quando interrupção de maior prioridade tiver sido 
+                    processada, processador retorna à interrupção anterior
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
     \end{itemize}
 \end{document}

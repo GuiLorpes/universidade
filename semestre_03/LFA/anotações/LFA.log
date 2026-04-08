@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.2.6)  31 MAR 2026 11:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2026.2.6)  6 APR 2026 14:35
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -396,33 +396,33 @@ File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 ) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<imagens/hierarquia_chomsky.png, id=46, 1067.99pt x 556.0775pt>
+<imagens/hierarquia_chomsky.png, id=50, 1067.99pt x 556.0775pt>
 File: imagens/hierarquia_chomsky.png Graphic file (type png)
 <use imagens/hierarquia_chomsky.png>
 Package pdftex.def Info: imagens/hierarquia_chomsky.png  used on input line 94.
 (pdftex.def)             Requested size: 343.35364pt x 178.77148pt.
  [2 <./imagens/hierarquia_chomsky.png>] [3] [4] [5] [6] [7] [8]
-Overfull \hbox (12.26259pt too wide) in paragraph at lines 486--490
+Overfull \hbox (12.26259pt too wide) in paragraph at lines 487--491
 []\T1/cmr/m/n/12 Dado um AFND $\OML/cmm/m/it/12 A \OT1/cmr/m/n/12 =\OML/cmm/m/it/12 < \OT1/cmr/m/n/12 ^^F\OML/cmm/m/it/12 ; S; S[]; ^^N; F >$\T1/cmr/m/n/12 , define-se o AFD $\OML/cmm/m/it/12 A[] \OT1/cmr/m/n/12 =\OML/cmm/m/it/12 < \OT1/cmr/m/n/12 ^^F\OML/cmm/m/it/12 ; S[]; S[]; ^^N[]; F[] >$
  []
 
-[9] [10] (./LFA.aux)
+[9] [10] [11] (./LFA.aux)
 Package rerunfilecheck Info: File `LFA.out' has not changed.
-(rerunfilecheck)             Checksum: 7D2B92E43AF12E937D478A28BAE7F125;1145.
+(rerunfilecheck)             Checksum: A1048ECBDDFDD9B39D39E480DFD392EF;1294.
  ) 
 Here is how much of TeX's memory you used:
- 12877 strings out of 478287
- 199271 string characters out of 5849290
- 517961 words of memory out of 5000000
- 30883 multiletter control sequences out of 15000+600000
+ 12880 strings out of 478287
+ 199298 string characters out of 5849290
+ 517956 words of memory out of 5000000
+ 30884 multiletter control sequences out of 15000+600000
  484083 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  60i,10n,63p,383b,637s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm2074.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on LFA.pdf (10 pages, 297757 bytes).
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm2074.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on LFA.pdf (11 pages, 305984 bytes).
 PDF statistics:
- 162 PDF objects out of 1000 (max. 8388607)
- 117 compressed objects within 2 object streams
- 19 named destinations out of 1000 (max. 500000)
- 54 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 175 PDF objects out of 1000 (max. 8388607)
+ 127 compressed objects within 2 object streams
+ 21 named destinations out of 1000 (max. 500000)
+ 62 words of extra memory for PDF output out of 10000 (max. 10000000)
 

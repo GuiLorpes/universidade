@@ -38,7 +38,7 @@
         \item $\Sigma$ é o alfabeto de Entradas
         \item $S$ é um conjunto finito não vazio de estados
         \item $S_0$ é o estado inicial, $S_0 \in S$
-        \item $\delta$ é a funçã de transição de estados, definida 
+        \item $\delta$ é a função de transição de estados, definida 
         $\delta:S \times \Sigma \rightarrow S $
         \item $F$ é o conjunto de estados finais, $F \subseteq S$
     \end{itemize}
@@ -48,29 +48,96 @@
     \begin{enumerate}[label=\alph*)]
         \item ${b(ab)^nba | n \geq 0}$
         \begin{itemize}[label=R:]
-            \item 
+            \item \
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.37\linewidth]{imagens/ex2a.jpeg}
+            \end{figure}
         \end{itemize}
         \item ${ba^nba | n \geq 0}$
         \begin{itemize}[label=R:]
-                \item 
+            \item \
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.5\linewidth]{imagens/ex2b.jpeg}
+            \end{figure}
         \end{itemize}
+        \vspace{16pt}
         \item ${a^mb^n | m+n \text{ é par}}$
         \begin{itemize}[label=R:]
-            \item 
+            \item \
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.37\linewidth]{imagens/ex2c.jpeg}
+            \end{figure} 
         \end{itemize}
         \item ${ab^mba(ab)^n | m,n \geq 0}$
         \begin{itemize}[label=R:]
-            \item 
+            \item \
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.37\linewidth]{imagens/ex2d.jpeg}
+            \end{figure} 
         \end{itemize}
     \end{enumerate} 
     \item Seja $\Sigma = \{0,1,2,3,4,5,6,7,8,9\}$, construa AFDs para as 
     seguintes linguagens:
     \begin{enumerate}[label=\alph*)]
-        \item $\{x \in \Sigma | \text{A sequencia descrita por } x \text{ 
+        \item $\{x \in \Sigma^+ | \text{A sequencia descrita por } x \text{ 
             corresponda a um valor inteiro par}\}$ 
+        \begin{itemize}[label=R:]
+            \item \
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.37\linewidth]{imagens/ex3a.jpeg}
+            \end{figure} 
+        \end{itemize}
+        \item $\{x\in\Sigma^+|$A sequencia descrita por $x$ corresponda a um 
+        valor inteiro divisivel por  $5\}$
+        \begin{itemize}[label=R:]
+            \item \
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.37\linewidth]{imagens/ex3b.jpeg}
+            \end{figure} 
+        \end{itemize}
+        \item $\{x \in \Sigma^+ | \text{A sequencia descrita por } x \text{ 
+            corresponda a um valor inteiro impar}\}$ 
+        \begin{itemize}[label=R:]
+            \item \
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.37\linewidth]{imagens/ex3c.jpeg}
+            \end{figure} 
+        \end{itemize}
     \end{enumerate}
     \item Descreva um algoritmo de um AFD
-    \item Qual é a linguagem definida pelo seguinte autômato?0
+    \begin{itemize}[label=R:]
+    \item 
+        \begin{verbatim}
+    automato:
+    inicia automato no estado inicial;
+    recebe entrada
+    se entrada for igual a condição para o proximo estado {
+        atualiza o estado atual para o proximo estado
+    }
+    caso contrario {
+        espera outra entrada
+    }
+    se o estado atual é o estado final {
+        
+    } 
+        \end{verbatim}
+    \end{itemize}
+    
+    \item Qual é a linguagem definida pelo seguinte autômato?
+    \begin{itemize}[label=R:]
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\linewidth]{imagens/ex5.jpeg}
+        \end{figure} 
+        \item $\{x\in\{a,b\}^*||x|_a \text{ é impar} \wedge|x|_b \text{ é impar}\}$
+    \end{itemize}
 \end{enumerate}
 
 \end{document}

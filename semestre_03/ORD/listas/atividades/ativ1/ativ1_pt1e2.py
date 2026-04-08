@@ -1,4 +1,3 @@
-import os
 import io
 
 # Programa 1
@@ -21,21 +20,25 @@ SAIR\n"))
                 sobrenome = str(input("INSIRA O SOBRENOME OU PRESSIONE <ENTER> \
 PARA SAIR\n"))
     except OSError as e:
-        print(f'ERRO MAIN: {e}\n')
+        print(f'ERRO escreve_campos: {e}\n')
     finally:
         print("PROGRAMA FINALIZADO\n")
+
+# Programa 2
 
 def le_campos(nomeArq: str) -> None:
     try:
         with open(nomeArq, 'r') as entrada:
+            campos = ['SOBRENOME', 'NOME', 'ENDEREÇO', 'CIDADE', 
+                      'ESTADO', 'CEP']
             campo = leia_campo(entrada)
-            i = 1
+            i = 0
             while campo != '':
-                print(f'CAMPO {i}: {campo}')
+                print(f'{campos[i]}: {campo}')
                 i += 1
                 campo = leia_campo(entrada)
     except FileNotFoundError as e:
-        print(f'ERRO MAIN: {e}\n')
+        print(f'ERRO le_campos: {e}\n')
     finally:
         print('PROGRAMA FINALIZADO\n')
 
@@ -54,12 +57,12 @@ def leia_campo(arq: io.TextIOWrapper) -> str:
 def main() -> None:
     nomeArq = str(input('QUAL O NOME DO SEU ARQUIVO?\n'))
     print('QUE OPERAÇÃO DESEJA REALIZAR?\n')
-    c = 0
-    while c < 3:    
-        c = int(input('1 -> ESCREVER NO ARQUIVO\n2 -> LER O ARQUIVO\n3 -> SAIR\n'))
-        if c == 1:
+    programa = 0
+    while programa < 3:    
+        programa = int(input('1 -> ESCREVER NO ARQUIVO\n2 -> LER O ARQUIVO\n3 -> SAIR\n'))
+        if programa == 1:
             escreve_campos(nomeArq)
-        if c == 2:
+        if programa == 2:
             le_campos(nomeArq)
     print('ATÉ A PRÓXIMA\n')
 if __name__ == '__main__':

@@ -23,6 +23,9 @@
 
 \maketitle
 
+\tableofcontents
+\break
+
 \section{Memória Secundária}
 \begin{itemize}
     \item Por que discos e fitas são lentos?
@@ -652,6 +655,132 @@ eficiente.
                     \item Libera a estrutura descritora para novos arquivos
                 \end{itemize}
             \end{itemize}
+            \item Exemplo:
+            \begin{itemize}
+                \item \begin{verbatim}
+arq = open('meuarq.txt', 'r')
+''' comandos '''
+arq.close()\end{verbatim}
+            \end{itemize}
+            \item Quando o arquivo é aberto em um comando \verb|with|, não é 
+            necessário o fechamento explícito
+            \begin{itemize}
+                \item \begin{verbatim}
+with open('meuarq.txt', 'r') as arq
+    ''' comandos '''\end{verbatim}
+                \begin{itemize}
+                    \item Nesse caso, o objeto de arquivo arq só existirá no 
+                    escopo do comando with
+                \end{itemize}
+            \end{itemize}
         \end{itemize}
-        Ao utilizar o -1, será lido até o final do arquivo
+        \subsection{Leitura e escrita em arquivos}
+        \begin{itemize}
+            \item Em Python, as funções de leitura e escrita são métodos do 
+            objeto de arquivo
+            \begin{itemize}
+                \item Portanto, dependem do tipo do objeto
+            \end{itemize}
+            \item Arquivos em modo texto são representados por objetos do tipo 
+            \textbf{TextIOWrapper}
+            \begin{itemize}
+                \item Só admitem leitura e escrita de strings, i.e., objetos 
+                do tipo str
+            \end{itemize}
+            \item Arquivos em modo binário são representados por objetos 
+            \textbf{BufferedReader} (leitura), \textbf{BufferedWriter} (escrita) 
+            e \textbf{BufferedRandom} (leitura e escrita)
+            \begin{itemize}
+                \item Só admitem leitura e escrita de objetos do tipo bytes ou 
+                bytearray
+                \begin{itemize}
+                    \item bytes são imutaveis e bytearray são mutaveis -- ambos 
+                    representam sequencias de bytes
+                \end{itemize}
+            \end{itemize} 
+        \end{itemize}
+            \subsubsection{Leitura em modo texto}
+            \begin{itemize}
+                \item \verb|def read(size=-1) -> str|
+                \begin{itemize}
+                    \item Lê e retorna no maximo size caracteres como uma unica 
+                    string
+                    \item Se size for negativo ou None, lê até o fim do arquivo 
+                    (EOF), i.e., retorna todo o conteudo do arquivo como um 
+                    unica string
+                \end{itemize}
+                \item \verb|def readline(size=-1) -> str|
+                \begin{itemize}
+                    \item Lê até uma quebra de linha ou EOF e retorna o conteudo 
+                    como uma unica string
+                    \item Se o ponteiro L/E já estiver EOF, retorna uma string 
+                    vazia
+                    \item Se size for especificado, no maximo size caracteres 
+                    serão lidos
+                \end{itemize}
+                \item \verb|def readlines(hint=-1) -> list[str]|
+                \begin{itemize}
+                    \item Retorna as linhas do arquivo como uma lista de strings
+                    \item Se hint for especificado, linhas serão lidas até o 
+                    maximo de hint caracteres no total
+                \end{itemize}
+            \end{itemize}
+            \subsubsection{Escrita em modo texto}
+            \begin{itemize}
+                \item \verb|def write(s) -> int|
+                \begin{itemize}
+                    \item Escreve a string s no arquivo
+                    \item Retorna o numero de caracteres escritos
+                \end{itemize}
+                \item \verb|writelines(lines) -> None|
+                \begin{itemize}
+                    \item Escreve uma lista de strings
+                    \item Não são adicionados separadores entre as strings, 
+                    então é comum que cada string contenha um caractere 
+                    separador (p.e., '\verb|\n|') no final.
+                \end{itemize}
+            \end{itemize}
+            \subsubsection{Leitura em modo binário}
+            \begin{itemize}
+                \item \verb|def read(size=-1) -> bytes|
+                \begin{itemize}
+                    \item Lê e retorna até size bytes
+                    \item Se size for negativo ou None, o conteudo do arquivo 
+                    será lido até EOF e retornado 
+                    \item Um objeto bytes vazio(b'') é retornado se o ponteiro 
+                    estiver em EOF
+                \end{itemize}
+                \item \verb|def readinto(b) -> int|
+                \begin{itemize}
+                    \item Lê bytes para uma variavel b, pré-alocada como um 
+                    bytearray, e retorna o numero de bytes lidos
+                \end{itemize}
+                \item \verb|def readlines(hint=-1) -> list[bytes]|
+                \begin{itemize}
+                    \item Retorna o conteudo do arquivo como uma lista de linhas
+                    \item Considera o valor b'\verb|\n|' como delimitador de 
+                    linha
+                    \item Se hint for especificado, linhas serão lidas até o 
+                    maximo de hint bytes no total
+                \end{itemize}
+            \end{itemize}
+            \subsubsection{Escrita em modo binário}
+            \begin{itemize}
+                \item \verb|def write(b) -> int|
+                \begin{itemize}
+                    \item Escreve o objeto b do tipo bytes ou bytearray no 
+                    arquivo
+                    \item Retorna o numero de bytes escritos (sempre igual ao 
+                    comprimento de b em bytes, pois uma falha na escrita irá 
+                    gerar uma exceção)
+                \end{itemize}
+                \item \verb|def writelines(lines) -> None|
+                \begin{itemize}
+                    \item Escreve uma lista de linhas no arquivo
+                    \item Não são adicionados separadores entre as linhas, então 
+                    é comum que cada linha seja adicionada de um caractere 
+                    separador (p.e., b'\verb|\n|')
+                \end{itemize}
+            \end{itemize}
+\section{Acesso Sequencial \dots}
 \end{document}
