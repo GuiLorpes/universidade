@@ -50,15 +50,16 @@ public class Main {
                 }
                 System.out.println("= " + res);
 
-                System.out.println("DIGITE A OPERAÇÃO QUE DESEJA REALIZAR");
-                System.out.println("DIGITE: x + y = z");
-                System.out.println("DIGITE <ENTER> PARA SAIR!");
-                entrada = scan.nextLine();
             } catch(ArithmeticException e) {
                 System.out.println("Erro: " + e);
-                break;
             }
+            System.out.println("\nDIGITE A OPERAÇÃO QUE DESEJA REALIZAR");
+            System.out.println("DIGITE: x + y = z");
+            System.out.println("DIGITE <ENTER> PARA SAIR!");
+            entrada = scan.nextLine();
         }
+        System.out.println("ATÉ A PRÓXIMA! :P");
+        System.out.println("=====================================");
         scan.close();
     }
 }

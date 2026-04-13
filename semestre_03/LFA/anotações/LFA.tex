@@ -584,10 +584,28 @@ Site do Professor: \url{http://www.din.uem.br/yandre}
                 \begin{itemize}
                     \item Se $R_u=R_v$, então $S_u$ e $S_v$ são equivalentes e, 
                     para o simbolo $a$ não deve ser marcado
-                    \item \dots
+                    \item Se $R_u \neq R_v$, e o par $\{R_u,R_v\}$ não está 
+                    marcado, então $\{S_u,S_v\}$ é incluido em uma lista a 
+                    partir de $\{R_u,R_v\}$ para posterior analise
+                    \item Se $R_u \neq R_v$, e o par $\{R_u,R_v\}$ está 
+                    marcado, então:
+                    
+                    $\rightarrow$ $\{S_u,S_v\}$ é não equivalente e deve ser
+                    marcado
+
+                    $\rightarrow$ Se $\{S_u,S_v\}$ encabeça uma lista de pares, 
+                    então todos os pares da lista devem ser marcados
                 \end{itemize}
             \end{itemize}
-            \item Na unificação \dots
+            \item Na unificação dos estados equivalentes:
+            \begin{itemize}
+                \item Conjuntos de estados finais equivalentes podem ser 
+                unificados como um unico estado final
+                \item Conjuntos de estados não-finais equivalentes podem ser 
+                unificados como um unico estado não-final
+                \item Se algum dos estados equivalentes é inicial, então o 
+                correspondente estado unificado é inicial
+            \end{itemize}
         \end{itemize}
     \end{itemize}
 \section{Expressões Regulares}
@@ -623,6 +641,8 @@ Site do Professor: \url{http://www.din.uem.br/yandre}
             precedencia sobre a concatenação
             \item A concatenação tem precedência sobre a união
         \end{itemize}
+        \item Exemplos de ER
+        \item[] Tabela
     \end{itemize}
     \item ERs podem ser usadas em buscas em editores de texto
 
