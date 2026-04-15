@@ -5,32 +5,43 @@ FILE_NAME = 'pessoasGOTfixo.dat'
 SIZE_OF_REG = 64
 SIZE_OF_CAB = 4
     
-def edita_campos(arq: io.BufferedRandom, rrn: int) -> str:
-    buffer = ''
-    cab = arq.read(SIZE_OF_CAB)
-    total_reg = int.from_bytes(cab, 'little')
-    campos = ['ID', 'Sobrenome', 'Nome', 'Castelo', 'Cidade', 
-                'Região']
-    
-    for c in campos:
-        s = input(f'{c}: ')
-        if c == 'ID':
-            i = 1
-            achou = False
-            while i <= total_reg and not achou:
-                offset = i * SIZE_OF_REG + SIZE_OF_CAB
-                arq.seek(offset, os.SEEK_SET)
-                aux = arq.read(SIZE_OF_REG).decode()
-                auxlista = aux.split('|')
-                if s == str(auxlista[0]):
-                    
-                    achou = True
-                    print('ID já existe!')
-                    s = input('Insira outro ID\n')
-                else:
-                    i += 1
-        buffer += (s + '|')
-    return buffer
+def edita_campos(nomeArq: str, rrn: int) -> None:
+    try:
+        with open(nomeArq, 'r+b') as arq:
+            buffer = ''
+            cab = arq.read(SIZE_OF_CAB)
+            total_reg = int.from_bytes(cab, 'little')
+            campos = ['ID', 'Sobrenome', 'Nome', 'Castelo', 'Cidade', 
+                        'Região']
+            
+            for c in campos:
+                s = input(f'{c}: ')
+                if c == 'ID':
+                    i = 1
+                    achou = False
+                    while i <= total_reg and not achou:
+                        offset = i * SIZE_OF_REG + SIZE_OF_CAB
+                        arq.seek(offset, os.SEEK_SET)
+                        aux = arq.read(SIZE_OF_REG).decode()
+                        auxlista = aux.split('|')
+                        if s == str(auxlista[0]):
+                            if i == rrn:
+                                achou = True
+                            else:    
+                                achou = True
+                                print('ID já existe!')
+                                s = input('Insira outro ID\n')
+                        else:
+                            i += 1
+                buffer += (s + '|')
+            registro = buffer.encode()
+            offset = rrn * SIZE_OF_REG + SIZE_OF_CAB
+            arq.seek(0, os.SEEK_SET)
+            arq.seek(offset, os.SEEK_SET)
+            arq.write(registro.ljust(64, b'\0'))
+
+    except FileNotFoundError as e:
+        print(f'Erro: {e}')
 
 def escreve_campos(arq: io.BufferedRandom) -> str:
     buffer = ''
@@ -76,7 +87,7 @@ def escreve_arq(nomeArq: str) -> None:
                 cab = arq.read(SIZE_OF_CAB)
                 total_reg = int.from_bytes(cab, 'little')
 
-                # Faz o offser com esse numero de registros
+                # Faz o offset com esse numero de registros
                 offset = total_reg * SIZE_OF_REG + SIZE_OF_CAB
                 arq.seek(0, os.SEEK_SET)
 
@@ -116,7 +127,7 @@ def busca_rrn(nomeArq: str) -> None:
             print('Deseja modificar as informações deste registro?')
             case = int(input('1 - Sim | 2 Não\n'))
             if case == 1:
-                escreve_arq(nomeArq)
+                edita_campos(nomeArq, rrn)
             else:
                 return None
     except FileNotFoundError as e:

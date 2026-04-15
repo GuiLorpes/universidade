@@ -781,6 +781,62 @@ with open('meuarq.txt', 'r') as arq
                     é comum que cada linha seja adicionada de um caractere 
                     separador (p.e., b'\verb|\n|')
                 \end{itemize}
+                \item Detecção de fim de arquivo
+                \begin{itemize}
+                    \item Durante a leitura de um arquivo, o S.O monitora a 
+                    posição do ponteiro de L/E do arquivo 
+                \end{itemize}
             \end{itemize}
+            
 \section{Acesso Sequencial \dots}
+
+\section{Busca Binária}
+\begin{itemize}
+    \item \dots
+    \item \dots
+\end{itemize}
+    \subsection{Busca Binária em memória}
+    \begin{itemize}
+        \item Função que recebe um valoe  a ser buscado e uma lista ordenada 
+        valoe
+        \item Retorna \dots
+    \end{itemize}
+    \subsection{Busca binária em um arquivo}
+    \begin{itemize}
+        \item Pre requisitos para BB em arquivo
+        \begin{itemize}
+            \item Requer registros de tamanho fixo
+            \item O arquivo deve estar ordenado em ordem crescente da chave de 
+            busca
+        \end{itemize}
+        \item Complexidade
+        \begin{itemize}
+            \item Em um arquivo de n registros
+            \begin{itemize}
+                \item Busca binaria: O($\log_2n$), pior caso $\lfloor \log_2n \rfloor$
+                \begin{itemize}
+                    \item Em cada chute elimina-se metade das possibilidades
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+        \item A busca binaria é mais eficiente ddo que a sequencial, porem o 
+        arquivo deve estar ordenado por chave
+        \begin{itemize}
+            \item Custo de ordenar e manter o arquivo ordenado após novas 
+            inserções
+            \begin{itemize}
+                \item A cada inserção deve-se reordenar o arquivo ou fazer a 
+                inserção no arquivo em memoria e regravar o disco
+            \end{itemize}
+        \end{itemize}
+        \item Um primeira solução $\rightarrow$ Ordenação interna
+        \begin{itemize}
+            \item Só é fctivel se o arquivo for pequeno e couber na memória
+            \begin{enumerate}
+                \item Ler todo o arquivo do disco para a RAM (acesso sequencial)
+                \item Ordenar os registros em RAM usando um algoritmo de 
+                ordenação
+            \end{enumerate}
+        \end{itemize}
+    \end{itemize}
 \end{document}
