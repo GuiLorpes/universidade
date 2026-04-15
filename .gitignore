@@ -1,0 +1,12 @@
+learning_LaTeX/
+cursos_udemy/
+capacitações_PET/
+IEEE/
+livros/
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
