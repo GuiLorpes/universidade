@@ -1,4 +1,0 @@
-\babel@toc {portuguese}{}\relax 
-\contentsline {section}{\numberline {1}Apresentação da Matéria}{1}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Os três pilares da disciplina}{1}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}Mapa do Projeto}{1}{subsection.1.2}%

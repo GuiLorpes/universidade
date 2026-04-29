@@ -647,4 +647,76 @@ Site do Professor: \url{http://www.din.uem.br/yandre}
     \item ERs podem ser usadas em buscas em editores de texto
 
 \end{itemize}
+
+\section{Gramática}
+\begin{itemize}
+    \item Mecanismo geror que permite definir formalmente uma linguagem
+    \item Atraves de um gramatica pode-se gerar todas as sentenças da linguagem 
+    definida por ela
+    \item Modelo muito apicdo na especificação de linguagens computacionais
+    \item Formalmente, gramática é uma quadrupla $G=<V,T,P,S>$, onde:
+    \begin{itemize}
+        \item $V$ é um conjunto finito de simbolos não-terminais (ou variáveis)
+        (corresponde com os estados no AFD)
+        \item $T$ é um conjunto finito de simbolos terminais disjunto de $V$
+        (correponde com o alfabeto no AFD)
+        \item $P$ é um conjunto finito de pares, denominados regras de produção 
+        tal que a primeira componente é palavra de $(V\cup T)^+$ e a segunda 
+        componente é a palavra de $(V \cup T)^*$ (corresponde ao $\delta$ no AFD)
+        \item $S$ é um elemento de $V$, denominado simbolo inicial (ou simbolo 
+        de partida) (corresponde ao $S_0$ no AFD)
+    \end{itemize}
+    \item Os simbolos de T equivalem  aqueles que aparecem nos programas de uma 
+    linguagem de programação. É o alfabeto em cima do qual a linguagem é 
+    definida
+    \item Os elementos de V são simbolos auxiliares \dots
+    \item Uma regra de produção $(\alpha, \beta)$ é representada por $\alpha 
+    \rightarrow \beta$
+    \item As regras de produção definem as condições de geração das sentenças
+    \item A aplicação de uma regra de produção é denominada derivação
+    \item Uma regra $\alpha \rightarrow \beta$ indica que $\alpha$ pode ser 
+    substituido por $\beta$ semrpre que $\alpha$ aparecer
+    \item Enquanto houver simbolo não-terminal na cadeia em derivação, esta 
+    derivação não terá terminado
+    \item O simbolo inicial é o simbolo através do qual deve iniciar o processo 
+    de derivação de uma sentença
+    \item Observações:
+    \begin{itemize}
+        \item $V\cap T = \varnothing$
+        \item Os elemento ed T são os terminais. Procuraremos representá-los 
+        por letras minusculas (a, b, c, d, \ldots)
+        \item Os elementos de V são os não terminais. Procuraremos representá-
+        los por letra maiúsculas (A, B, C, D, \ldots)
+        \item As cadeias mistas, isto é, aquelas que contem simbolos de $V$ e 
+        simbolos de $T$ (cadeias pertencentes à ($V \cup T)^*$) serão 
+        representadas por letras gregas ($\alpha$, $\beta$, $\gamma$, $\delta$, 
+        \ldots)
+    \end{itemize}
+    \item Geração direta $(\Rightarrow)$:
+    \begin{itemize}
+        \item Considere $\alpha, \beta, \gamma, \delta \in (V \cup T)^*$
+        \item Uma cadeia $\alpha\gamma\beta$ gera diretamente $(\Rightarrow)$ 
+        uma cadeia $\alpha\delta\beta$ se e somente se: 
+        \[\gamma \rightarrow \delta \in P\] 
+    \end{itemize}
+    \item Geração $(\Rightarrow^*)$:
+    \begin{itemize}
+        \item Considere $\alpha, \beta, \gamma, \delta \in (V \cup T)^*$
+        \item Uma cadeia $\alpha$ gera $(\Rightarrow^*)$ uma cadeia $\beta$ se 
+        e somente se:
+        \[\exists \gamma_1, \gamma_2, \ldots, \gamma_n \text{ tal que }\]
+        \[\alpha \Rightarrow \gamma_1 \Rightarrow \gamma_2 \Rightarrow \ldots 
+        \Rightarrow \gamma_n \Rightarrow \beta | n \geq 0\]
+    \end{itemize}
+    \item Definições:
+    \begin{itemize}
+        \item Forma sentencial: uma cadeia $\alpha \in (V \cup T)^*$ é uma forma 
+        sentencial de uma gramática se e somente se $S \Rightarrow^*\alpha$, ou 
+        seja, $\alpha$ é um "embrião" para alguma sentença gerada pela gramática 
+        ou a própria sentença 
+        \item Sentença: uma forma sentencial $\alpha$, é uma sentença de G se e 
+        somente se $\alpha \in T^*$. Portanto, as cadeias terminais geradas pela 
+        gramática são as sentenças de G
+    \end{itemize}
+\end{itemize}
 \end{document}

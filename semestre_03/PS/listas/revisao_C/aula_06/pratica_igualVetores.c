@@ -18,22 +18,37 @@ um valor menor\n", TAM_MAX);
             printf("Insira o valor da posição %d do vetor 1\n", (i+1));
             scanf("%d", &v1[i]);
         }
+        printf("\n");
         for (int i = 0; i < n; i++) {
             printf("Insira o valor da posição %d do vetor 2\n", (i+1));
             scanf("%d", &v2[i]);
         }
-        int j = 0;
-        do {
-            if (!(v1[j] == v2[j])) {
-                boolean = 0;
-            } 
-            j++;
-        } while ((j < n) && (boolean == 1));
-        if (boolean == 1) {
-            printf("O vetor 1 e o vetor 2 são iguais!\n");
+        int iguais = 0;
+        for (int i = 0; i < n; i++) {
+            int j = 0, achou = 0;
+            while ((j < n) && (achou != 1)) {
+                if (v1[i] == v2[j]) {
+                    achou = 1;
+                    iguais++;
+                }
+                j++;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            int j = 0, achou = 0;
+            while ((j < n) && (achou != 1)) {
+                if (v2[i] == v1[j]) {
+                    achou = 1;
+                    iguais++;
+                }
+                j++;
+            }
+        }
+        if (iguais == (2*n)) {
+            printf("Os vetores 1 e 2 possuem os mesmos elementos!\n");
         }
         else {
-            printf("O vetor 1 é diferente do vetor 2!\n");
+            printf("Os vetores 1 e 2 não possuem os mesmos elementos!\n");
         }
         printf("Deseja realizar a operação novamente? s/n\n");
         getchar();

@@ -194,7 +194,8 @@ Exemplo de Decisão de Projeto
         \begin{itemize}
             \item Sinais de controle são aplicados ao hardware
         \end{itemize}
-        \item Ciclo de Instrução
+    \end{itemize}
+        \subsubsection{Ciclo de Instrução}
         \begin{itemize}
             \item Um ciclo de instrução é composto por duas etapas
             \begin{itemize}
@@ -224,7 +225,7 @@ Exemplo de Decisão de Projeto
                     \end{itemize}
             \end{itemize}
         \end{itemize}
-        \item Interrupção
+        \subsubsection{Interrupção}
         \begin{itemize}
             \item Mecnismo pelo qual módulos (como E/S) podem interromper a 
             sequencia de processamento normal
@@ -275,5 +276,367 @@ Exemplo de Decisão de Projeto
                 \end{itemize}
             \end{itemize}
         \end{itemize}
+    \subsection{Conexões}
+    \begin{itemize}
+        \item Todas as unidades de um sistema computacional precisam estar 
+        conectadas
+        \item Tipos diferentes de conexão para tipos diferentes de módulos:
+        \begin{itemize}
+            \item Memória
+            \item Módulo de E/S
+            \item CPU
+        \end{itemize}
     \end{itemize}
+        \subsubsection{Conexão da Memória Principal}
+        \begin{itemize}
+            \item Tipicamente, a memória principal é composta de N palavras de 
+            mesmo tamanho
+            \item Receve e envia palavras:
+            \begin{itemize}
+                \item Endereços (de posições)
+                \item Dados
+            \end{itemize}
+            \item Recebe sinais de controle
+            \begin{itemize}
+                \item Leitura
+                \item Escrita
+            \end{itemize}
+        \end{itemize}
+        \subsubsection{Conexão de Entrada/Saída}
+        \begin{itemize}
+            \item Similar à memória, do ponto de vista da CPU
+            \item Caada interce (porta) é identificada por um endereço
+            \item Operação de Saída
+            \begin{itemize}
+                \item Recebe dados do computador
+                \item Envia dados para a interface do dispositivo externo
+            \end{itemize}
+            \item Operação de Entrada
+            \begin{itemize}
+                \item Recebe dados da interface de um dispositivo externo
+                \item Envia dados para o computador
+            \end{itemize}
+            \item Recebe sinais de controle do computador
+            \item Envia sinais de controle para os dispositivos externos
+            \begin{itemize}
+                \item Ex.: Ligar motor do disco rígido
+            \end{itemize}
+            \item Recebe endereços do computador
+            \begin{itemize}
+                \item Ex.: Número da porta para identificar periférico
+            \end{itemize}
+            \item Envia sinais de interrupção (controle)
+        \end{itemize}
+        \subsubsection{Conexão da CPU}
+        \begin{itemize}
+            \item Lê instruções e dados
+            \item Escreve dados (após processamento)
+            \item Envia sinais de endereçamento para outras unidades
+            \item Envia sinais de controle para outras unidades
+            \item Recebe (e processa) as interrupções
+        \end{itemize}
+    \section{Tipos de Transferências}
+    \begin{itemize}
+        \item Memória principal para processador
+        \begin{itemize}
+            \item[] imagem
+        \end{itemize}
+        \item Processador para memória principal
+        \begin{itemize}
+            \item[] imagem
+        \end{itemize}
+        \item Subsistema de E/S para processador
+        \begin{itemize}
+            \item[] imagem
+        \end{itemize}
+        \item Processador para subsistema de E/S
+        \begin{itemize}
+            \item[] imagem
+        \end{itemize}
+        \item Entre memória e subsistemas de E/S (DMA) - Opcional
+    \end{itemize}
+    \subsection{Barramento (BUS)}
+    \begin{itemize}
+        \item Há diversas maneiras de se projetar um sistema de interconexão
+        \item Mais comuns: 
+        \begin{itemize}
+            \item Barramento separado em linhas de dados, endereço de controle
+            \item Barramento compartilhado (multiplexado) para vários tipos de 
+            informação (i.e.: dados e endereços)
+        \end{itemize}
+        \item Meio de comunicação entre dois ou mais dispositivos
+        \item Sinais colocados em um barramento são recebidos por todos os 
+        dispositivos (broadcast)
+        \item Apenas um módulo pode escrever em um barramento em um dado instante
+        \item Geralmente é agrupado:
+        \begin{itemize}
+            \item Vários canais de comunicação em um só barramento (barramento 
+            paralelo)
+            \item Barramento de dados de 32 bits é um conjunto de 32 canais de 
+            1 bit
+        \end{itemize}
+        \item Nos modelos não se representam as conexões para a fonte de tensão
+        \item[] imagem
+        \item No diagrama acima o barramento está dividido em:
+        \begin{itemize}
+            \item Brramento de dados
+            \item Barramento de endereço
+            \item Barramento de controle
+        \end{itemize}
+    \end{itemize}
+        \subsubsection{Barramento de Dados}
+        \begin{itemize}
+            \item Transmite dados
+            \begin{itemize}
+                \item Observe que não há distinão entre "dado" e instrução neste 
+                nivel (fora da CPU)
+            \end{itemize}
+            \item Largura do barramento é um fator determinante no desempenho (via 
+            da regra, quanto mais largo, melhor)
+            \item Largura de barramento de dados comuns:
+            \begin{itemize}
+                \item 8 bits (Intel 8088)
+                \item 16 bits (Intel 8086)
+                \item 32 bits (Intel Pentium)
+                \item 64 bits (Intel Xeon -- Core2Duo/Quad -- Core i3/5/7)
+            \end{itemize}
+        \end{itemize}
+        \subsubsection{Barramento de Endereços}
+        \begin{itemize}
+            \item Usado para identificar a fonre e o destino dos dados que 
+            trafegam no barramento de dados
+            \item Ex.: CPU precisa ler uma instrução (dado) de uma determinada 
+            posição na memória
+            \item Largura do barramento de endereço determina a capacidade de 
+            memória máxi-ma do sistema
+            \begin{itemize}
+                \item Ex.: Z-80 tem um barramento de endereço de 16 bits. \\
+                Memória máxima: $2^{16}=65.536$ posições de memória.
+            \end{itemize}
+        \end{itemize}
+        \subsubsection{Barramento de controle}
+        \begin{itemize}
+            \item Controle e temporização das infomações
+            \begin{itemize}
+                \item Sinais de leitura e escrita para a memória principal para 
+                dispositios de E/S.
+                \item Requisições de interrupção
+                \item Sinais de controle gerais, tais como:
+                \begin{itemize}
+                    \item Requisição de uso do barramento por um módulo
+                    \item Término de uso do barramento
+                    \item Inicialização (reset) de dispositivos, etc.
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+        \subsubsection{Aspectos fisicos dos barramentos}
+        \begin{itemize}
+            \item Conectores de borda de placa de expansão (Ex.: PCI)
+            \item Cabos paralelos
+            \item Linhas paralelas em placas de circuito impresso
+        \end{itemize}
+        \subsubsection{Barramento Único}
+        \begin{itemize}
+            \item Apesar de ser mais simples de implementar, há desvantagens de se 
+            usar um unico barramento de sistema
+            \begin{itemize}
+                \item Condutores longos: tempo maior de propagação
+                \item Muitos dispositivos ligados no mesmo meio de transmissão 
+                significa que a coordenação do uso do barramento pode afetar o 
+                desempenho geral do sistema
+                \item E se houver dispositivos com diferentes velocidades de 
+                transmissão ligados ao barramento?
+                \begin{itemize}
+                    \item Taxa de transferência total de dados é limitada à taxa de 
+                    transferência no barramento do sistema
+                \end{itemize}
+                \item Solução: Usar múltiplos barramentos
+            \end{itemize}
+        \end{itemize}
+        \subsubsection{Classificação de Barramentos}
+        \begin{itemize}
+            \item Dedicado
+            \begin{itemize}
+                \item Linhas separadas para dados e endereços
+            \end{itemize}
+            \item Multiplexado
+            \begin{itemize}
+                \item Linhas compartilhadas
+                \item Necessita de mais uma linha de controle, para indicar se 
+                há dados ou endereços trafegando no barramento naquele instante
+                \item Vantagem: Necessita de menos condutores
+                \item Desvantagens:
+                \begin{itemize}
+                    \item Controle mais complexo
+                    \item Pode diminuir o desempenho (pois compartilha um só 
+                    canal para endereços e dados)
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+        \subsubsection{Arbitragem do Barramento}
+        \begin{itemize}
+            \item Apenas um módulo pode controlar o barramento por vez (apesar 
+            de mais de um módulo poder ler o que está sendo transmitido)
+            \item O que acontece se mais de um módulo solicitar o controle do 
+            barramento?
+            \item Claramente, precisamos estabelecer regras para ceder o 
+            controle do barramento: Arbitragem do Barramento 
+            \item As regras definem mestre (que controla) e escravo(s) (que é/
+            são controlados)
+            \item A arbitragem pode ser centralizada ou distribuida
+            \item Tipos de Arbitragem
+            \begin{itemize}
+                \item Centralizada
+                \begin{itemize}
+                    \item Somente um módulo controla o acesso ao barramento
+                    \begin{itemize}
+                        \item Controlador de barramento ou árbitro decide quem 
+                        poderá controlar o barramento
+                    \end{itemize}
+                    \item Pode ser parte da CPU, ou um dispositivo dedicado a 
+                    essa tarefa
+                \end{itemize}
+                \item Distribuida
+                \begin{itemize}
+                    \item Cada módulo pode decidir controlar o barramento
+                    \item Necessária lógica de controle em todos os módulos
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+        \subsubsection{Gargalo de von Neumann}
+        \begin{itemize}
+            \item Refere-se ao tráfego nos barramentos do computador
+            \begin{itemize}
+                \item Vai endereço da instrução, volta instrução
+                \item Vão endereços dos operandos
+                \item Vão e voltam operandos
+            \end{itemize}
+            \item Para eliminar gargalo: Diminuit tráfego de informações
+            \begin{itemize}
+                \item Manter informações na CPU $\rightarrow$ Inclusão de 
+                registradores
+                \item Diminuir tamanho (em bits) das informações transferidas
+            \end{itemize}
+        \end{itemize}
+\section{Aritmética Computacional}
+    \subsection{Unidade Lógica Aritimética(ULA)}
+    \begin{itemize}
+        \item É a parte do computador que de fato executa as operações 
+        aritméticas e lógicas sobre os dados
+        \item Tudo o mais no computador existe para atender a essa unidade
+        \item Todos os outros elementos do computador são usados para:
+        \begin{itemize}
+            \item Trazer os dados a serem processados pela ULA
+            \item Receber os resultados das operações efetuadas
+        \end{itemize}
+        \item Constitui o núcleo ou a essência do computador 
+        \item É baseada em dispositivos lógicos digitais simples, capazes 
+        de armazenar dígitos binários e efetuar operações simples de lógica 
+        booleana
+        \item Os dados são fornecidos à ULA em registradores e os 
+        resultados de uma operação são armazenados também em registradores
+        \item A ULA pode também ativar bits especiais (flags) para indicar 
+        o resultado de uma operação 
+        \item[] imagem
+        \item A aritmética computacional geralmente opera com dois tipos de 
+        números muito diferentes:
+        \begin{itemize}
+            \item Numeros inteiros
+            \item Numeros de ponto flutuante
+        \end{itemize}
+        \item Em ambos os casos, a escolhja da representação é uma questão 
+        crucial de projeto
+    \end{itemize}
+        \subsubsection{Números Inteiros}
+        \begin{itemize}
+            \item Representação de números inteiros
+            \begin{itemize}
+                \item No sistema de números binários, é possivel representar 
+                números arbitrários usando os digitos zero e um \
+                \[-1101,101_2 = -13,625_{10}\]                
+            \end{itemize}
+            \item Para armazenar esses números no computador, não é possivel 
+            usar os sinais de menos e a virgula
+            \begin{itemize}
+                \item Apenas os digitos binários (0, 1) podem ser usados
+            \end{itemize}
+            \item Representação sinal-magnitude
+            \begin{itemize}
+                \item Utiliza o bit mais significativo da palabra como um bit 
+                de sinal
+                \begin{itemize}
+                    \item Se o bit mais significativo for 0, o numero será 
+                    positivo
+                    \item Se for 1, o número será negativo
+                \end{itemize}
+                \item É a forma mais simples de representação
+                \[
+                \begin{array}{l}
+                    +18_{10} = 00010010 \\
+                    -18_{10} = 10010010 \\
+                \end{array}
+                \]
+                \item Algumas desvantagens dessa forma de representação
+                \begin{itemize}
+                    \item Numa operação de adição e subtração é preciso considerar:
+                    \begin{itemize}
+                        \item A magnitude do número
+                        \item O sinal dos dois operandos
+                    \end{itemize}
+                    \item Existem duas representações de 0:
+                    \[
+                    \begin{array}{l}
+                        +0_{10} = 00000000 \\
+                        -0_{10} = 10000000 \\
+                    \end{array}
+                    \]
+                \end{itemize}
+            \end{itemize}
+            \item Representação em complemento de dois
+            \begin{itemize}
+                \item Também usa o bit mais significativo como bit de sinal
+                \item Os números são escritos da seguinte forma:
+                \begin{itemize}
+                    \item Positivos: Sua magnitude é representada na sua forma 
+                    binária direta, e um bit de sinal 0 é colocado em sua frente
+                    \begin{itemize}
+                        \item (bit 0) + o número em binário
+                        \item Exemplos:
+                        \[0001 (+1)\] \[0100 (+4)\] \[0111 (+7)\]
+                    \end{itemize}
+                    \item Negativos: Sua magnitude é representada na forma de 
+                    complemento a 2 (um bit de sinal acaba ficando em sua 
+                    frente)
+                    \begin{itemize}
+                        \item Para um número binário de $n$ bits, o peso do bit 
+                        mais significativo é $-2^{n-1}$
+                        \[ A = -2^{n-1} a_{n-1} + \sum\limits_{i=0}^{n-2}2^ia_i \]
+                    \end{itemize}
+                \end{itemize}
+                \item Regra para formar a negação:
+                \begin{enumerate}
+                    \item Inverte-se os bits do número em binário
+                    \begin{itemize}
+                        \item $0100 \rightarrow$ Invertendo temos $\rightarrow
+                        1011$
+                    \end{itemize}
+                    \item Soma-se um ao valor invertido:
+                    \begin{itemize}
+                        \item $1011 + 0001 = 1100$  
+                    \end{itemize}
+                \end{enumerate}
+                \item O zero é tratado com um numero positivo
+                \item Só existe uma representação de zero
+                \begin{itemize}
+                    \item Realizando o complemento de dois de zero
+                    \item [] imagem
+                \end{itemize}
+                \item É possivel representar $2^{n-1}-1$ numeros positivos
+                \item É possivel representar $2^{n-1}$ numeros negativos
+                \item A representação em complemento de dois parece "pouco 
+                natural"
+                \item Porem ela torna mais simples a implementação das operações 
+                36aritmeticas mais importantes (adição e subtração)
+            \end{itemize}
+        \end{itemize}
 \end{document}

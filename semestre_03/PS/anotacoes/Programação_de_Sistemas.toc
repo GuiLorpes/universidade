@@ -1,2 +1,0 @@
-\babel@toc {portuguese}{}\relax 
-\contentsline {section}{\numberline {1}Revisão da Linguagem C}{1}{section.1}%

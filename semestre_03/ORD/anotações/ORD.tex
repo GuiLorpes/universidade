@@ -623,8 +623,7 @@ eficiente.
     try:
         ''' código a ser executado '''
     except:
-        ''' código a ser executado caso uma exceção ocorra '''
-                \end{verbatim}
+        ''' código a ser executado caso uma exceção ocorra '''\end{verbatim}
                 \item Exemplo:
                 \begin{verbatim}
     try:
@@ -632,8 +631,7 @@ eficiente.
         print('abertura OK')
     except:
         print('Erro na abertura')
-        exit()
-                \end{verbatim}
+        exit()\end{verbatim}
             \end{itemize}
         \end{itemize}
         \subsubsection{Fechamento de arquivos}
@@ -781,12 +779,194 @@ with open('meuarq.txt', 'r') as arq
                     é comum que cada linha seja adicionada de um caractere 
                     separador (p.e., b'\verb|\n|')
                 \end{itemize}
-                \item Detecção de fim de arquivo
+            \end{itemize}
+            \subsubsection{Detecção de fim de arquivo}
+            \begin{itemize}
+                \item Durante a leitura de um arquivo, o S.O monitora a 
+                posição do ponteiro de L/E do arquivo 
+                \item Em Python, não existe uma função específica para 
+                isso, mas as funções de leitura detectam o fim de arquivo
                 \begin{itemize}
-                    \item Durante a leitura de um arquivo, o S.O monitora a 
-                    posição do ponteiro de L/E do arquivo 
+                    \item Nesse caso, as funções de leitura retornam um objeto 
+                    vazio, seja uma string ('') ou um byte (b'')
                 \end{itemize}
             \end{itemize}
+        \subsection{Posicionamento do Ponteiro de L/E}
+        \begin{itemize}
+            \item Funções de leitura e escrita movimentam o ponteiro de L/E do 
+            arquivo de forma automática
+            \begin{itemize}
+                \item O ponteiro de L/E sempre avança quando lê/escreve
+            \end{itemize}
+            \item Podemos movimetar o ponteiro e L/E para uma posição específica 
+            do arquivo usando o método \verb|seek|
+            \begin{itemize}
+                \item Chamamos o tamanho do deslocamento a ser realizado de 
+                \verb|byte-offset|
+                \item Quando esse deslocamento é contado a partir do inicio do 
+                arquivo, podemos pensar no offset como um "endereço" para onde 
+                se deseja mover o ponteiro de L/E
+            \end{itemize}
+            \item \verb|def seek(offset, whence = os.SEEK_SET) -> int|
+            \begin{itemize}
+                \item Posiciona o ponteiro de L/E no byte offset calculado a 
+                partir da origem dada (whence)
+                \item Retorna o valor absoluto da nova posição
+                \item O parâmetro whence aceita os seguintes valores:
+                \begin{itemize}
+                    \item \verb|os.SEEK_SET| ou 0 $\rightarrow$ Início do 
+                    arquivo. É o valor padrão.
+                    \item \verb|os.SEEK_CUR| ou 1 $\rightarrow$ Posição atual 
+                    do ponteiro de L/E.
+                    \item \verb|os.SEEK_END| ou 2 $\rightarrow$ Fim do arquivo.
+                \end{itemize}
+            \end{itemize}
+            \item Arquivos em modo texto só aceitam see com offsets positivos 
+            a partir de \verb|os.SEEK_SET|
+            \begin{itemize}
+                \item Nesse caso, se whence for \verb|os.SEEK_CUR| ou 
+                \verb|os.SEEK_END|, o offset deverá ser 0
+            \end{itemize}
+            \item Como voltar o ponteiro de L/E para o inicio?
+            \begin{itemize}
+                \item \verb|arq.seek(0)|
+            \end{itemize}
+            \item Como posicionar o ponteiro de L/E no fim?
+            \begin{itemize}
+                \item \verb|arq.seek(0, os.SEEK_END)|
+            \end{itemize}
+            \item Como saber em qual posição o ponteiro de L/E está?
+            \begin{itemize}
+                \item Todo objeto de arquivo possui um método \verb|tell|
+                \item \verb|def tell() -> int|
+                \begin{itemize}
+                    \item Retorna a posição atual do ponteiro de L/E como um 
+                    número inteiro
+                \end{itemize}
+            \end{itemize} 
+        \end{itemize}
+        \subsection{Arquivos e o S.O}
+        \begin{itemize}
+            \item Marcação de fim de linha
+            \begin{itemize}
+                \item Dependendo do S.O utilizado, a representação de fim de 
+                linha muda
+                \begin{itemize}
+                    \item DOS/Windows utiliza dois bytes
+                    \begin{itemize}
+                        \item Par CR-LF (decimal ASCII 13 e 10 $\rightarrow$ 
+                        hex 0D 0A)
+                    \end{itemize}
+                    \item Unix/Linux utiliza um byte
+                    \begin{itemize}
+                        \item LF (decimal ASCII 10 $\rightarrow$ hex 0A)
+                    \end{itemize}
+                \end{itemize}
+                \item Para vermos essa marcação precisamos usar um editor 
+                hexadecimal
+            \end{itemize}
+        \end{itemize}
+            \subsubsection{Arquivos binários em Python}
+            \begin{itemize}
+                \item Os arquivos binários em Python realizam escrita e leitura 
+                apenas com os tipos bytes e bytearray
+                \item Alguns tipos fornecem métodos de conversão prontos para 
+                os tipos binários
+                \begin{itemize}
+                    \item Conversão de inteiros
+                    \begin{itemize}
+                        \item \verb|<int>.to_bytes(n)| $\rightarrow$ converte 
+                        inteiro para n bytes
+                        \item \verb|int.from_byte(<bytes>)| $\rightarrow$ 
+                        converte bytes para inteiros
+                    \end{itemize}
+                    \item Conversão de strings:
+                    \begin{itemize}
+                        \item \verb|<str>.encode()| $\rightarrow$ converte 
+                        string para bytes
+                        \item \verb|<byte>.decode()| $\rightarrow$ converte 
+                        bytes para string
+                    \end{itemize}
+                \end{itemize}
+            \end{itemize}
+\section{Organização em campos e registros}
+\begin{itemize}
+    \item Queremos criar um programa que permita cadastrar pessoas
+    \begin{itemize}
+        \item Para cada pessoa, armazenaremos as seguintes informações
+        \begin{itemize}
+            \item Sobrenome, Nome, Endereço, Cidade, Estado e CEP
+        \end{itemize}
+        \item Por exemplo:
+        \begin{itemize}
+            \item Alan Silva, Rua Tiete 123, Maringá, PR, 87100
+            \item Andre Flores, Rua Braga 34, Sarandi, PR, 87111
+        \end{itemize}
+    \end{itemize}
+    \item Cada uma dessas informações constitui um agregado com um significado 
+    próprio, como "Alan" ou "Rua Braga 34"
+    \item Chamamos esses agregados de campos e eles são as menores unidades de 
+    formação com significado dentro de um arquivo
+    \item Considere o pseudocódigo abaixo para criar o nosso cadastro de pessoas 
+    como um fluxo de bytes
+    \vspace{20pt}
+    \begin{verbatim}
+PROGRAMA escreve_fluxo:
+    receba o nome do arquivo a ser criado e abra o arquivo com o nome 
+    lógico SAIDA
+    receba o SOBRENOME
+    enquanto comprimento(SOBRENOME) > 0:
+        receba NOME, ENDEREÇO, CIDADE, ESTADO e CEP
+        escreva SOBRENOME no arquivo SAIDA
+        escreva NOME no arquivo SAIDA
+        escreva ENDEREÇO no arquivo SAIDA
+        escreva CIDADE no arquivo SAIDA
+        escreva ESTADO no arquivo SAIDA
+        escreva CEP no arquivo SAIDA
+        receba o SOBRENOME
+        fim /* enquanto */
+    feche SAIDA
+    fim PROGRAMA
+    \end{verbatim}
+    \item Supondo que cadastremos os dados dos exemplos anteriores usando o 
+    nosso programa:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|l|}
+            \hline
+            Arquivo gerado: \\\hline
+            SilvaAlanRuaTiete123MaringaPR87100FloresAndreRuaBraga34SarandiPR87111
+            \\\hline
+        \end{tabular}
+    \end{table}
+    \item Perdemos a integridade das unidades de informação das entradas de dados
+    \item Não conseguiremos mais separar um campo de outro
+\end{itemize}
+    \subsection{Estrutura de Campos}
+    \begin{itemize}
+        \item Existem várias formas de adicionar estrutura aos arquivos para 
+        manter a integridade dos campos
+        \begin{enumerate}
+            \item Definir campos de tamanhos fixos
+            \item Iniciar cada campo com um indicador de tamanho
+            \item Separar os campos por um delimitador
+            \item Usar uma expressão do tipo \textit{palavra-chave=valor} para 
+            identificar cada campo e seu conteúdo
+        \end{enumerate}
+    \end{itemize}
+        \subsubsection{Campos com Tamanho Fixo}
+        \begin{itemize}
+            \item Força os dados em campos de tamanho fixo
+            \item Aumento do tamanho do arquivo: normalmente se aloca mais 
+            espaço que o necessário
+            \item Possivel perda de informação $\rightarrow$ pelo limite imposto 
+            ao tamanho dos campos, os valores dos campos podem ser truncados 
+            (cortados)
+            \item Indicado quando o tamanho dos valores a serem armazenados for 
+            fixo ou com pouca variação
+            \item Facilita a implementação em linguagens que utilizam tipos com 
+            tamanhos pré-definidos
+        \end{itemize}
             
 \section{Acesso Sequencial \dots}
 
@@ -839,4 +1019,14 @@ with open('meuarq.txt', 'r') as arq
             \end{enumerate}
         \end{itemize}
     \end{itemize}
+\section()
+\begin{itemize}
+    \item Objetivo
+    \begin{itemize}
+        \item Processar de forma coordenada duas ou mais listas sequenciais para produzir uma lista unica como saida
+        \begin{itemize}
+            \item Por ex., duas ou mais listas de chaves primarias
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
 \end{document}

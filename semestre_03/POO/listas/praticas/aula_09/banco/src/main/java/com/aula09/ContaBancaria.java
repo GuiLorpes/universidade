@@ -25,7 +25,7 @@ public abstract class ContaBancaria {
         return saldo;
     }
     public String getTitular() {
-        return titular;
+        return titular.toString();
     }
 
 
