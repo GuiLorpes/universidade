@@ -20,7 +20,23 @@ def criaListaOffsetChaves(nomeArq: str) -> list[tuple[int,int,str,str]]:
             offset += tamRegistro + 2
             tamRegistro = int.from_bytes(arq.read(2), 'little') 
     return chaves
+
+
+def criaListaInvertida(nomeArq:str) -> None:
+    '''
+    Cria uma lista invertida, a partir de *nomeArq*, com o ID do item atual, e 
+    o ID do próximo item do mesmo gênero, e o ID do proximo item da mesma 
+    publicadora 
+    '''
+    chaves = criaListaOffsetChaves(nomeArq)
+    listaInvertida: list[tuple[int, int, int]] = []
+    for c in chaves:
+        listaInvertida.append((c[1], -1, -1))
     
+
+                  
+    
+
 
 def organizaRegistros(nomeArq: str, registro: list[tuple[int,int,str,str]]) \
     -> None:
@@ -63,10 +79,7 @@ def organizaRegistros(nomeArq: str, registro: list[tuple[int,int,str,str]]) \
             buffer = reg.read(int.from_bytes(tamReg,'little'))
 
             chaveSec2.write(tamReg + buffer)
-
-
-    return
-
+            
 
 def mergesort(registros: list[tuple[int,int,str,str]], chave: int) -> None:
     ''' Ordena uma lista de registros de acordo com a chave inserida '''
@@ -123,6 +136,7 @@ def main() -> None:
         raise FileNotFoundError('Insira um arquivo válido')
     else:
         chaves = criaListaOffsetChaves(sys.argv[1])
+        print(chaves)
         organizaRegistros(sys.argv[1], chaves)
 
 
