@@ -22,20 +22,47 @@ def criaListaOffsetChaves(nomeArq: str) -> list[tuple[int,int,str,str]]:
     return chaves
 
 
-def criaListaInvertida(nomeArq:str) -> None:
+def criaListaInvertida(chaves: list[tuple[int,int,str,str]]) -> list[list[int]]:
     '''
     Cria uma lista invertida, a partir de *nomeArq*, com o ID do item atual, e 
     o ID do próximo item do mesmo gênero, e o ID do proximo item da mesma 
     publicadora 
     '''
-    chaves = criaListaOffsetChaves(nomeArq)
-    listaInvertida: list[tuple[int, int, int]] = []
+    listaInvertida: list[list[int]] = []
     for c in chaves:
-        listaInvertida.append((c[1], -1, -1))
-    
+        listaInvertida.append([c[1], -1, -1])
+    i = 0   # Indice para a lista invertida
+    j = i+1   # Indice para as chaves
 
-                  
+    # Procura o próximo do gênero
+    while i < len(listaInvertida):
+        achou = False
+        while j < len(chaves) and not achou:
+            achou = chaves[i][2] == chaves[j][2]
+            if achou:
+                listaInvertida[i][1] = j
+            j += 1
+        if not achou:
+            listaInvertida[i][1] = -1
+        i += 1
+        j = i + 1
     
+    i = 0
+    j = i + 1
+    # Procura o proximo da publicadora
+    while i < len(listaInvertida):
+        achou = False
+        while j < len(chaves) and not achou:
+            achou = chaves[i][3] == chaves[j][3]
+            if achou:
+                listaInvertida[i][2] = j
+            j += 1
+        if not achou:
+            listaInvertida[i][2] = -1
+        i += 1
+        j = i + 1
+
+    return listaInvertida
 
 
 def organizaRegistros(nomeArq: str, registro: list[tuple[int,int,str,str]]) \
@@ -52,6 +79,7 @@ def organizaRegistros(nomeArq: str, registro: list[tuple[int,int,str,str]]) \
 
     # Cria arquivo com indice primário
     with open(nomeArq, "rb") as reg, open("primario.ind", "wb") as chavePrimaria:
+        indices: list[str] = []
         mergesort(registro, 1)
         for offset, *_ in registro:
             reg.seek(offset, os.SEEK_SET)
@@ -61,24 +89,34 @@ def organizaRegistros(nomeArq: str, registro: list[tuple[int,int,str,str]]) \
             chavePrimaria.write(tamReg + buffer)
 
     # Cria arquivo com indice secundário de genero 
-    with open(nomeArq, "rb") as reg, open("genero.ind", "wb") as chaveSec1:
+    with open("genero.ind", "wb") as chaveSec1:
+        generos:list[str] = []
         mergesort(registro, 2)
-        for offset, *_ in registro:
-            reg.seek(offset, os.SEEK_SET)
-            tamReg = reg.read(2)
-            buffer = reg.read(int.from_bytes(tamReg,'little'))
-
-            chaveSec1.write(tamReg + buffer)
-
+        for r in registro:
+            i = 0
+            achou = False
+            while i < len(generos) and not achou:
+                achou = r[2] == generos[i]
+                if not achou:
+                    i += 1
+            if not achou:
+                generos.append(r[2])
+        print(generos)
+            
     # Cria arquivo com indice secundário de publicadora
-    with open(nomeArq, "rb") as reg, open("publicadora.ind", "wb") as chaveSec2:
+    with open("publicadora.ind", "wb") as chaveSec2:
+        publicadora: list[str] = []
         mergesort(registro, 3)
-        for offset, *_ in registro:
-            reg.seek(offset, os.SEEK_SET)
-            tamReg = reg.read(2)
-            buffer = reg.read(int.from_bytes(tamReg,'little'))
-
-            chaveSec2.write(tamReg + buffer)
+        for r in registro:
+            i = 0
+            achou = False
+            while i < len(publicadora) and not achou:
+                achou = r[3] == publicadora[i]
+                if not achou:
+                    i += 1
+            if not achou:
+                publicadora.append(r[3])
+        print(publicadora)
             
 
 def mergesort(registros: list[tuple[int,int,str,str]], chave: int) -> None:
@@ -137,6 +175,7 @@ def main() -> None:
     else:
         chaves = criaListaOffsetChaves(sys.argv[1])
         print(chaves)
+        print(criaListaInvertida(chaves))
         organizaRegistros(sys.argv[1], chaves)
 
 
