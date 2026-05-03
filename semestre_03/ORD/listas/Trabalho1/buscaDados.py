@@ -2,32 +2,7 @@ import io
 import os
 import sys
 
-def buscaPrimaria(id: str) -> str:
-    '''
-    Procura pelo item com *id*, e retorna seus campos separados por '|' em uma 
-    string, caso não encontre o item, retorna uma string vazia
-    Ex:
-    >>> buscaPrimaria(459)
-        "459|Fortnite|2017|Sandbox|Epic Games|PC|" 
-    '''
-    item = ''
-    try:
-        with open("primario.ind", "rb") as entrada:
-            tamReg = int.from_bytes(entrada.read(2), 'little')
-            achou = False
-            while tamReg > 0 and not achou:
-                registro = (entrada.read(tamReg)).decode()
-                campos = registro.split('|')
-                achou = campos[0] == id
-                tamReg = int.from_bytes(entrada.read(2), 'little')
-            if achou:
-                item += registro
-            else:
-                print('Registro não encontrado!')
 
-    except FileNotFoundError as e:
-        print(f"Erro: {e}")
-    return item
 
 
 def buscaSecundaria1(genero: str) -> list[str]:

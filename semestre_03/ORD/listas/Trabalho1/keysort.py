@@ -1,6 +1,56 @@
+from __future__ import annotations
 import os
 import io
 import sys
+from dataclasses import dataclass
+
+
+# Essas duas classes são classes auxiliares para a fila invertida
+@dataclass
+class Node:
+    anterior: Node
+    id: int
+    pos: int
+    prox: Node
+    def __init__(self, id: int, pos: int):
+        self.anterior = None # type: ignore
+        self.id = id
+        self.pos = pos
+        self.prox = None # type: ignore
+
+def insere_depois(p: Node, novo: Node):
+    '''Insere *novo* após *p* no encademaneto.'''
+    novo.anterior = p
+    novo.prox = p.prox
+    p.prox.anterior = novo
+    p.prox = novo
+
+class Lista:
+    sentinela: Node
+    def __init__(self):
+        self.sentinela = Node(-1, -1)
+        self.sentinela.anterior = self.sentinela
+        self.sentinela.prox = self.sentinela
+    def vazio(self) -> bool:
+        return self.sentinela.prox is self.sentinela
+    def insereOrdenado(self, novo: Node):
+        if self.vazio():
+            insere_depois(self.sentinela, novo)
+        else:
+            q = self.sentinela.prox
+            while q.id < novo.id and q is not self.sentinela:
+                q = q.prox
+            insere_depois(q.anterior, novo)
+    def listaIDeProx(self) -> list[tuple[int, int]]:
+        ''' Retorna uma lista de tuplas com o id e a proxima posição '''
+        lista: list[tuple[int, int]] = []
+        q = self.sentinela.prox
+        while q.prox.pos != -1:
+            lista.append((q.id, q.prox.pos))
+            q = q.prox
+        return lista
+
+# Fim das classes auxiliares
 
 
 def criaListaOffsetChaves(nomeArq: str) -> list[tuple[int,int,str,str]]:
@@ -28,45 +78,78 @@ def criaListaInvertida(chaves: list[tuple[int,int,str,str]]) -> list[list[int]]:
     o ID do próximo item do mesmo gênero, e o ID do proximo item da mesma 
     publicadora 
     '''
+    # Cria a lista invertida vazia para ser organizada
     listaInvertida: list[list[int]] = []
-    for c in chaves:
-        listaInvertida.append([c[1], -1, -1])
-    i = 0   # Indice para a lista invertida
-    j = i+1   # Indice para as chaves
+    for r in chaves:
+        listaInvertida.append([r[1], -1, -1])
 
-    # Procura o próximo do gênero
-    while i < len(listaInvertida):
-        achou = False
-        while j < len(chaves) and not achou:
-            achou = chaves[i][2] == chaves[j][2]
-            if achou:
-                listaInvertida[i][1] = j
-            j += 1
-        if not achou:
-            listaInvertida[i][1] = -1
-        i += 1
-        j = i + 1
+
+    # Cria a lista com todos os generos no registro
+    listaGeneros = []
+    for r in chaves:
+        if r[2] not in listaGeneros:
+            listaGeneros.append(r[2])
+    listaGeneros.sort()
     
-    i = 0
-    j = i + 1
-    # Procura o proximo da publicadora
-    while i < len(listaInvertida):
-        achou = False
-        while j < len(chaves) and not achou:
-            achou = chaves[i][3] == chaves[j][3]
-            if achou:
-                listaInvertida[i][2] = j
-            j += 1
-        if not achou:
-            listaInvertida[i][2] = -1
-        i += 1
-        j = i + 1
+    # Cria a lista com todas as publicadoras no registro
+    listaPublicadoras = []
+    for r in chaves:
+        if r[3] not in listaPublicadoras:
+            listaPublicadoras.append(r[3])
+    listaPublicadoras.sort()
 
+
+    # Organiza os generos primeiro 
+    # Encontrar todos de um genero para atualizar na lista
+    for g in listaGeneros:
+        nodeGenero = Lista()
+        # Acha o primeiro registro do genero
+        # Os generos já foram inseridos a partir dos registros, então não 
+        # precisa verificar se i < len(registros), já que é certeza que o 
+        # genero vai ter pelo menos um elemento dele!
+        i = 0
+        while chaves[i][2] != g:
+            i += 1
+        nodeGenero.insereOrdenado(Node(chaves[i][1], i))
+        # nodeGenero sempre aponta para o inicio do nó 
+        j = i + 1
+        while j < len(chaves):
+            if chaves[j][2] == g:
+                novoNode = Node(chaves[j][1], j)
+                nodeGenero.insereOrdenado(novoNode)
+            j += 1
+        doGenero = nodeGenero.listaIDeProx()
+        for item in doGenero:
+            i = 0
+            # Novamente, com certeza vai ter um listaInvertida[i] com id igual 
+            # ao do r, então não é necessário fazer a verificação se ele existe
+            while listaInvertida[i][0] != item[0]:
+                i += 1
+            listaInvertida[i][1] = item[1]
+
+
+    # Organiza as publicadoras
+    for p in listaPublicadoras:
+        nodePublicadora = Lista()
+        i = 0
+        while chaves[i][3] != p:
+            i += 1
+        nodePublicadora.insereOrdenado(Node(chaves[i][1], i))
+        j = i + 1
+        while j < len(chaves):
+            if chaves[j][3] == p:
+                novoNode = Node(chaves[j][1], j)
+                nodePublicadora.insereOrdenado(novoNode)
+            j += 1
+        daPublicadora = nodePublicadora.listaIDeProx()
+        for item in daPublicadora:
+            i = 0
+            while listaInvertida[i][0] != item[0]:
+                i += 1
+            listaInvertida[i][2] = item[1]            
     return listaInvertida
 
-
-def organizaRegistros(nomeArq: str, registro: list[tuple[int,int,str,str]]) \
-    -> None:
+def constroiIndices(registro: list[tuple[int,int,str,str]]) -> None:
     '''
     Com base no *nomeArq* cria 4 arquivos novos, primario.ind, genero.ind, 
     publicadora.ind e listaInvertida.lst, onde cada um dos .ind são ordenados 
@@ -76,48 +159,49 @@ def organizaRegistros(nomeArq: str, registro: list[tuple[int,int,str,str]]) \
     ordenadas de acordo com cada uma das chaves e serão escritos em seus 
     respectivos arquivos
     '''
-
     # Cria arquivo com indice primário
-    with open(nomeArq, "rb") as reg, open("primario.ind", "wb") as chavePrimaria:
-        indices: list[str] = []
+    with open("primario.ind", "wb") as chavePrimaria:
+        # Escreve o cabeçalho com 4 bytes
+        chavePrimaria.write(len(registro).to_bytes(4,'little')) 
         mergesort(registro, 1)
-        for offset, *_ in registro:
-            reg.seek(offset, os.SEEK_SET)
-            tamReg = reg.read(2)
-            buffer = reg.read(int.from_bytes(tamReg,'little'))
-
-            chavePrimaria.write(tamReg + buffer)
+        # Escreve o ID e o byteoffset, ambos com 4 bytes
+        # Escreve tambem os bytes separadores '|'
+        # Total de 10 bytes por registro
+        for r in registro:
+            chavePrimaria.write(r[1].to_bytes(4, 'little'))
+            chavePrimaria.write(r[0].to_bytes(4, 'little') + b'|')
 
     # Cria arquivo com indice secundário de genero 
     with open("genero.ind", "wb") as chaveSec1:
-        generos:list[str] = []
-        mergesort(registro, 2)
+            # Cria a lista com todos os generos no registro
+        listaGeneros = []
         for r in registro:
-            i = 0
-            achou = False
-            while i < len(generos) and not achou:
-                achou = r[2] == generos[i]
-                if not achou:
-                    i += 1
-            if not achou:
-                generos.append(r[2])
-        print(generos)
+            if r[2] not in listaGeneros:
+                listaGeneros.append(r[2])
+        listaGeneros.sort()
+        for g in listaGeneros:
+            chaveSec1.write(g.encode() + b'|')
             
     # Cria arquivo com indice secundário de publicadora
     with open("publicadora.ind", "wb") as chaveSec2:
-        publicadora: list[str] = []
-        mergesort(registro, 3)
+        listaPublicadoras = []
         for r in registro:
-            i = 0
-            achou = False
-            while i < len(publicadora) and not achou:
-                achou = r[3] == publicadora[i]
-                if not achou:
-                    i += 1
-            if not achou:
-                publicadora.append(r[3])
-        print(publicadora)
-            
+            if r[3] not in listaPublicadoras:
+                listaPublicadoras.append(r[3])
+        listaPublicadoras.sort()
+        for p in listaPublicadoras:
+            chaveSec2.write(p.encode() + b'|')
+
+    # # Cria arquivo com a lista invertida
+    # with open("listaInvertida.lst", "wb") as lstInvertida:
+    #     listaInvertida = criaListaInvertida(registro)
+    #     for i in listaInvertida:
+    #         # tem que usar o struct aqui, ainda não vimos
+    #         id = i[0].to_bytes(4, 'little')
+    #         proxGen = i[1].to_bytes(4, 'little')
+    #         proxPub = i[2].to_bytes(4, 'little')
+    #         lstInvertida.write(id + proxGen + proxPub + b'|')
+
 
 def mergesort(registros: list[tuple[int,int,str,str]], chave: int) -> None:
     ''' Ordena uma lista de registros de acordo com a chave inserida '''
@@ -167,16 +251,95 @@ def mergesort(registros: list[tuple[int,int,str,str]], chave: int) -> None:
         k += 1
     
 
+def buscaPrimaria(id: str) -> str:
+    '''
+    Procura pelo item com *id*, e retorna seus campos separados por '|' em uma 
+    string, caso não encontre o item, retorna uma string vazia
+    Ex:
+    >>> buscaPrimaria(459)
+        "459|Fortnite|2017|Sandbox|Epic Games|PC|" 
+    '''
+    item = ''
+    with open("games.dat", "rb") as bp, open("primario.ind", "rb") as indices:
+        # offset nos indices = i * 9 + 4
+        i_min = 0
+        i_max = int.from_bytes(indices.read(4), 'little') - 1
+        while i_min <= i_max:
+            i_meio = (i_max + i_min) // 2
+            offset = i_meio * 9 + 4
+            indices.seek(offset, os.SEEK_SET)
+            vMedio = int.from_bytes(indices.read(4), 'little') 
+            if int(id) == vMedio:
+                bpOffset = int.from_bytes(indices.read(4), 'little') 
+                bp.seek(bpOffset, os.SEEK_SET)
+                tamReg = int.from_bytes(bp.read(2), 'little')
+                item = bp.read(tamReg).decode()
+                return item
+            elif int(id) < vMedio:
+                i_max = i_meio - 1
+            else:
+                i_min = i_meio + 1
+    return item
+
+# Buscas secundárias vou precisar do struct :(
+
+
+def insereRegistro(registro: str) -> None:
+    try:
+        campos = registro.split('|')
+        # Verifica se encontra um id igual
+        # Se encontrou, não insere
+        if buscaPrimaria(campos[0]) != '':
+            print("ID já existe!")
+            return
+        with open("games.dat", "r+b") as arq:
+            arq.seek(0, os.SEEK_END)
+            tamBytes = len(registro).to_bytes(2, 'little')
+            arq.write(tamBytes)
+            arq.write(registro.encode())
+
+        chaves = criaListaOffsetChaves("games.dat")
+        constroiIndices(chaves)
+        print("Registro inserido com sucesso!")
+            
+    except OSError as e:
+        print(f"Erro: {e}")
+
+
+def realizaOperacoes(nomeArq: str) -> None:
+    try:
+        with open(nomeArq, 'rb') as operacoes:
+            raise NotImplementedError
+        
+        
+    # case 'i':
+    #         if len(sys.argv) != 4:
+    #             sys.exit(f"Erro! Uso: {sys.argv[0]} <nome_do_arquivo> <-i> "\
+    #                      "<registro>")
+    #         else:
+    #             insereRegistro(sys.argv[3])
+    except FileNotFoundError as e:
+        print(f'Erro: {e}')
+
 def main() -> None:
-    if len(sys.argv) > 2:
-        sys.exit(f"Erro! Uso: {sys.argv[0]} <nome_do_arquivo>")
+    if len(sys.argv) < 3:
+        sys.exit(f"Erro! Uso: {sys.argv[0]} <nome_do_arquivo> <operador>")
     if not os.path.isfile(sys.argv[1]):
         raise FileNotFoundError('Insira um arquivo válido')
-    else:
-        chaves = criaListaOffsetChaves(sys.argv[1])
-        print(chaves)
-        print(criaListaInvertida(chaves))
-        organizaRegistros(sys.argv[1], chaves)
+    
+    match sys.argv[2]:
+        case '-b':
+            chaves = criaListaOffsetChaves(sys.argv[1])
+            constroiIndices(chaves)
+        case '-e':
+            if len(sys.argv) != 4:
+                sys.exit(f"Erro! Uso: {sys.argv[0]} <nome_do_arquivo> <-e> "\
+                         "<operações>")
+            else:
+                realizaOperacoes(sys.argv[3])
+            raise NotImplementedError
+
+        
 
 
 if __name__ == "__main__":

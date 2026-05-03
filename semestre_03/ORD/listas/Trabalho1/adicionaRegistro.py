@@ -6,19 +6,16 @@ import sys
 def insereRegistro(registro: str) -> None:
     try:
         # Verifica se encontra um id igual
-        with open("games.dat", "rb") as entrada:
+        with open("primario.ind", "rb") as ids:
             campos = registro.split('|')
-            tamReg = int.from_bytes(entrada.read(2), 'little')
-            achou = False
-            while tamReg > 0 and not achou:
-                registro = entrada.read(tamReg).decode()
-                id = (registro.split('|'))[0]
-                achou = campos[0] == id
-                tamReg = int.from_bytes(entrada.read(2), 'little')
+            id = int.to_bytes(ids.read(4),'little')
+            i = 0
+            while id > 0 and id != int(campos[0]):
+                # offset é 
+                offset = (i * 4)
+                id.seek(offset)
             # Se encontrou, não insere
-            if achou:
-                print(f"Já existe um registro de ID {campos[0]}!")
-                return
+            
         with open("games.dat", "ab") as arq:
             arq.seek(0, os.SEEK_END)
             tamBytes = len(registro).to_bytes(2, 'little')
@@ -27,7 +24,6 @@ def insereRegistro(registro: str) -> None:
             
     except OSError as e:
         print(f"Erro: {e}")
-
 
 def main() -> None:
     if len(sys.argv) > 3:
