@@ -1,29 +1,28 @@
 #include <stdio.h>
 
 long int fatorial(int n) {
-    int valor = 1;
+    long int valor = 1;
     for (int i = n; i > 0; i--) {
         valor *= i;
     }
-    return valor;
+    printf("%ld", valor);
 }
 
-void fibonnaci(int n) {
-    int i = 0;
-    long long int fibonacci = 1, num_anterior = 0;
+long long int fibonnaci(int n) {
+    int i = 1;
+    long long int fibonacci[n];
+    fibonacci[0] = 1;
     do {
         double aux;
-        if (i == 0){
-            fibonacci += num_anterior;
+        if (i == 1){
+            fibonacci[1] = 1;
         }
         else {
-            aux = fibonacci;
-            fibonacci += num_anterior;
+            aux = fibonacci[i - 1] + fibonacci[i];
+            fibonacci[i + 1] = aux;
         }
-        printf("%lld\n", fibonacci);
-        num_anterior = aux;
         i++;
-    } while (i < n);
+    } while (i < n - 1);
 }
 
 long long int potencia(int x, int pot) {
@@ -48,8 +47,7 @@ void main() {
         printf("1 -> Calcular Fatorial \n2 -> Imprimir Fibonnaci \n"
         "3 -> Calcular Potencia \n4 -> Imprimir numeros primos \n5 -> Sair\n");
         scanf("%i", &condicao);
-        switch (condicao)
-        {
+        switch (condicao) {
         case 1:
             int fat;
             printf("Insira o numero que deseja calcular o fatorial!\n");
@@ -62,8 +60,11 @@ void main() {
             printf("Quantos digitos da sequência de Fibonacci você deseja "
                 "ver?\n");
             scanf("%i", &fib);
-            fibonnaci(fib);
-            break;
+            long long int fibo[fib] = fibonnaci(fib);
+            for (int i = 0; i < fib; i++) {
+                printf("%lld", fibo[i]);
+            }
+            
         case 3:
             int x, pot;
             printf("Insira qual o numero que elevar:\n");
