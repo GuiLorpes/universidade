@@ -3,16 +3,20 @@ import os
 import io
 import sys
 from dataclasses import dataclass
+from struct import Struct
+
+# Variaveis globais para o struct
+# TAM_CAB
 
 
 # Essas duas classes são classes auxiliares para a fila invertida
 @dataclass
 class Node:
     anterior: Node
-    id: int
+    id: int | str
     pos: int
     prox: Node
-    def __init__(self, id: int, pos: int):
+    def __init__(self, id: int | str, pos: int):
         self.anterior = None # type: ignore
         self.id = id
         self.pos = pos
@@ -27,8 +31,8 @@ def insere_depois(p: Node, novo: Node):
 
 class Lista:
     sentinela: Node
-    def __init__(self):
-        self.sentinela = Node(-1, -1)
+    def __init__(self, tipo: int | str):
+        self.sentinela = Node(tipo, -1)
         self.sentinela.anterior = self.sentinela
         self.sentinela.prox = self.sentinela
     def vazio(self) -> bool:
@@ -41,10 +45,10 @@ class Lista:
             while q.id < novo.id and q is not self.sentinela:
                 q = q.prox
             insere_depois(q.anterior, novo)
-    def listaIDeProx(self) -> list[tuple[int, int]]:
+    def listaIDeProx(self) -> list[tuple[int |str , int]]:
         ''' Retorna uma lista de tuplas com o id e a proxima posição '''
-        lista: list[tuple[int, int]] = []
-        q = self.sentinela.prox
+        lista: list[tuple[int | str, int]] = []
+        q = self.sentinela
         while q.prox.pos != -1:
             lista.append((q.id, q.prox.pos))
             q = q.prox
@@ -72,17 +76,26 @@ def criaListaOffsetChaves(nomeArq: str) -> list[tuple[int,int,str,str]]:
     return chaves
 
 
-def criaListaInvertida(chaves: list[tuple[int,int,str,str]]) -> list[list[int]]:
+def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
     '''
-    Cria uma lista invertida, a partir de *nomeArq*, com o ID do item atual, e 
-    o ID do próximo item do mesmo gênero, e o ID do proximo item da mesma 
-    publicadora 
+    Com base no *nomeArq* cria 4 arquivos novos, primario.ind, genero.ind, 
+    publicadora.ind e listaInvertida.lst, onde cada um dos .ind são ordenados 
+    de acordo com as chaves primária, secundária de gênero e secundária de 
+    publicadora. 
+    Os *registros* estarão com o offset de cada um dos elementos, e serão 
+    ordenadas de acordo com cada uma das chaves e serão escritos em seus 
+    respectivos arquivos
     '''
+    # Cria o arquivo com todos os IDs e seus offsets em "games.dat"
+    listaIDs: list[tuple[int, int]]
+    for r in chaves:
+        listaIDs.append((r[1], r[0]))
+    listaIDs.sort()
+    
     # Cria a lista invertida vazia para ser organizada
     listaInvertida: list[list[int]] = []
     for r in chaves:
         listaInvertida.append([r[1], -1, -1])
-
 
     # Cria a lista com todos os generos no registro
     listaGeneros = []
@@ -98,11 +111,13 @@ def criaListaInvertida(chaves: list[tuple[int,int,str,str]]) -> list[list[int]]:
             listaPublicadoras.append(r[3])
     listaPublicadoras.sort()
 
+    # Cria uma lista com os generos com a primeira ocorrencia de cada
+    generosPrimeiro: list[tuple[int | str, int]] = []
 
     # Organiza os generos primeiro 
     # Encontrar todos de um genero para atualizar na lista
     for g in listaGeneros:
-        nodeGenero = Lista()
+        nodeGenero = Lista(g)
         # Acha o primeiro registro do genero
         # Os generos já foram inseridos a partir dos registros, então não 
         # precisa verificar se i < len(registros), já que é certeza que o 
@@ -118,7 +133,7 @@ def criaListaInvertida(chaves: list[tuple[int,int,str,str]]) -> list[list[int]]:
                 novoNode = Node(chaves[j][1], j)
                 nodeGenero.insereOrdenado(novoNode)
             j += 1
-        doGenero = nodeGenero.listaIDeProx()
+        doGenero = nodeGenero.listaIDeProx()[1:]
         for item in doGenero:
             i = 0
             # Novamente, com certeza vai ter um listaInvertida[i] com id igual 
@@ -126,11 +141,15 @@ def criaListaInvertida(chaves: list[tuple[int,int,str,str]]) -> list[list[int]]:
             while listaInvertida[i][0] != item[0]:
                 i += 1
             listaInvertida[i][1] = item[1]
-
-
+        genero = nodeGenero.sentinela
+        generosPrimeiro.append((genero.id, genero.prox.pos))
+        
+    # Cria uma lista com as publicadoras com a primeira ocorrencia de cada
+    publicadorasPrimeiro: list[tuple[int | str, int]] = []
+    
     # Organiza as publicadoras
     for p in listaPublicadoras:
-        nodePublicadora = Lista()
+        nodePublicadora = Lista(p)
         i = 0
         while chaves[i][3] != p:
             i += 1
@@ -141,13 +160,20 @@ def criaListaInvertida(chaves: list[tuple[int,int,str,str]]) -> list[list[int]]:
                 novoNode = Node(chaves[j][1], j)
                 nodePublicadora.insereOrdenado(novoNode)
             j += 1
-        daPublicadora = nodePublicadora.listaIDeProx()
+        daPublicadora = nodePublicadora.listaIDeProx()[1:]
         for item in daPublicadora:
             i = 0
             while listaInvertida[i][0] != item[0]:
                 i += 1
-            listaInvertida[i][2] = item[1]            
-    return listaInvertida
+            listaInvertida[i][2] = item[1]
+        publicadora = nodePublicadora.sentinela     
+        publicadorasPrimeiro.append((publicadora.id, publicadora.prox.pos))
+    
+    with open("primario.ind", "wb") as chavePrimaria:
+        # Escreve o cabeçalho com 4 bytes
+        cabecalho = pack(len(listaIDs))
+
+
 
 def constroiIndices(registro: list[tuple[int,int,str,str]]) -> None:
     '''
