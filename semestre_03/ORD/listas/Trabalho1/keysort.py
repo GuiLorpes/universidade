@@ -3,10 +3,16 @@ import os
 import io
 import sys
 from dataclasses import dataclass
-from struct import Struct
+from struct import pack, unpack, calcsize
 
 # Variaveis globais para o struct
-# TAM_CAB
+
+FORMATO_ELEMLISTA = '2i'    # dois inteiros de 4 bytes
+FORMATO_CAB = 'i'        # um inteiro de 4 bytes
+FORMATO_TAMREG = 'h'        # um inteiro de 2 bytes
+SIZEOF_ELEMLISTA = calcsize(FORMATO_ELEMLISTA)      # 8 bytes
+SIZEOF_CAB = calcsize(FORMATO_CAB)            # 4 bytes
+SIZEOF_TAMREG = calcsize(FORMATO_TAMREG)            # 2 bytes
 
 
 # Essas duas classes são classes auxiliares para a fila invertida
@@ -42,7 +48,7 @@ class Lista:
             insere_depois(self.sentinela, novo)
         else:
             q = self.sentinela.prox
-            while q.id < novo.id and q is not self.sentinela:
+            while q is not self.sentinela and q.id < novo.id:
                 q = q.prox
             insere_depois(q.anterior, novo)
     def listaIDeProx(self) -> list[tuple[int |str , int]]:
@@ -87,7 +93,7 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
     respectivos arquivos
     '''
     # Cria o arquivo com todos os IDs e seus offsets em "games.dat"
-    listaIDs: list[tuple[int, int]]
+    listaIDs: list[tuple[int, int]] = []
     for r in chaves:
         listaIDs.append((r[1], r[0]))
     listaIDs.sort()
@@ -143,6 +149,7 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
             listaInvertida[i][1] = item[1]
         genero = nodeGenero.sentinela
         generosPrimeiro.append((genero.id, genero.prox.pos))
+    print(generosPrimeiro)
         
     # Cria uma lista com as publicadoras com a primeira ocorrencia de cada
     publicadorasPrimeiro: list[tuple[int | str, int]] = []
@@ -168,55 +175,29 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
             listaInvertida[i][2] = item[1]
         publicadora = nodePublicadora.sentinela     
         publicadorasPrimeiro.append((publicadora.id, publicadora.prox.pos))
+    print(publicadorasPrimeiro)
     
-    with open("primario.ind", "wb") as chavePrimaria:
-        # Escreve o cabeçalho com 4 bytes
-        cabecalho = pack(len(listaIDs))
+    
+    # # Cria arquivo com indice primário
+    # with open("primario.ind", "wb") as chavePrimaria:
+    #     # Escreve o cabeçalho com 4 bytes
+    #     cabecalho = pack(len(listaIDs))
+    
+    # # Cria arquivo com indice secundário de genero 
+    # with open("genero.ind", "wb") as chaveSec1:
+    #     for g in generosPrimeiro:
+    #         chaveSec1.write(g[0].encode() + b'|')
+    #         chaveSec1.write(g[1].to_bytes(4, 'little') + b'|')
 
-
-
-def constroiIndices(registro: list[tuple[int,int,str,str]]) -> None:
-    '''
-    Com base no *nomeArq* cria 4 arquivos novos, primario.ind, genero.ind, 
-    publicadora.ind e listaInvertida.lst, onde cada um dos .ind são ordenados 
-    de acordo com as chaves primária, secundária de gênero e secundária de 
-    publicadora. 
-    Os *registros* estarão com o offset de cada um dos elementos, e serão 
-    ordenadas de acordo com cada uma das chaves e serão escritos em seus 
-    respectivos arquivos
-    '''
-    # Cria arquivo com indice primário
-    with open("primario.ind", "wb") as chavePrimaria:
-        # Escreve o cabeçalho com 4 bytes
-        chavePrimaria.write(len(registro).to_bytes(4,'little')) 
-        mergesort(registro, 1)
-        # Escreve o ID e o byteoffset, ambos com 4 bytes
-        # Escreve tambem os bytes separadores '|'
-        # Total de 10 bytes por registro
-        for r in registro:
-            chavePrimaria.write(r[1].to_bytes(4, 'little'))
-            chavePrimaria.write(r[0].to_bytes(4, 'little') + b'|')
-
-    # Cria arquivo com indice secundário de genero 
-    with open("genero.ind", "wb") as chaveSec1:
-            # Cria a lista com todos os generos no registro
-        listaGeneros = []
-        for r in registro:
-            if r[2] not in listaGeneros:
-                listaGeneros.append(r[2])
-        listaGeneros.sort()
-        for g in listaGeneros:
-            chaveSec1.write(g.encode() + b'|')
-            
-    # Cria arquivo com indice secundário de publicadora
-    with open("publicadora.ind", "wb") as chaveSec2:
-        listaPublicadoras = []
-        for r in registro:
-            if r[3] not in listaPublicadoras:
-                listaPublicadoras.append(r[3])
-        listaPublicadoras.sort()
-        for p in listaPublicadoras:
-            chaveSec2.write(p.encode() + b'|')
+    # # Cria arquivo com indice secundário de publicadora
+    # with open("publicadora.ind", "wb") as chaveSec2:
+    #     listaPublicadoras = []
+    #     for r in registro:
+    #         if r[3] not in listaPublicadoras:
+    #             listaPublicadoras.append(r[3])
+    #     listaPublicadoras.sort()
+    #     for p in listaPublicadoras:
+    #         chaveSec2.write(p.encode() + b'|')
 
     # # Cria arquivo com a lista invertida
     # with open("listaInvertida.lst", "wb") as lstInvertida:
