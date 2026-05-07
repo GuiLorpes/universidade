@@ -8,7 +8,7 @@ long int fatorial(int n) {
     printf("%ld", valor);
 }
 
-long long int fibonnaci(int n) {
+void fibonnaci(int fibonacci, int n) {
     int i = 1;
     long long int fibonacci[n];
     fibonacci[0] = 1;
@@ -30,12 +30,17 @@ long long int potencia(int x, int pot) {
     for (int i = 1; i < pot; i++) {
         resultado *= x;
     }
-    return resultado;
+    printf(resultado);
 }
 
-void imprime_impares(int n) {
-    for (int i = 1; i <= n; i += 2) {
-        printf("%i\n", i);
+void imprime_impares(int *vetor, int n) {
+    int i = 0, j = 0;
+    while (i < n && j < sizeof(vetor))  {
+        if (i % 2 == 1) {
+            vetor[j] = n;
+            j++;
+        }
+        i++;
     }
 }
 
@@ -75,11 +80,15 @@ void main() {
             printf("%i^%i = %lld\n", x, pot, resultado);
             break;
         case 4:
-            int impares;
+            int numImpares;
             printf("Insira até que número gostaria de ver os números impares");
             printf("\n");
             scanf("%i", &impares);
-            imprime_impares(impares);
+            int vetImpares[numImpares / 2];
+            imprime_impares(vetImpares, numImpares);
+            for (int i = 0; i < numImpares; i++) {
+                printf("%i\n", vetImpares[i]);
+            }
             break;
         case 5:
             printf("Obrigado por usar o meu código! ^^\n");
