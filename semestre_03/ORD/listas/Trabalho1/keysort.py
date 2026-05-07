@@ -7,12 +7,14 @@ from struct import pack, unpack, calcsize
 
 # Variaveis globais para o struct
 
-FORMATO_ELEMLISTA = '2i'    # dois inteiros de 4 bytes
-FORMATO_CAB = 'i'        # um inteiro de 4 bytes
-FORMATO_TAMREG = 'h'        # um inteiro de 2 bytes
-SIZEOF_ELEMLISTA = calcsize(FORMATO_ELEMLISTA)      # 8 bytes
-SIZEOF_CAB = calcsize(FORMATO_CAB)            # 4 bytes
-SIZEOF_TAMREG = calcsize(FORMATO_TAMREG)            # 2 bytes
+FORMATO_ELEM = '2i'                             # dois inteiros de 4 bytes
+FORMATO_CAB = 'i'                               # um inteiro de 4 bytes
+FORMATO_TAMREG = 'h'                            # um inteiro de 2 bytes
+FORMATO_LISTAINV = '3i'                         # três inteiros de 4 bytes
+SIZEOF_ELEM = calcsize(FORMATO_ELEM)            # 8 bytes
+SIZEOF_CAB = calcsize(FORMATO_CAB)              # 4 bytes
+SIZEOF_TAMREG = calcsize(FORMATO_TAMREG)        # 2 bytes
+SIZEOF_LISTINV = calcsize(FORMATO_LISTAINV)     # 12 bytes
 
 
 # Essas duas classes são classes auxiliares para a fila invertida
@@ -178,36 +180,38 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
     print(publicadorasPrimeiro)
     
     
-    # # Cria arquivo com indice primário
-    # with open("primario.ind", "wb") as chavePrimaria:
-    #     # Escreve o cabeçalho com 4 bytes
-    #     cabecalho = pack(len(listaIDs))
+    # Cria arquivo com indice primário
+    with open("primario.ind", "wb") as chavePrimaria:
+        # Escreve o cabeçalho com 4 bytes
+        cabecalho = pack(FORMATO_CAB, len(listaIDs))
+        chavePrimaria.write(cabecalho)
+        for chave in listaIDs:
+            chavePrimaria.write(pack(FORMATO_ELEM, *chave))
     
-    # # Cria arquivo com indice secundário de genero 
-    # with open("genero.ind", "wb") as chaveSec1:
-    #     for g in generosPrimeiro:
-    #         chaveSec1.write(g[0].encode() + b'|')
-    #         chaveSec1.write(g[1].to_bytes(4, 'little') + b'|')
+    # Cria arquivo com indice secundário de genero 
+    with open("genero.ind", "wb") as chaveSec1:
+        for g in generosPrimeiro:
+            # tamanho do registro = len(palavra) + bytes do offset + 2 '|'
+            tamreg = len(g[0]) + 4 + 2
+            chaveSec1.write(pack(FORMATO_TAMREG, tamreg))
+            chaveSec1.write(pack('s', g[0].encode() + b'|'))
+            chaveSec1.write(pack('is', g[1], b'|'))
 
-    # # Cria arquivo com indice secundário de publicadora
-    # with open("publicadora.ind", "wb") as chaveSec2:
-    #     listaPublicadoras = []
-    #     for r in registro:
-    #         if r[3] not in listaPublicadoras:
-    #             listaPublicadoras.append(r[3])
-    #     listaPublicadoras.sort()
-    #     for p in listaPublicadoras:
-    #         chaveSec2.write(p.encode() + b'|')
+    # Cria arquivo com indice secundário de publicadora
+    with open("publicadora.ind", "wb") as chaveSec2:
+        for p in publicadorasPrimeiro:
+            tamreg = len(g[0]) + 4 + 2
+            chaveSec2.write(pack(FORMATO_TAMREG, tamreg))
+            chaveSec2.write(pack('s', p[0].encode() + b'|'))
+            chaveSec2.write(pack('is', p[1], b'|'))
 
-    # # Cria arquivo com a lista invertida
-    # with open("listaInvertida.lst", "wb") as lstInvertida:
-    #     listaInvertida = criaListaInvertida(registro)
-    #     for i in listaInvertida:
-    #         # tem que usar o struct aqui, ainda não vimos
-    #         id = i[0].to_bytes(4, 'little')
-    #         proxGen = i[1].to_bytes(4, 'little')
-    #         proxPub = i[2].to_bytes(4, 'little')
-    #         lstInvertida.write(id + proxGen + proxPub + b'|')
+    # Cria arquivo com a lista invertida
+    with open("listaInvertida.lst", "wb") as lstInvertida:
+        for i in listaInvertida:
+            tamreg = len(listaInvertida)
+            lstInvertida.write(pack(FORMATO_CAB, tamreg))
+            
+            
 
 
 def mergesort(registros: list[tuple[int,int,str,str]], chave: int) -> None:
