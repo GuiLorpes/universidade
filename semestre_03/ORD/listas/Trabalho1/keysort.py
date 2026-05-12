@@ -7,14 +7,9 @@ from struct import pack, unpack, calcsize
 
 # Variaveis globais para o struct
 
-FORMATO_ELEM = '2i'                             # dois inteiros de 4 bytes
-FORMATO_CAB = 'i'                               # um inteiro de 4 bytes
-FORMATO_TAMREG = 'h'                            # um inteiro de 2 bytes
-FORMATO_LISTAINV = '3i'                         # três inteiros de 4 bytes
-SIZEOF_ELEM = calcsize(FORMATO_ELEM)            # 8 bytes
-SIZEOF_CAB = calcsize(FORMATO_CAB)              # 4 bytes
-SIZEOF_TAMREG = calcsize(FORMATO_TAMREG)        # 2 bytes
-SIZEOF_LISTINV = calcsize(FORMATO_LISTAINV)     # 12 bytes
+FORMATO_LISTAINV = 'isisis'                     # três inteiros de 4 bytes 
+                                                # separados por 2 bytes de '|'
+SIZEOF_LISTINV = calcsize(FORMATO_LISTAINV)     # 15 bytes
 
 
 # Essas duas classes são classes auxiliares para a fila invertida
@@ -120,7 +115,7 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
     listaPublicadoras.sort()
 
     # Cria uma lista com os generos com a primeira ocorrencia de cada
-    generosPrimeiro: list[tuple[int | str, int]] = []
+    generosPrimeiro: list[tuple[str, int]] = []
 
     # Organiza os generos primeiro 
     # Encontrar todos de um genero para atualizar na lista
@@ -150,11 +145,11 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
                 i += 1
             listaInvertida[i][1] = item[1]
         genero = nodeGenero.sentinela
-        generosPrimeiro.append((genero.id, genero.prox.pos))
+        generosPrimeiro.append((str(genero.id), genero.prox.pos))
     print(generosPrimeiro)
         
     # Cria uma lista com as publicadoras com a primeira ocorrencia de cada
-    publicadorasPrimeiro: list[tuple[int | str, int]] = []
+    publicadorasPrimeiro: list[tuple[str, int]] = []
     
     # Organiza as publicadoras
     for p in listaPublicadoras:
@@ -176,40 +171,45 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
                 i += 1
             listaInvertida[i][2] = item[1]
         publicadora = nodePublicadora.sentinela     
-        publicadorasPrimeiro.append((publicadora.id, publicadora.prox.pos))
+        publicadorasPrimeiro.append((str(publicadora.id), publicadora.prox.pos))
     print(publicadorasPrimeiro)
     
-    
+    print(listaInvertida)
+
     # Cria arquivo com indice primário
     with open("primario.ind", "wb") as chavePrimaria:
         # Escreve o cabeçalho com 4 bytes
-        cabecalho = pack(FORMATO_CAB, len(listaIDs))
+        cabecalho = len(listaIDs).to_bytes(4, 'little')
         chavePrimaria.write(cabecalho)
         for chave in listaIDs:
-            chavePrimaria.write(pack(FORMATO_ELEM, *chave))
+            chavePrimaria.write(chave[0].to_bytes(4, 'little'))
+            chavePrimaria.write(chave[1].to_bytes(4, 'little'))
     
     # Cria arquivo com indice secundário de genero 
     with open("genero.ind", "wb") as chaveSec1:
-        for g in generosPrimeiro:
+        for g, pos in generosPrimeiro:
             # tamanho do registro = len(palavra) + bytes do offset + 2 '|'
-            tamreg = len(g[0]) + 4 + 2
-            chaveSec1.write(pack(FORMATO_TAMREG, tamreg))
-            chaveSec1.write(pack('s', g[0].encode() + b'|'))
-            chaveSec1.write(pack('is', g[1], b'|'))
+            tamreg = len(g) + 4 + 2
+            chaveSec1.write(tamreg.to_bytes(2, 'little'))
+            chaveSec1.write(g.encode() + b'|')
+            chaveSec1.write(pos.to_bytes(4, 'little'))
+            chaveSec1.write(b'|')
 
     # Cria arquivo com indice secundário de publicadora
     with open("publicadora.ind", "wb") as chaveSec2:
-        for p in publicadorasPrimeiro:
-            tamreg = len(g[0]) + 4 + 2
-            chaveSec2.write(pack(FORMATO_TAMREG, tamreg))
-            chaveSec2.write(pack('s', p[0].encode() + b'|'))
-            chaveSec2.write(pack('is', p[1], b'|'))
+        for p, pos in publicadorasPrimeiro:
+            tamreg = len(p) + 4 + 2
+            chaveSec2.write(tamreg.to_bytes(2, 'little'))
+            chaveSec2.write(p.encode() + b'|')
+            chaveSec2.write(pos.to_bytes(4, 'little'))
+            chaveSec2.write(b'|')
 
     # Cria arquivo com a lista invertida
     with open("listaInvertida.lst", "wb") as lstInvertida:
-        for i in listaInvertida:
-            tamreg = len(listaInvertida)
-            lstInvertida.write(pack(FORMATO_CAB, tamreg))
+        tamreg = len(listaInvertida)
+        lstInvertida.write(tamreg.to_bytes(4, 'little'))
+        for id, proxG, proxP in listaInvertida:
+            lstInvertida.write(pack(FORMATO_LISTAINV, id, proxG, proxP))
             
             
 
@@ -270,30 +270,27 @@ def buscaPrimaria(id: str) -> str:
     >>> buscaPrimaria(459)
         "459|Fortnite|2017|Sandbox|Epic Games|PC|" 
     '''
-    try:
-        item = ''
-        with open("games.dat", "rb") as bp, open("primario.ind", "rb") as ids:
-            i_min = 0
-            i_max = unpack(FORMATO_CAB, ids.read(SIZEOF_CAB))[0]
-            while i_min <= i_max:
-                i_meio = (i_max + i_min) // 2
-                ids.seek(offset, os.SEEK_SET)
-                vMedio = unpack(FORMATO_ELEM, ids.read(SIZEOF_ELEM))
-                if int(id) == vMedio[0]:
-                    bpOffset = vMedio[1]
-                #     bpOffset = int.from_bytes(indices.read(4), 'little') 
-                #     bp.seek(bpOffset, os.SEEK_SET)
-                #     tamReg = int.from_bytes(bp.read(2), 'little')
-                #     item = bp.read(tamReg).decode()
-                #     return item
-                # elif int(id) < vMedio:
-                #     i_max = i_meio - 1
-                # else:
-                #     i_min = i_meio + 1
-        return item
-    except FileNotFoundError as e:
-        print(f"Erro: {e}")
-        return ''
+    item = ''
+    with open("games.dat", "rb") as arq, open("primario.ind", "rb") as indices:
+        # offset nos indices = i * 8 + 4
+        i_min = 0
+        i_max = int.from_bytes(indices.read(4), 'little') - 1
+        while i_min <= i_max:
+            i_meio = (i_max + i_min) // 2
+            offset = i_meio * 8 + 4
+            indices.seek(offset, os.SEEK_SET)
+            vMedio = int.from_bytes(indices.read(4), 'little') 
+            if int(id) == vMedio:
+                bpOffset = int.from_bytes(indices.read(4), 'little') 
+                arq.seek(bpOffset, os.SEEK_SET)
+                tamReg = int.from_bytes(arq.read(2), 'little')
+                item = arq.read(tamReg).decode()
+                return item
+            elif int(id) < vMedio:
+                i_max = i_meio - 1
+            else:
+                i_min = i_meio + 1
+    return item
 
 # Buscas secundárias
 
@@ -307,11 +304,37 @@ def buscaSecGenero(genero:str) -> list[str]:
     listaOffsets = []
     try:
         with open("genero.ind", "rb") as generos, \
+            open("listaInvertida.lst", "rb") as lstInv, \
             open("primario.ind","rb") as id:
             primeiro = -1
-            tamReg = unpack(FORMATO_TAMREG,)
+            tamReg = generos.read(2)
+            buffer = generos.read(int.from_bytes(tamReg, 'little')).decode()
+            g = buffer.split('|')
+            while g[0] != genero and tamReg:
+                tamReg = generos.read(2)
+                buffer = generos.read(int.from_bytes(tamReg, 'little')).decode()
+                g = buffer.split('|')
+            if g[0] == genero:
+                primeiro = int(g[1])
+                tamLista = int.from_bytes(lstInv.read(4), 'little')
+                lstInv.seek(primeiro * SIZEOF_LISTINV + 4, os.SEEK_SET)
+                listaInvertida = unpack(FORMATO_LISTAINV, \
+                                        lstInv.read(SIZEOF_LISTINV))
+                while listaInvertida[1] != -1:
+                    offset = listaInvertida[1] * 8 + 4
+                    # Precisa do + 4 para ler o offset do Id
+                    id.seek(offset + 4, os.SEEK_SET)
+                    offsetID = int.from_bytes(id.read(4), 'little')
+                    listaOffsets.append(offsetID)
+                    lstInv.seek(listaInvertida[1] * SIZEOF_LISTINV + 4, \
+                                os.SEEK_SET)
+                    listaInvertida = unpack(FORMATO_LISTAINV, \
+                                            lstInv.read(SIZEOF_LISTINV))
+            elif primeiro == -1:
+                return []
+        with open("games.dat", "rb") as games:
             
-            return []
+        return []
     except FileNotFoundError as e:
         print(f"Erro: {e}")
         return[]
@@ -373,7 +396,7 @@ def main() -> None:
                 realizaOperacoes(sys.argv[3])
             raise NotImplementedError
         case 'b1':
-            buscaPrimaria(sys.argv[3])
+            print(buscaPrimaria(sys.argv[3]))
 
         
 
