@@ -270,27 +270,30 @@ def buscaPrimaria(id: str) -> str:
     >>> buscaPrimaria(459)
         "459|Fortnite|2017|Sandbox|Epic Games|PC|" 
     '''
-    item = ''
-    with open("games.dat", "rb") as bp, open("primario.ind", "rb") as indices:
-        # offset nos indices = i * 9 + 4
-        i_min = 0
-        i_max = int.from_bytes(indices.read(4), 'little') - 1
-        while i_min <= i_max:
-            i_meio = (i_max + i_min) // 2
-            offset = i_meio * 9 + 4
-            indices.seek(offset, os.SEEK_SET)
-            vMedio = int.from_bytes(indices.read(4), 'little') 
-            if int(id) == vMedio:
-                bpOffset = int.from_bytes(indices.read(4), 'little') 
-                bp.seek(bpOffset, os.SEEK_SET)
-                tamReg = int.from_bytes(bp.read(2), 'little')
-                item = bp.read(tamReg).decode()
-                return item
-            elif int(id) < vMedio:
-                i_max = i_meio - 1
-            else:
-                i_min = i_meio + 1
-    return item
+    try:
+        item = ''
+        with open("games.dat", "rb") as bp, open("primario.ind", "rb") as ids:
+            i_min = 0
+            i_max = unpack(FORMATO_CAB, ids.read(SIZEOF_CAB))[0]
+            while i_min <= i_max:
+                i_meio = (i_max + i_min) // 2
+                ids.seek(offset, os.SEEK_SET)
+                vMedio = unpack(FORMATO_ELEM, ids.read(SIZEOF_ELEM))
+                if int(id) == vMedio[0]:
+                    bpOffset = vMedio[1]
+                #     bpOffset = int.from_bytes(indices.read(4), 'little') 
+                #     bp.seek(bpOffset, os.SEEK_SET)
+                #     tamReg = int.from_bytes(bp.read(2), 'little')
+                #     item = bp.read(tamReg).decode()
+                #     return item
+                # elif int(id) < vMedio:
+                #     i_max = i_meio - 1
+                # else:
+                #     i_min = i_meio + 1
+        return item
+    except FileNotFoundError as e:
+        print(f"Erro: {e}")
+        return ''
 
 # Buscas secundárias
 
@@ -306,6 +309,7 @@ def buscaSecGenero(genero:str) -> list[str]:
         with open("genero.ind", "rb") as generos, \
             open("primario.ind","rb") as id:
             primeiro = -1
+            tamReg = unpack(FORMATO_TAMREG,)
             
             return []
     except FileNotFoundError as e:
@@ -368,6 +372,8 @@ def main() -> None:
             else:
                 realizaOperacoes(sys.argv[3])
             raise NotImplementedError
+        case 'b1':
+            buscaPrimaria(sys.argv[3])
 
         
 
