@@ -292,7 +292,26 @@ def buscaPrimaria(id: str) -> str:
                 i_min = i_meio + 1
     return item
 
-# Buscas secundárias vou precisar do struct :(
+# Buscas secundárias
+
+# Busca secundária de gênero
+
+def buscaSecGenero(genero:str) -> list[str]:
+    '''
+    Procura por itens do mesmo *genero* e os retorna numa lista, caso não 
+    exista retorna lista vazia.
+    '''
+    listaOffsets = []
+    try:
+        with open("genero.ind", "rb") as generos, \
+            open("primario.ind","rb") as id:
+            primeiro = -1
+            
+            return []
+    except FileNotFoundError as e:
+        print(f"Erro: {e}")
+        return[]
+
 
 
 def insereRegistro(registro: str) -> None:
