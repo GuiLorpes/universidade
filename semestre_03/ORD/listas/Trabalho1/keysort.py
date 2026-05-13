@@ -7,8 +7,7 @@ from struct import pack, unpack, calcsize
 
 # Variaveis globais para o struct
 
-FORMATO_LISTAINV = 'isisis'                     # três inteiros de 4 bytes 
-                                                # separados por 2 bytes de '|'
+FORMATO_LISTAINV = '3i'                     # três inteiros de 4 bytes 
 SIZEOF_LISTINV = calcsize(FORMATO_LISTAINV)     # 15 bytes
 
 
@@ -305,35 +304,46 @@ def buscaSecGenero(genero:str) -> list[str]:
     try:
         with open("genero.ind", "rb") as generos, \
             open("listaInvertida.lst", "rb") as lstInv, \
-            open("primario.ind","rb") as id:
+            open("primario.ind","rb") as indice:
+            # Inicio primeiro como -1
             primeiro = -1
             tamReg = generos.read(2)
             buffer = generos.read(int.from_bytes(tamReg, 'little')).decode()
-            g = buffer.split('|')
-            while g[0] != genero and tamReg:
+            # Pega o genero e o id da lista
+            g, id = buffer.split('|')
+
+            # Procura na lista até encontrar o genero
+            while g != genero and tamReg:
                 tamReg = generos.read(2)
                 buffer = generos.read(int.from_bytes(tamReg, 'little')).decode()
-                g = buffer.split('|')
-            if g[0] == genero:
-                primeiro = int(g[1])
-                tamLista = int.from_bytes(lstInv.read(4), 'little')
+                g, id = buffer.split('|')
+            # Verifica se g é igual ao genero
+            if g == genero:
+                primeiro = int(id)
+                # Vai na lista invertida a primeira ocorrencia e pega o proximo
                 lstInv.seek(primeiro * SIZEOF_LISTINV + 4, os.SEEK_SET)
-                listaInvertida = unpack(FORMATO_LISTAINV, \
+                _, proxG, _ = unpack(FORMATO_LISTAINV, \
                                         lstInv.read(SIZEOF_LISTINV))
-                while listaInvertida[1] != -1:
-                    offset = listaInvertida[1] * 8 + 4
+                # Enquanto o proximo não for -1, vai procurando os offsets
+                while proxG != -1:
+                    offset = proxG * 8 + 4
                     # Precisa do + 4 para ler o offset do Id
-                    id.seek(offset + 4, os.SEEK_SET)
-                    offsetID = int.from_bytes(id.read(4), 'little')
+                    indice.seek(offset + 4, os.SEEK_SET)
+                    # Pega no arquivo indices.ind o offset no games.dat
+                    offsetID = int.from_bytes(indice.read(4), 'little')
                     listaOffsets.append(offsetID)
-                    lstInv.seek(listaInvertida[1] * SIZEOF_LISTINV + 4, \
+                    lstInv.seek(proxG * SIZEOF_LISTINV + 4, \
                                 os.SEEK_SET)
-                    listaInvertida = unpack(FORMATO_LISTAINV, \
+                    _, proxG, _ = unpack(FORMATO_LISTAINV, \
                                             lstInv.read(SIZEOF_LISTINV))
-            elif primeiro == -1:
+            else:
                 return []
         with open("games.dat", "rb") as games:
-            
+            for offset in listaOffsets:
+                games.seek(offset, os.SEEK_SET)
+                tamReg = games.read(2)
+                item = games.read(tamReg).decode()
+
         return []
     except FileNotFoundError as e:
         print(f"Erro: {e}")
