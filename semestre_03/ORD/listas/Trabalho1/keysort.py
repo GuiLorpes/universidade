@@ -90,9 +90,11 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
     '''
     # Cria o arquivo com todos os IDs e seus offsets em "games.dat"
     listaIDs: list[tuple[int, int]] = []
-    for r in chaves:
-        listaIDs.append((r[1], r[0]))
+    for offset, id, _, _ in chaves:
+        listaIDs.append((id, offset))
     listaIDs.sort()
+
+    print(listaIDs)
     
     # Cria a lista invertida vazia para ser organizada
     listaInvertida: list[list[int]] = []
@@ -175,14 +177,17 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
     
     print(listaInvertida)
 
+    
+
+
     # Cria arquivo com indice primário
     with open("primario.ind", "wb") as chavePrimaria:
         # Escreve o cabeçalho com 4 bytes
         cabecalho = len(listaIDs).to_bytes(4, 'little')
         chavePrimaria.write(cabecalho)
-        for chave in listaIDs:
-            chavePrimaria.write(chave[0].to_bytes(4, 'little'))
-            chavePrimaria.write(chave[1].to_bytes(4, 'little'))
+        for id, offset in listaIDs:
+            chavePrimaria.write(id.to_bytes(4, 'little'))
+            chavePrimaria.write(offset.to_bytes(4, 'little'))
     
     # Cria arquivo com indice secundário de genero 
     with open("genero.ind", "wb") as chaveSec1:
@@ -307,30 +312,38 @@ def buscaSecGenero(genero:str) -> list[str]:
             open("primario.ind","rb") as indice:
             # Inicio primeiro como -1
             primeiro = -1
-            tamReg = generos.read(2)
-            buffer = generos.read(int.from_bytes(tamReg, 'little')).decode()
+            tamReg = int.from_bytes(generos.read(2), 'little')
+            buffer = generos.read(tamReg).split(b'|')
             # Pega o genero e o id da lista
-            g, id = buffer.split('|')
-
+            g = buffer[0].decode()
+            id = int.from_bytes(buffer[1], 'little')
+            print(g, id)
             # Procura na lista até encontrar o genero
             while g != genero and tamReg:
-                tamReg = generos.read(2)
-                buffer = generos.read(int.from_bytes(tamReg, 'little')).decode()
-                g, id = buffer.split('|')
+                print(g, id)
+                tamReg = int.from_bytes(generos.read(2), 'little')
+                buffer = generos.read(tamReg).split(b'|')
+                g = buffer[0].decode()
+                id = int.from_bytes(buffer[1], 'little')
             # Verifica se g é igual ao genero
             if g == genero:
                 primeiro = int(id)
+                print(g, id, primeiro)
                 # Vai na lista invertida a primeira ocorrencia e pega o proximo
                 lstInv.seek(primeiro * SIZEOF_LISTINV + 4, os.SEEK_SET)
                 _, proxG, _ = unpack(FORMATO_LISTAINV, \
                                         lstInv.read(SIZEOF_LISTINV))
+                print(proxG)
                 # Enquanto o proximo não for -1, vai procurando os offsets
                 while proxG != -1:
+                    print(proxG)
                     offset = proxG * 8 + 4
+                    print(offset)
                     # Precisa do + 4 para ler o offset do Id
                     indice.seek(offset + 4, os.SEEK_SET)
                     # Pega no arquivo indices.ind o offset no games.dat
                     offsetID = int.from_bytes(indice.read(4), 'little')
+                    print(offsetID)
                     listaOffsets.append(offsetID)
                     lstInv.seek(proxG * SIZEOF_LISTINV + 4, \
                                 os.SEEK_SET)
@@ -338,13 +351,17 @@ def buscaSecGenero(genero:str) -> list[str]:
                                             lstInv.read(SIZEOF_LISTINV))
             else:
                 return []
+        print(listaOffsets)
         with open("games.dat", "rb") as games:
             for offset in listaOffsets:
+                print(offset)
+                listaDoGenero = []
                 games.seek(offset, os.SEEK_SET)
-                tamReg = games.read(2)
+                tamReg = int.from_bytes(games.read(2), 'little')
                 item = games.read(tamReg).decode()
-
-        return []
+                print(item)
+                listaDoGenero.append(item)
+            return listaDoGenero
     except FileNotFoundError as e:
         print(f"Erro: {e}")
         return[]
@@ -407,6 +424,10 @@ def main() -> None:
             raise NotImplementedError
         case 'b1':
             print(buscaPrimaria(sys.argv[3]))
+        case 'b2':
+            lista = buscaSecGenero(sys.argv[3])
+            for l in lista:
+                print(l)
 
         
 
