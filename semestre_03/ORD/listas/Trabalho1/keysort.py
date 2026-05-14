@@ -59,22 +59,38 @@ class Lista:
 # Fim das classes auxiliares
 
 
-def criaListaOffsetChaves(nomeArq: str) -> list[tuple[int,int,str,str]]:
+def criaListaOffsetChaves() -> list[tuple[int,int,str,str]]:
     '''
-    Lê *nomeArq*, pega o id, o genero e a publicadora, e verifica o offset do 
+    Lê games.dat, pega o id, o genero e a publicadora, e verifica o offset do 
     registro e os retorna em uma tupla ((offset, id, genero, publicadora)), faz
     isso para todos os registros e os coloca em uma lista
     '''
     chaves: list[tuple[int,int,str,str]] = []
-    with open(nomeArq, 'rb') as arq:
+    with open('games.dat', 'rb') as arq:
         offset = 0
-        tamRegistro = int.from_bytes(arq.read(2), 'little')
-        while tamRegistro > 0:
-            registro =  (arq.read(tamRegistro).decode()).split('|')
-            chave = (offset, int(registro[0]), registro[3], registro[4])
-            chaves.append(chave)
+        atual = arq.tell()
+        bufferTamReg = arq.read(2)
+        
+        while bufferTamReg:
+            tamRegistro = int.from_bytes(bufferTamReg, 'little')
+            primeiro_byte = arq.read(1)
+            if primeiro_byte == b'*': 
+                # registro removido: já consumimos 1 byte do registro, pular o restante
+                arq.seek(tamRegistro - 1, os.SEEK_CUR)
+            else:
+                # não removido: voltamos 1 byte e lemos o registro completo
+                arq.seek(-1, os.SEEK_CUR)
+                registro = arq.read(tamRegistro).decode().split('|')
+                # registro esperado: [id, nome, ano, genero, publicadora, ...]
+                try:
+                    chave = (offset, int(registro[0]), registro[3], registro[4])
+                    chaves.append(chave)
+                except (IndexError, ValueError):
+                    # registro mal formado: pular
+                    pass
+            # atualiza offset e lê próximo tamanho
             offset += tamRegistro + 2
-            tamRegistro = int.from_bytes(arq.read(2), 'little') 
+            bufferTamReg = arq.read(2)
     return chaves
 
 
@@ -235,16 +251,12 @@ def buscaID(id:int) -> int:
             indices.seek(offset, os.SEEK_SET)
             vMedio = int.from_bytes(indices.read(4), 'little') 
             if id == vMedio:
-
                 idOffset = int.from_bytes(indices.read(4), 'little') 
                 achou = True
             elif id < vMedio:
                 i_max = i_meio - 1
             else:
                 i_min = i_meio + 1
-    if idOffset == -1:
-        raise ValueError("ID não encontrado!")
-    else:
         return idOffset
 
 def buscaPrimaria(id: str) -> str:
@@ -259,6 +271,8 @@ def buscaPrimaria(id: str) -> str:
     with open("games.dat", "rb") as arq:
         # offset nos indices = i * 8 + 4
         offset = buscaID(int(id))
+        if offset == -1:
+            raise ValueError("ID não encontrado!")
         arq.seek(offset, os.SEEK_SET)
         tamReg = int.from_bytes(arq.read(2), 'little')
         item = arq.read(tamReg).decode()
@@ -376,79 +390,130 @@ def buscaSecPub(publicadora:str) -> list[str]:
         return[]
 
 
-def insereRegistro(registro: str) -> None:
+def insereRegistro(registro: str) -> bool:
     try:
         campos = registro.split('|')
         # Verifica se encontra um id igual
         # Se encontrou, não insere
-        if buscaPrimaria(campos[0]) != '':
+        if buscaID(int(campos[0])) != -1:
             print("ID já existe!")
-            return
+            return False
         with open("games.dat", "r+b") as arq:
             arq.seek(0, os.SEEK_END)
             tamBytes = len(registro).to_bytes(2, 'little')
             arq.write(tamBytes)
             arq.write(registro.encode())
 
-        chaves = criaListaOffsetChaves("games.dat")
+        chaves = criaListaOffsetChaves()
         constroiIndices(chaves)
         print("Registro inserido com sucesso!")
+        return True
             
     except OSError as e:
         print(f"Erro: {e}")
+        return False
+
+
+def removeRegistro(id: str) -> bool:
+    ''' 
+    Procura pelo registro do *id* e remove aquele registro, colocando um b'*' 
+    após o registro de tamanho.
+    '''
+    try:
+        offsetID = buscaID(int(id))
+        if offsetID == -1:
+            print("ID não existe!")
+            return False
+        with open("games.dat", "r+b") as arq:
+            # Soma mais dois do registro de tamanho que não será necessário
+            arq.seek(offsetID + 2)
+            arq.write(b'*')
+        chaves = criaListaOffsetChaves()
+        constroiIndices(chaves)
+        print("Registro removido com sucesso!")
+        return True
+    except OSError as e:
+        print(f"Erro: {e}")
+        return False
+            
+
+def compactacao() -> None:
+    '''
+    Retira os registros começando por b'*' de games.dat.
+    '''
+    try:
+        with open('games.dat', 'r+b') as games, \
+            open('novo_games.dat', 'wb') as novo:
+            bufferTamReg = games.read(2)
+            tamReg = int.from_bytes(bufferTamReg, 'little')
+            while bufferTamReg:
+                primeiro = games.read(1)
+                if primeiro == b'*':
+                    games.seek(tamReg - 1, os.SEEK_CUR)
+                else:
+                    restante = games.read(tamReg - 1)
+                    novo.write(bufferTamReg + primeiro + restante)
+                bufferTamReg = games.read(2)
+                tamReg = int.from_bytes(bufferTamReg, 'little')
+        os.replace('novo_games.dat', 'games.dat')
+        chaves = criaListaOffsetChaves()
+        constroiIndices(chaves)
+    except FileNotFoundError as e:
+        print(f"Erro: {e}")
+
+
+def imprimeResultado(resultado: list[str]) -> None:
+    tamMax:int = 0
+    for r in resultado:
+        if len(r) > tamMax:
+            tamMax = len(r)
+    print('=' * tamMax + '\n')
+    for item in resultado:
+        print(item)
+    print('=' * tamMax + '\n')
 
 
 def realizaOperacoes(nomeArq: str) -> None:
     try:
-        with open(nomeArq, 'rb') as operacoes:
-            raise NotImplementedError
-        
-        
-        # case 'i':
-        #         if len(sys.argv) != 4:
-        #             sys.exit(f"Erro! Uso: {sys.argv[0]} <nome_do_arquivo> <-i> "\
-        #                     "<registro>")
-        #         else:
-        #             insereRegistro(sys.argv[3])
+        with open(nomeArq, 'r') as arq:
+            for linha in arq:
+                operacao = linha.strip().split(' ', 1)
+                comando = operacao[0]
+                argumento = operacao[1]
+                match comando:
+                    case 'bp':
+                        rPrimario = buscaPrimaria(argumento)
+                        imprimeResultado(list(rPrimario))
+                    case 'bs1':
+                        rSecGen = buscaSecGenero(argumento)
+                        imprimeResultado(rSecGen)
+                    case 'bs2':
+                        rSecPub = buscaSecPub(argumento)
+                        imprimeResultado(rSecPub)
+                    case 'i':
+                        insereRegistro(argumento)
+                    case 'r':
+                        removeRegistro(argumento)
+                    case _:
+                        print(f"Operação inválida!")
     except FileNotFoundError as e:
         print(f'Erro: {e}')
 
 def main() -> None:
-    if len(sys.argv) < 3:
-        sys.exit(f"Erro! Uso: {sys.argv[0]} <nome_do_arquivo> <operador>")
-    if not os.path.isfile(sys.argv[1]):
-        raise FileNotFoundError('Insira um arquivo válido')
-    
-    match sys.argv[2]:
+    if len(sys.argv) < 2:
+        sys.exit(f"Erro! Uso: {sys.argv[0]} <operador>")
+    match sys.argv[1]:
         case '-b':
-            chaves = criaListaOffsetChaves(sys.argv[1])
+            chaves = criaListaOffsetChaves()
             constroiIndices(chaves)
         case '-e':
-            if len(sys.argv) != 4:
-                sys.exit(f"Erro! Uso: {sys.argv[0]} <nome_do_arquivo> <-e> "\
-                         "<operações>")
+            if len(sys.argv) != 3:
+                sys.exit(f"Erro! Uso: {sys.argv[0]} <-e> <operações>")
             else:
-                realizaOperacoes(sys.argv[3])
-            raise NotImplementedError
-        case 'b1':
-            print('============================================================')
-            print(f"Cadastro do id {sys.argv[3]}: \n")
-            print(buscaPrimaria(sys.argv[3]))
-            print('============================================================\n')
-        case 'b2':
-            print('============================================================')
-            print(f"Cadastros do gênero '{sys.argv[3]}': \n")
-            lista = buscaSecGenero(sys.argv[3])
-            for l in lista:
-                print(l)
-            print('============================================================\n')
-        case 'b3':
-            print('============================================================')
-            print(f"Cadastros da publicadora '{sys.argv[3]}':\n")
-            lista = buscaSecPub(sys.argv[3])
-            for l in lista:
-                print(l)
-            print('============================================================\n')
+                realizaOperacoes(sys.argv[2])
+        case '-c':
+            compactacao()
+
 
         
 
