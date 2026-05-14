@@ -78,24 +78,21 @@ def criaListaOffsetChaves(nomeArq: str) -> list[tuple[int,int,str,str]]:
     return chaves
 
 
-def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
+def criaListasIDGenPubInv(chaves: list[tuple[int,int,str,str]]) -> \
+    tuple[list[tuple[int, int]], list[tuple[str, int]], list[tuple[str, int]], \
+    list[list[int]]]:
     '''
-    Com base no *nomeArq* cria 4 arquivos novos, primario.ind, genero.ind, 
-    publicadora.ind e listaInvertida.lst, onde cada um dos .ind são ordenados 
-    de acordo com as chaves primária, secundária de gênero e secundária de 
-    publicadora. 
-    Os *registros* estarão com o offset de cada um dos elementos, e serão 
-    ordenadas de acordo com cada uma das chaves e serão escritos em seus 
-    respectivos arquivos
+    Usando as *chaves*, cria 4 listas, a lista com os ids e seus offsets em 
+    games.dat, a lista com os generos e sua primeira ocorrencia na lista 
+    invertida, a lista com as publicadoras e sua primeira ocorrencia na lista 
+    invertida, e a lista invertida
     '''
-    # Cria o arquivo com todos os IDs e seus offsets em "games.dat"
+
     listaIDs: list[tuple[int, int]] = []
     for offset, id, _, _ in chaves:
         listaIDs.append((id, offset))
     listaIDs.sort()
 
-    print(listaIDs)
-    
     # Cria a lista invertida vazia para ser organizada
     listaInvertida: list[list[int]] = []
     for r in chaves:
@@ -147,7 +144,6 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
             listaInvertida[i][1] = item[1]
         genero = nodeGenero.sentinela
         generosPrimeiro.append((str(genero.id), genero.prox.pos))
-    print(generosPrimeiro)
         
     # Cria uma lista com as publicadoras com a primeira ocorrencia de cada
     publicadorasPrimeiro: list[tuple[str, int]] = []
@@ -173,12 +169,18 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
             listaInvertida[i][2] = item[1]
         publicadora = nodePublicadora.sentinela     
         publicadorasPrimeiro.append((str(publicadora.id), publicadora.prox.pos))
-    print(publicadorasPrimeiro)
-    
-    print(listaInvertida)
+    return listaIDs, generosPrimeiro, publicadorasPrimeiro, listaInvertida 
 
-    
 
+def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
+    '''
+    Com base no *nomeArq* cria 4 arquivos novos, primario.ind, genero.ind, 
+    publicadora.ind e listaInvertida.lst, onde cada um dos .ind são ordenados 
+    de acordo com as chaves primária, secundária de gênero e secundária de 
+    publicadora.
+    '''
+    listaIDs, generosPrimeiro, publicadorasPrimeiro, \
+        listaInvertida = criaListasIDGenPubInv(chaves)
 
     # Cria arquivo com indice primário
     with open("primario.ind", "wb") as chavePrimaria:
@@ -215,56 +217,35 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
         for id, proxG, proxP in listaInvertida:
             lstInvertida.write(pack(FORMATO_LISTAINV, id, proxG, proxP))
             
-            
 
+def buscaID(id:int) -> int:
+    ''' 
+    Procura pelo *id* no arquivo primario.ind e retorna o offset do id no 
+    games.dat
+    '''
+    with open("primario.ind", "rb") as indices:
+        # offset nos indices = i * 8 + 4
+        idOffset = -1
+        i_min = 0
+        i_max = int.from_bytes(indices.read(4), 'little') - 1
+        achou = False
+        while i_min <= i_max and achou == False:
+            i_meio = (i_max + i_min) // 2
+            offset = i_meio * 8 + 4
+            indices.seek(offset, os.SEEK_SET)
+            vMedio = int.from_bytes(indices.read(4), 'little') 
+            if id == vMedio:
 
-def mergesort(registros: list[tuple[int,int,str,str]], chave: int) -> None:
-    ''' Ordena uma lista de registros de acordo com a chave inserida '''
-
-    # Caso base (1 elemento)
-    tamanhoRegistros = len(registros)
-    if tamanhoRegistros <= 1:
-        return
-    
-    # Divide a lista em duas
-    meio = tamanhoRegistros // 2
-    esq = registros[:meio]
-    dir = registros[meio:]
-
-    # Organiza as duas metades
-    mergesort(esq, chave)
-    mergesort(dir, chave)
-
-    i = 0   # Elementos da esquerda
-    j = 0   # Elementos da direita 
-    k = 0   # Elementos do registro
-
-    # Junta as duas metades
-    while i < len(esq) and j < len(dir):
-
-        # Se esq[i] < dir[j], adiciona troca registro[k] por esq[i]
-        if esq[i][chave] <= dir[j][chave]:
-            registros[k] = esq[i]
-            i += 1
-
-        # Se esq[i] > dir[j], adiciona troca registro[k] por dir[j]
-        else: # esq[i][chave] >= dir[j][chave]
-            registros[k] = dir[j]
-            j += 1
-        k += 1
-
-    # Adiciona os elementos restantes da esquerda
-    while i < len(esq):
-        registros[k] = esq[i]
-        i += 1
-        k += 1
-
-    # Adiciona os elementos restantes da direita
-    while j < len(dir):
-        registros[k] = dir[j]
-        j += 1
-        k += 1
-    
+                idOffset = int.from_bytes(indices.read(4), 'little') 
+                achou = True
+            elif id < vMedio:
+                i_max = i_meio - 1
+            else:
+                i_min = i_meio + 1
+    if idOffset == -1:
+        raise ValueError("ID não encontrado!")
+    else:
+        return idOffset
 
 def buscaPrimaria(id: str) -> str:
     '''
@@ -275,25 +256,12 @@ def buscaPrimaria(id: str) -> str:
         "459|Fortnite|2017|Sandbox|Epic Games|PC|" 
     '''
     item = ''
-    with open("games.dat", "rb") as arq, open("primario.ind", "rb") as indices:
+    with open("games.dat", "rb") as arq:
         # offset nos indices = i * 8 + 4
-        i_min = 0
-        i_max = int.from_bytes(indices.read(4), 'little') - 1
-        while i_min <= i_max:
-            i_meio = (i_max + i_min) // 2
-            offset = i_meio * 8 + 4
-            indices.seek(offset, os.SEEK_SET)
-            vMedio = int.from_bytes(indices.read(4), 'little') 
-            if int(id) == vMedio:
-                bpOffset = int.from_bytes(indices.read(4), 'little') 
-                arq.seek(bpOffset, os.SEEK_SET)
-                tamReg = int.from_bytes(arq.read(2), 'little')
-                item = arq.read(tamReg).decode()
-                return item
-            elif int(id) < vMedio:
-                i_max = i_meio - 1
-            else:
-                i_min = i_meio + 1
+        offset = buscaID(int(id))
+        arq.seek(offset, os.SEEK_SET)
+        tamReg = int.from_bytes(arq.read(2), 'little')
+        item = arq.read(tamReg).decode()
     return item
 
 # Buscas secundárias
@@ -308,64 +276,104 @@ def buscaSecGenero(genero:str) -> list[str]:
     listaOffsets = []
     try:
         with open("genero.ind", "rb") as generos, \
-            open("listaInvertida.lst", "rb") as lstInv, \
-            open("primario.ind","rb") as indice:
+            open("listaInvertida.lst", "rb") as lstInv:
             # Inicio primeiro como -1
             primeiro = -1
             tamReg = int.from_bytes(generos.read(2), 'little')
             buffer = generos.read(tamReg).split(b'|')
             # Pega o genero e o id da lista
             g = buffer[0].decode()
-            id = int.from_bytes(buffer[1], 'little')
-            print(g, id)
+            primeiraAparicao = int.from_bytes(buffer[1], 'little')
             # Procura na lista até encontrar o genero
             while g != genero and tamReg:
-                print(g, id)
                 tamReg = int.from_bytes(generos.read(2), 'little')
                 buffer = generos.read(tamReg).split(b'|')
                 g = buffer[0].decode()
-                id = int.from_bytes(buffer[1], 'little')
+                primeiraAparicao = int.from_bytes(buffer[1], 'little')
             # Verifica se g é igual ao genero
             if g == genero:
-                primeiro = int(id)
-                print(g, id, primeiro)
+                primeiro = int(primeiraAparicao)
                 # Vai na lista invertida a primeira ocorrencia e pega o proximo
                 lstInv.seek(primeiro * SIZEOF_LISTINV + 4, os.SEEK_SET)
-                _, proxG, _ = unpack(FORMATO_LISTAINV, \
+                id, proxG, _ = unpack(FORMATO_LISTAINV, \
                                         lstInv.read(SIZEOF_LISTINV))
-                print(proxG)
+                offsetID = buscaID(id)
+                listaOffsets.append(offsetID)
                 # Enquanto o proximo não for -1, vai procurando os offsets
                 while proxG != -1:
-                    print(proxG)
-                    offset = proxG * 8 + 4
-                    print(offset)
-                    # Precisa do + 4 para ler o offset do Id
-                    indice.seek(offset + 4, os.SEEK_SET)
-                    # Pega no arquivo indices.ind o offset no games.dat
-                    offsetID = int.from_bytes(indice.read(4), 'little')
-                    print(offsetID)
-                    listaOffsets.append(offsetID)
                     lstInv.seek(proxG * SIZEOF_LISTINV + 4, \
                                 os.SEEK_SET)
-                    _, proxG, _ = unpack(FORMATO_LISTAINV, \
+                    id, proxG, _ = unpack(FORMATO_LISTAINV, \
                                             lstInv.read(SIZEOF_LISTINV))
+                    offsetID = buscaID(id)
+                    listaOffsets.append(offsetID)
             else:
                 return []
-        print(listaOffsets)
         with open("games.dat", "rb") as games:
-            for offset in listaOffsets:
-                print(offset)
-                listaDoGenero = []
+            listaDoGenero = []
+            for offset in listaOffsets:                
                 games.seek(offset, os.SEEK_SET)
                 tamReg = int.from_bytes(games.read(2), 'little')
                 item = games.read(tamReg).decode()
-                print(item)
                 listaDoGenero.append(item)
             return listaDoGenero
     except FileNotFoundError as e:
         print(f"Erro: {e}")
         return[]
 
+
+def buscaSecPub(publicadora:str) -> list[str]:
+    '''
+    Procura por itens da mesma *publicadora* e os retorna numa lista, caso não 
+    exista retorna lista vazia.
+    '''
+    listaOffsets = []
+    try:
+        with open("publicadora.ind", "rb") as publicadoras, \
+            open("listaInvertida.lst", "rb") as lstInv:
+            # Inicio primeiro como -1
+            primeiro = -1
+            tamReg = int.from_bytes(publicadoras.read(2), 'little')
+            buffer = publicadoras.read(tamReg).split(b'|')
+            # Pega o genero e o id da lista
+            p = buffer[0].decode()
+            primeiraAparicao = int.from_bytes(buffer[1], 'little')
+            # Procura na lista até encontrar o genero
+            while p != publicadora and tamReg:
+                tamReg = int.from_bytes(publicadoras.read(2), 'little')
+                buffer = publicadoras.read(tamReg).split(b'|')
+                p = buffer[0].decode()
+                primeiraAparicao = int.from_bytes(buffer[1], 'little')
+            # Verifica se g é igual ao genero
+            if p == publicadora:
+                primeiro = int(primeiraAparicao)
+                # Vai na lista invertida a primeira ocorrencia e pega o proximo
+                lstInv.seek(primeiro * SIZEOF_LISTINV + 4, os.SEEK_SET)
+                id, _, proxP = unpack(FORMATO_LISTAINV, \
+                                        lstInv.read(SIZEOF_LISTINV))
+                offsetID = buscaID(id)
+                listaOffsets.append(offsetID)
+                # Enquanto o proximo não for -1, vai procurando os offsets
+                while proxP != -1:
+                    lstInv.seek(proxP * SIZEOF_LISTINV + 4, \
+                                os.SEEK_SET)
+                    id, _, proxP = unpack(FORMATO_LISTAINV, \
+                                            lstInv.read(SIZEOF_LISTINV))
+                    offsetID = buscaID(id)
+                    listaOffsets.append(offsetID)
+            else:
+                return []
+        with open("games.dat", "rb") as games:
+            listaDaPublicadora = []
+            for offset in listaOffsets:                
+                games.seek(offset, os.SEEK_SET)
+                tamReg = int.from_bytes(games.read(2), 'little')
+                item = games.read(tamReg).decode()
+                listaDaPublicadora.append(item)
+            return listaDaPublicadora
+    except FileNotFoundError as e:
+        print(f"Erro: {e}")
+        return[]
 
 
 def insereRegistro(registro: str) -> None:
@@ -396,12 +404,12 @@ def realizaOperacoes(nomeArq: str) -> None:
             raise NotImplementedError
         
         
-    # case 'i':
-    #         if len(sys.argv) != 4:
-    #             sys.exit(f"Erro! Uso: {sys.argv[0]} <nome_do_arquivo> <-i> "\
-    #                      "<registro>")
-    #         else:
-    #             insereRegistro(sys.argv[3])
+        # case 'i':
+        #         if len(sys.argv) != 4:
+        #             sys.exit(f"Erro! Uso: {sys.argv[0]} <nome_do_arquivo> <-i> "\
+        #                     "<registro>")
+        #         else:
+        #             insereRegistro(sys.argv[3])
     except FileNotFoundError as e:
         print(f'Erro: {e}')
 
@@ -423,11 +431,24 @@ def main() -> None:
                 realizaOperacoes(sys.argv[3])
             raise NotImplementedError
         case 'b1':
+            print('============================================================')
+            print(f"Cadastro do id {sys.argv[3]}: \n")
             print(buscaPrimaria(sys.argv[3]))
+            print('============================================================\n')
         case 'b2':
+            print('============================================================')
+            print(f"Cadastros do gênero '{sys.argv[3]}': \n")
             lista = buscaSecGenero(sys.argv[3])
             for l in lista:
                 print(l)
+            print('============================================================\n')
+        case 'b3':
+            print('============================================================')
+            print(f"Cadastros da publicadora '{sys.argv[3]}':\n")
+            lista = buscaSecPub(sys.argv[3])
+            for l in lista:
+                print(l)
+            print('============================================================\n')
 
         
 
