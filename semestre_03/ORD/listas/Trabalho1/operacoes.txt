@@ -4,3 +4,6 @@ i 539|Minecraft|2011|Sandbox|Microsoft Studios|PC|
 r 121
 r 754
 bs2 CD Projekt RED
+bs2 Nintendo
+bs1 Action-Adventure
+bp 2093
