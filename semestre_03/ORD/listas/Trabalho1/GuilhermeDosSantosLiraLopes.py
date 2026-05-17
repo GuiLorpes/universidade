@@ -264,7 +264,7 @@ def buscaPrimaria(id: str) -> str:
         # offset nos indices = i * 8 + 4
         offset = buscaID(int(id))
         if offset == -1:
-            raise ValueError("ID não encontrado!")
+            return ''
         arq.seek(offset, os.SEEK_SET)
         tamReg = int.from_bytes(arq.read(2), 'little')
         item = arq.read(tamReg).decode()
@@ -341,16 +341,16 @@ def buscaSecPub(publicadora:str) -> list[str]:
             primeiro = -1
             tamReg = int.from_bytes(publicadoras.read(2), 'little')
             buffer = publicadoras.read(tamReg).split(b'|')
-            # Pega o genero e o id da lista
+            # Pega a publicadora e o id da lista
             p = buffer[0].decode()
             primeiraAparicao = int.from_bytes(buffer[1], 'little')
-            # Procura na lista até encontrar o genero
+            # Procura na lista até encontrar a publicadora
             while p != publicadora and tamReg:
                 tamReg = int.from_bytes(publicadoras.read(2), 'little')
                 buffer = publicadoras.read(tamReg).split(b'|')
                 p = buffer[0].decode()
                 primeiraAparicao = int.from_bytes(buffer[1], 'little')
-            # Verifica se g é igual ao genero
+            # Verifica se p é igual a publicadora
             if p == publicadora:
                 primeiro = int(primeiraAparicao)
                 # Vai na lista invertida a primeira ocorrencia e pega o proximo
@@ -454,13 +454,21 @@ def compactacao() -> None:
 
 def imprimeResultado(comando: str, argumento:str, resultado: list[str]) -> None:
     tamMax:int = 0
-    for r in resultado:
-        if len(r) > tamMax:
-            tamMax = len(r)
+    naoAchou = (len(resultado) == 1 and resultado[0] == '')
+    if naoAchou:
+        tamMax = 23 + len(argumento)
+    else:
+        for r in resultado:
+            if len(r) > tamMax:
+                tamMax = len(r)
     print('=' * tamMax )
     match comando:
         case 'bp':
             print(f"Busca pelo item de ID: {argumento}\n")
+            if naoAchou:
+                print("ID não encontrado!")
+                print('=' * tamMax + '\n')
+                return
         case 'bs1':
             print(f"Busca por itens de genero: {argumento}\n")
         case 'bs2':
