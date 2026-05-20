@@ -1,0 +1,25 @@
+- Implementar as 21 instruções
+- A memoria possui 40bits, com duas instruções de 20bits
+- É recomendado escrever uma função de gerenciador de memoria
+- Na hora de passar a instrução para a memoria, escrever o opcode binário 
+  correspondente
+- Fazer um conversor da instrução para binário (escrever o opcode em inteiro)
+- Para escrever as duas instruções em uma mesma palavra, utilizar shift e and
+
+- Primeiro criar esse gerenciador de memoria
+- Depois criar o Ciclo de Instrução
+  - Com busca da instrução, decodificação da instrução, busca dos operandos, 
+    execução, e por fim para escrita dos resultados
+  - Com o pipeline
+- Função de auxilio para mostrar o passo a passo
+- Criar o codigo em modulos, como o IAS
+  - Um com a memoria
+    - Criar um vetor com 1000 espaços com tamanho de 40bits
+      - Os primeiro 100 são para dados
+      - E os 900 são para instruções
+  - Um com a CPU
+    - Possui os registradores
+    - Pipeline
+      - Possui o ciclo de instrução
+- Os resultados da instrução vão estar na memoria
+- Criar um arquivo .h para as variaveis globais
