@@ -86,6 +86,8 @@ def criaListaOffsetChaves() -> list[tuple[int,int,str,str]]:
                 chaves.append(chave)
             offset += tamRegistro + 2
             bufferTamReg = arq.read(2)
+
+    # O(n)
     return chaves
 
 
@@ -103,81 +105,87 @@ def criaListasIDGenPubInv(chaves: list[tuple[int,int,str,str]]) -> \
     # Cria a lista invertida vazia para ser organizada
     listaInvertida: list[list[int]] = []
     # Cria uma lista com todos os generos no registro
-    listaGeneros = []
+    listaGeneros: list[Lista] = []
     # Cria uma lista com todas as publicadoras no registro
-    listaPublicadoras = []
+    listaPublicadoras: list[Lista] = []
     for offset, id, gen, pub in chaves:
         listaIDs.append((id, offset)) 
         listaInvertida.append([id, -1, -1])
-        if gen not in listaGeneros:
-            listaGeneros.append(gen)
-        if pub not in listaPublicadoras:
-            listaPublicadoras.append(pub)
+        i = 0
+        while listaGeneros != [] and i < len(listaGeneros) and \
+            listaGeneros[i].sentinela.id != gen:
+            i += 1
+        listaGeneros.append(Lista(gen))
+        i = 0
+        while listaPublicadoras != [] and i < len(listaPublicadoras) and \
+            listaPublicadoras[i].sentinela.id != pub:
+            i += 1
+        listaPublicadoras.append(Lista(pub))
     listaIDs.sort()
-    listaGeneros.sort()
-    listaPublicadoras.sort()
+    # O(n)
 
     # Cria uma lista com os generos com a primeira ocorrencia de cada
     generosPrimeiro: list[tuple[str, int]] = []
 
     # Organiza os generos primeiro 
-    # Encontrar todos de um genero para atualizar na lista
-    for g in listaGeneros:
-        nodeGenero = Lista(g)
-        # Acha o primeiro registro do genero
-        # Os generos já foram inseridos a partir dos registros, então não 
-        # precisa verificar se i < len(registros), já que é certeza que o 
-        # genero vai ter pelo menos um elemento dele!
-        i = 0
-        while chaves[i][2] != g:
-            i += 1
-        nodeGenero.insereOrdenado(Node(chaves[i][1], i))
-        # nodeGenero sempre aponta para o inicio do nó 
-        j = i + 1
-        while j < len(chaves):
-            if chaves[j][2] == g:
-                novoNode = Node(chaves[j][1], j)
-                nodeGenero.insereOrdenado(novoNode)
+
+    # Conforme percorre as *chaves* adiciona as posições em suas listas 
+    # encadeadas
+    i = 0
+    while i < len(chaves):
+        # Acha a lista relacionada ao genero da chave
+        j = 0
+        while listaGeneros[j].sentinela.id != chaves[i][2]:
             j += 1
-        doGenero = nodeGenero.listaIDeProx()[1:]
-        for item in doGenero:
+
+        # Adiciona o novo node
+        novo = Node(chaves[i][2], i)
+        listaGeneros[j].insereOrdenado(novo)
+        i += 1
+
+    for g in listaGeneros:
+        q = g.sentinela.prox
+        while q is not None:
             i = 0
-            # Novamente, com certeza vai ter um listaInvertida[i] com id igual 
-            # ao do r, então não é necessário fazer a verificação se ele existe
-            while listaInvertida[i][0] != item[0]:
+            while listaInvertida[i][0] != q.id:
                 i += 1
-            listaInvertida[i][1] = item[1]
-        genero = nodeGenero.sentinela
+            listaInvertida[i][1] = q.prox.pos
+        genero = g.sentinela
         generosPrimeiro.append((str(genero.id), genero.prox.pos))
-        
+    generosPrimeiro.sort()
+    # O(2n) = O(n)
+    
     # Cria uma lista com as publicadoras com a primeira ocorrencia de cada
     publicadorasPrimeiro: list[tuple[str, int]] = []
     
     # Organiza as publicadoras
-    for p in listaPublicadoras:
-        nodePublicadora = Lista(p)
-        i = 0
-        while chaves[i][3] != p:
-            i += 1
-        nodePublicadora.insereOrdenado(Node(chaves[i][1], i))
-        j = i + 1
-        while j < len(chaves):
-            if chaves[j][3] == p:
-                novoNode = Node(chaves[j][1], j)
-                nodePublicadora.insereOrdenado(novoNode)
+    i = 0
+    while i < len(chaves):
+        # Acha a lista relacionada a publicadora da chave
+        j = 0
+        while listaPublicadoras[j].sentinela.id != chaves[i][3]:
             j += 1
-        daPublicadora = nodePublicadora.listaIDeProx()[1:]
-        for item in daPublicadora:
+
+        # Adiciona o novo node
+        novo = Node(chaves[i][3], i)
+        listaPublicadoras[j].insereOrdenado(novo)
+        i += 1
+
+    for p in listaPublicadoras:
+        q = p.sentinela.prox
+        while q is not None:
             i = 0
-            while listaInvertida[i][0] != item[0]:
+            while listaInvertida[i][0] != q.id:
                 i += 1
-            listaInvertida[i][2] = item[1]
-        publicadora = nodePublicadora.sentinela     
-        publicadorasPrimeiro.append((str(publicadora.id), publicadora.prox.pos))
+            listaInvertida[i][1] = q.prox.pos
+        publicadora = p.sentinela
+        generosPrimeiro.append((str(publicadora.id), publicadora.prox.pos))
+    generosPrimeiro.sort()
+    # O(2n) = O(n)
+
     return listaIDs, generosPrimeiro, publicadorasPrimeiro, listaInvertida 
 
-    # Imagino que não seja a forma mais efetiva para arrumar a lista invertida, 
-    # mas funciona bem
+    # O(n)
 
 
 def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
@@ -224,7 +232,8 @@ def constroiIndices(chaves: list[tuple[int,int,str,str]]) -> None:
         lstInvertida.write(tamreg.to_bytes(4, 'little'))
         for id, proxG, proxP in listaInvertida:
             lstInvertida.write(pack(FORMATO_LISTAINV, id, proxG, proxP))
-            
+        
+    # O(n)
 
 def buscaID(id:int) -> int:
     ''' 
@@ -250,6 +259,7 @@ def buscaID(id:int) -> int:
             else:
                 i_min = i_meio + 1
         return idOffset
+    # O(lg n)
 
 def buscaPrimaria(id: str) -> str:
     '''
@@ -269,6 +279,7 @@ def buscaPrimaria(id: str) -> str:
         tamReg = int.from_bytes(arq.read(2), 'little')
         item = arq.read(tamReg).decode()
     return item
+    # O(lg n)
 
 # Buscas secundárias
 
@@ -326,6 +337,7 @@ def buscaSecGenero(genero:str) -> list[str]:
     except FileNotFoundError as e:
         print(f"Erro: {e}")
         return[]
+    # O(n)
 
 
 def buscaSecPub(publicadora:str) -> list[str]:
@@ -380,6 +392,7 @@ def buscaSecPub(publicadora:str) -> list[str]:
     except FileNotFoundError as e:
         print(f"Erro: {e}")
         return[]
+    # O(n)
 
 
 def insereRegistro(registro: str) -> bool:
