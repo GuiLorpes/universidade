@@ -10,12 +10,12 @@ public class ContaCorrente extends ContaBancaria{
     
     @Override
     public void depositar(double valor) {
-        setSaldo((getSaldo() + valor));
+        this.setSaldo((this.getSaldo() + valor));
     }
     @Override
     public void sacar(double valor) {
-        if (getSaldo() + limiteConta >= valor) {
-            setSaldo((getSaldo() - valor));
+        if (this.getSaldo() + limiteConta >= valor) {
+            this.setSaldo((this.getSaldo() - valor));
             System.out.println("Saldo realizado com sucesso");
         }
         else {

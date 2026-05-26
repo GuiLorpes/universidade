@@ -27,6 +27,7 @@ public class CPF {
     
     
     public void exibirDados() {
-        System.out.println("CPF: " + situacao);
+        System.out.println("CPF: " + numero);
+        System.out.println("Situação: " + situacao.getDescricao());
     }
 }

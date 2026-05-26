@@ -1,15 +1,15 @@
 package com.exercicio;
 
-public class Pessoa extends CPF {
+public class Pessoa {
     private String nome;
     private int idade;
     private CPF cpf;
 
 
-    public Pessoa(String nome, int idade, String numero, Situacao situacao) {
-        super(numero, situacao);
+    public Pessoa(String nome, int idade, CPF cpf) {
         this.nome = nome;
         this.idade = idade;
+        this.cpf = cpf;
     }
 
 
@@ -23,4 +23,11 @@ public class Pessoa extends CPF {
         return cpf;
     }
 
+
+    public void exibirDados() {
+        System.out.println("Nome: " + this.getNome());
+        System.out.println("Idade: " + this.getIdade());
+        this.cpf.exibirDados();
+    }
+    
 }
