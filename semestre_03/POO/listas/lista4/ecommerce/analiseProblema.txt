@@ -1,0 +1,6 @@
+1) O sistema deve permitir que um produto seja cadastrado apenas por um usuário 
+do tipo ADMIN
+
+- Enum com tipos de usuario
+- Classe Produtos, Usuario, enum NivelAcesso,
+- pra classe do produto recebe o id, nome, valor.
