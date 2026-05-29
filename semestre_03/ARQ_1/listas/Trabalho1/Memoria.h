@@ -2,11 +2,13 @@
 #define MEMORIA_H
 #include <stdio.h>
 
+typedef unsigned long long int ull;
+
 typedef struct Memoria{
-    double *memoria;
+    ull *memoria;
 } Memoria;
 
 void alocaMemoria(Memoria *m);
-void liberaMemoroa(Memoria *m);
+void liberaMemoria(Memoria *m);
 
 #endif

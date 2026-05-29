@@ -5,13 +5,13 @@
 #define TAM_PALAVRA 40
 
 void alocaMemoria(Memoria *m) {
-    m->memoria = malloc(TAM_MEMORIA * TAM_PALAVRA);
+    m->memoria = malloc(TAM_MEMORIA * sizeof(ull));
     if (m->memoria == NULL) {
         printf("Erro ao alocar memória");
     }
 }
 
-void liberarMemoria(Memoria *m) {
+void liberaMemoria(Memoria *m) {
     if (m->memoria != NULL) {
         free(m->memoria);
         m->memoria = NULL;

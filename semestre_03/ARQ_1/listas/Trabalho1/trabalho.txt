@@ -23,3 +23,6 @@
       - Possui o ciclo de instrução
 - Os resultados da instrução vão estar na memoria
 - Criar um arquivo .h para as variaveis globais
+
+- Fazer 4 funções para o ciclo de instrução, no ciclo de busca faz a decodificação, 
+  no ciclo de execução fazer um switch case com as funções.
