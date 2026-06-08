@@ -1,8 +1,8 @@
 #ifndef LEITURAARQUIVO_H
 #define LEITURAARQUIVO_H
 #include "Memoria.h"
+#include "BancoRegistradores.h"
 
 void leArquivoPrograma(char *nomeArq, Memoria *m);
-int decodificaString(char *mnemonico);
 
 #endif

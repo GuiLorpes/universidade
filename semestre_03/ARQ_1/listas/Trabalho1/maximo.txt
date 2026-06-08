@@ -1,0 +1,54 @@
+# Máximo de N números (exemplo estático)
+# Layout:
+# [0]=N
+# [1..5]=valores
+# [10]=max (inicializado com valor[1])
+
+5
+3
+7
+2
+8
+6
+3    # max inicial (addr 10) = valor[1]
+
+# Instruções (sequenciais)
+# Estratégia simples (sem loop dinâmico): compara e atualiza max manualmente
+LOAD M(1)
+STOR M(10)    # max = valor1
+
+# comparar valor2 com max
+LOAD M(2)
+SUB M(10)
+JUMP +M(30)   # se AC >= 0, pular para label 30 (não implementar labels aqui — ajuste local)
+LOAD M(2)
+STOR M(10)
+# (30)
+
+# comparar valor3
+LOAD M(3)
+SUB M(10)
+JUMP +M(40)
+LOAD M(3)
+STOR M(10)
+# (40)
+
+# comparar valor4
+LOAD M(4)
+SUB M(10)
+JUMP +M(50)
+LOAD M(4)
+STOR M(10)
+# (50)
+
+# comparar valor5
+LOAD M(5)
+SUB M(10)
+JUMP +M(60)
+LOAD M(5)
+STOR M(10)
+# (60)
+
+# Resultado final em [10]
+
+# Observação: os saltos JUMP +M precisam de endereços válidos; substitua (30),(40)... pelos endereços corretos de instrução quando montar na memória.

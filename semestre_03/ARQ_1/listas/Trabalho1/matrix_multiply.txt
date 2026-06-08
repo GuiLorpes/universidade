@@ -1,0 +1,45 @@
+# Multiplicação de matrizes 2x2 (A * B = C)
+# Layout (blocos contíguos):
+# A_base = 10 (A[0,0]=10, A[0,1]=11, A[1,0]=12, A[1,1]=13)
+# B_base = 20 (B[0,0]=20, B[0,1]=21, B[1,0]=22, B[1,1]=23)
+# C_base = 30 (C[0,0]=30 ...)
+# Temporários: [40]=t1, [41]=t2
+
+# Dados A (2x2)
+10
+2   # A[0,0] addr 10
+3   # A[0,1] addr 11
+4   # A[1,0] addr 12
+5   # A[1,1] addr 13
+
+# Dados B (2x2)
+20
+1   # B[0,0] addr 20
+2   # B[0,1] addr 21
+3   # B[1,0] addr 22
+4   # B[1,1] addr 23
+
+# Espaço para C
+30
+0   # C[0,0]
+0   # C[0,1]
+0   # C[1,0]
+0   # C[1,1]
+
+# Temporários
+0
+0
+
+# Instruções (esqueleto para calcular C[0,0] = A00*B00 + A01*B10)
+LOAD M(10)    # AC = A00
+MUL M(20)     # AC*B00 -> depends on your MUL handling
+STOR M(30)    # C00 = A00*B00 (temporário)
+
+LOAD M(11)
+MUL M(22)
+ADD M(30)
+STOR M(30)    # C00 += A01*B10
+
+# Repita para C[0,1], C[1,0], C[1,1] usando endereços apropriados
+
+# Observação: este arquivo é um template; MUL e ADD/AC handling devem seguir sua implementação (MQ/AC). Ajuste as instruções e endereços conforme necessário.

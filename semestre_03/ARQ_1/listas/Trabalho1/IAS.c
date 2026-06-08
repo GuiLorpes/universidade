@@ -4,9 +4,7 @@
 #include <string.h>
 #include "Memoria.h"
 #include "BancoRegistradores.h"
-
-int TAM_MEMORIA = 1000;
-int TAM_PALAVRA = 40;
+#include "leituraArquivo.h"
 
 
 /* 
@@ -31,8 +29,8 @@ void busca(BancoRegistradores *br, Memoria *m) {
         
         printf("Verificando se a instrução à esquerda do MAR é necessária\n");
         instrucao = br->MAR;
-        long int instrucaoDir = instrucao & 0xFFFFF;
-        long int instrucaoEsq = (instrucao >> 20) & 0xFFFFF; 
+        ul instrucaoDir = instrucao & 0xFFFFF;
+        ul instrucaoEsq = (instrucao >> 20) & 0xFFFFF; 
         
         if (instrucaoEsq == 0) {
             printf("Instrução a esquerda não é necessária");
@@ -45,7 +43,10 @@ void busca(BancoRegistradores *br, Memoria *m) {
             printf("Instrução a esquerda é necessária");
             endereco = instrucaoEsq & 0xFFF;
             opcode = (instrucaoEsq >> 12) & 0xFF;
-            br->IBR = instrucaoEsq;
+            br->IR = opcode;
+            br->MAR = endereco;
+            br->IBR = instrucaoDir;
+            br->PC++;
         }
     }
     else {
@@ -57,7 +58,6 @@ void busca(BancoRegistradores *br, Memoria *m) {
         br->MAR = endereco;
         br->PC++;
     }
-
     printf("%d", br->IR);
     printf("%ld", br->MAR);
 }
@@ -66,8 +66,9 @@ void busca(BancoRegistradores *br, Memoria *m) {
 Verifica a instrução contida no IR, realiza a instrução dependendo do OPCODE
 */
 void execucao(BancoRegistradores *br, Memoria *m) {
-    int opcode = br->IR;
-    ul endereco = br->MAR;
+    
+    int opcode = br->IR, enderecoNovo;
+    ul endereco = br->MAR, instrucaoEsq, instrucaoDir, instrucaoNova;
 
     switch (opcode)
     {
@@ -108,63 +109,81 @@ void execucao(BancoRegistradores *br, Memoria *m) {
         br->AC = br->AC - abs(m->memoria[endereco]);
         break;
     case 11: // MUL_M(int x) 
-        br->AC = br->AC * m->memoria[endereco] & 0xFFFFFFFFFF;
-        br->MQ = ((br->MQ * m->memoria[endereco]) >> 40) & 0xFFFFFFFFFF;
+        br->MQ = br->AC * m->memoria[endereco] & 0xFFFFFFFFFF;
+        br->AC = ((br->AC * m->memoria[endereco]) >> 40) & 0xFFFFFFFFFF;
         break;
     case 12: // DIV_M(int x)
         br->MQ = br->AC / m->memoria[endereco];
         br->AC = br->AC % m->memoria[endereco];
+        break;
     case 20: // LSH
-        br->AC = br->AC << 1;
+        br->AC = (br->AC) << 1;
         break;
     case 21: // RSH
-        br->AC = br->AC >> 1;
+        br->AC = (br->AC) >> 1;
         break;
 
     // Salto incondicional
     case 13: // JUMP_M(int x, 0)
-        long int instrucaoEsq = (m->memoria[endereco] >> 20) & 0xFFFFF; 
+        br->IBR = m->memoria[endereco] & 0xFFFFF;
+        instrucaoEsq = (m->memoria[endereco] >> 20) & 0xFFFFF; 
         br->IR = (instrucaoEsq >> 12) & 0xFF;
         br->MAR = instrucaoEsq & 0xFFF;
+        br->PC = endereco + 1;
         break;
     case 14: // JUMP_M(int x, 20)
-        long int instrucaoDir = m->memoria[endereco] & 0xFFFFF;      
+        br->IBR = 0;
+        instrucaoDir = m->memoria[endereco] & 0xFFFFF;      
         br->IR = (instrucaoDir >> 12) & 0xFF;
         br->MAR = instrucaoDir & 0xFFF;  
+        br->PC = endereco + 1;
         break;
     
     // Salto condicional
     case 15: // JUMP_posiM(int x, 0)
         if (br->AC >= 0) {
-            long int instrucaoEsq = (m->memoria[endereco] >> 20) & 0xFFFFF; 
+            br->IBR = m->memoria[endereco] & 0xFFFFF;
+            instrucaoEsq = (m->memoria[endereco] >> 20) & 0xFFFFF; 
             br->IR = (instrucaoEsq >> 12) & 0xFF;
             br->MAR = instrucaoEsq & 0xFFF;
+            br->PC = endereco + 1;
         }
         break;
     case 16: // JUMP_posiM(int x, 20)
         if (br->AC >= 0) {
-            long int instrucaoDir = m->memoria[endereco] & 0xFFFFF;      
+            br->IBR = 0;
+            instrucaoDir = m->memoria[endereco] & 0xFFFFF;      
             br->IR = (instrucaoDir >> 12) & 0xFF;
             br->MAR = instrucaoDir & 0xFFF;  
+            br->PC = endereco + 1;  
         }
         break;
     
     // Alteração de endereço
-    case 18: // STOR_M(int x, 0)
-        
+    case 18: // STOR_M(int x, 8)
+        instrucaoEsq = (m->memoria[endereco] >> 20) & 0xFFFFF; 
+        enderecoNovo = br->AC & 0xFFF;
+        instrucaoNova = (instrucaoEsq & 0xFF000) + enderecoNovo;
+        m->memoria[endereco] = (m->memoria[endereco] & 0x00000FFFFF) + 
+        (instrucaoNova << 20);
         break;
-    case 19: // STOR_M(int x, 20)
-        
+    case 19: // STOR_M(int x, 28)
+        instrucaoDir = m->memoria[endereco] & 0xFFFFF; 
+        enderecoNovo = br->AC & 0xFFF;
+        instrucaoNova = (instrucaoDir & 0xFF000) + enderecoNovo;
+        m->memoria[endereco] = (m->memoria[endereco] & 0xFFFFF00000)
+         + instrucaoNova;
         break;
 
     default:
+        printf("OPCODE inválido");
         break;
     }
 }
 
 
 void cicloDeExecucao(BancoRegistradores *br, Memoria *m){
-
+    return;
 }
 
 
@@ -176,16 +195,17 @@ int main(void) {
     BancoRegistradores br;
     alocaMemoria(&m);
     inicializaRegistradores(&br);
+
+    // Verifica o arquivo onde está a instrução, e o extrai para a memória
     char nomeArq[256];
     printf("Insira o nome do arquivo do seu programa: \n");
     fgets(nomeArq, sizeof(nomeArq), stdin);
     nomeArq[strcspn(nomeArq, "\n")] = '\0';
     leArquivoPrograma(nomeArq, &m);
-
-
-
+    br.PC = m.memoria[100];
+    
     liberaMemoria(&m);
     return 0;
 }
 
-// gcc -Wall -std=c99 IAS.c Memoria.c BancoRegistradores.c -o ias
+// gcc -Wall -std=c99 IAS.c Memoria.c BancoRegistradores.c leituraArquivo.c -o ias

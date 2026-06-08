@@ -1,0 +1,27 @@
+# Soma de N números (exemplo estático)
+# Layout de memória (endereço entre parênteses nos comentários):
+# [0] = N
+# [1..5] = valores
+# [10] = resultado (inicial 0)
+# Observação: instruções abaixo são sequenciais (sem loop) para N=5.
+
+5
+3
+4
+1
+2
+6
+0    # resultado (addr 10)
+
+# Instruções (coloque na área de instruções)
+# Soma: resultado += valor1..valor5
+LOAD M(10)     # AC = resultado (0)
+ADD M(1)       # AC += valor em addr 1
+ADD M(2)
+ADD M(3)
+ADD M(4)
+ADD M(5)
+STOR M(10)     # salva resultado
+
+# Fim do programa
+
