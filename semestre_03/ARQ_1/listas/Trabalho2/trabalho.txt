@@ -1,0 +1,23 @@
+veremos somente as coisas da cache para os procedimentos de substituição
+vamos usar o syscall emulation
+ - "Chamada ao sistema"
+
+relatorio no máximo 4 paginas
+ - Resumo
+ - Introdução
+   - Contexto
+   - Problemática
+   - Objetivo
+ - Experimentos
+   - Metodologia -- 
+   - Resultados --
+ - Conclusão
+ - Refererências
+
+ - Não encher de numeros
+ - prefirir gráfico a tabelas
+
+vou fazer: 
+- 3mm
+- fdtd-2d
+- head-3d
