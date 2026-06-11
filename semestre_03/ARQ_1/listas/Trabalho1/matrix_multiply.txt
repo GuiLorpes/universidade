@@ -1,45 +1,65 @@
-# Multiplicação de matrizes 2x2 (A * B = C)
-# Layout (blocos contíguos):
-# A_base = 10 (A[0,0]=10, A[0,1]=11, A[1,0]=12, A[1,1]=13)
-# B_base = 20 (B[0,0]=20, B[0,1]=21, B[1,0]=22, B[1,1]=23)
-# C_base = 30 (C[0,0]=30 ...)
-# Temporários: [40]=t1, [41]=t2
+# Multiplicacao de matrizes 2x2: C = A * B
+# A = [[2, 3], [4, 5]]
+# B = [[1, 2], [3, 4]]
+# Resultado esperado: C = [[11, 16], [19, 28]]
+#
+# Dados:
+# M(0..3)=A, M(4..7)=B, M(8..11)=C, M(12)=temp
 
-# Dados A (2x2)
-10
-2   # A[0,0] addr 10
-3   # A[0,1] addr 11
-4   # A[1,0] addr 12
-5   # A[1,1] addr 13
-
-# Dados B (2x2)
-20
-1   # B[0,0] addr 20
-2   # B[0,1] addr 21
-3   # B[1,0] addr 22
-4   # B[1,1] addr 23
-
-# Espaço para C
-30
-0   # C[0,0]
-0   # C[0,1]
-0   # C[1,0]
-0   # C[1,1]
-
-# Temporários
+2
+3
+4
+5
+1
+2
+3
+4
+0
+0
+0
 0
 0
 
-# Instruções (esqueleto para calcular C[0,0] = A00*B00 + A01*B10)
-LOAD M(10)    # AC = A00
-MUL M(20)     # AC*B00 -> depends on your MUL handling
-STOR M(30)    # C00 = A00*B00 (temporário)
+# C00 = A00*B00 + A01*B10
+LOAD M(0)
+MUL M(4)
+LOAD MQ
+STOR M(12)
+LOAD M(1)
+MUL M(6)
+LOAD MQ
+ADD M(12)
+STOR M(8)
 
-LOAD M(11)
-MUL M(22)
-ADD M(30)
-STOR M(30)    # C00 += A01*B10
+# C01 = A00*B01 + A01*B11
+LOAD M(0)
+MUL M(5)
+LOAD MQ
+STOR M(12)
+LOAD M(1)
+MUL M(7)
+LOAD MQ
+ADD M(12)
+STOR M(9)
 
-# Repita para C[0,1], C[1,0], C[1,1] usando endereços apropriados
+# C10 = A10*B00 + A11*B10
+LOAD M(2)
+MUL M(4)
+LOAD MQ
+STOR M(12)
+LOAD M(3)
+MUL M(6)
+LOAD MQ
+ADD M(12)
+STOR M(10)
 
-# Observação: este arquivo é um template; MUL e ADD/AC handling devem seguir sua implementação (MQ/AC). Ajuste as instruções e endereços conforme necessário.
+# C11 = A10*B01 + A11*B11
+LOAD M(2)
+MUL M(5)
+LOAD MQ
+STOR M(12)
+LOAD M(3)
+MUL M(7)
+LOAD MQ
+ADD M(12)
+STOR M(11)

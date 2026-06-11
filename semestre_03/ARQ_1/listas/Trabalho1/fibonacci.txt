@@ -1,27 +1,53 @@
-# Fibonacci iterativo (gera primeiros 6 termos: F0..F5)
-# Layout:
-# [0]=count (6)
-# [1]=F0 (0)
-# [2]=F1 (1)
-# [10]=temp
+# Fibonacci iterativo para 6 termos: F0..F5
+# Resultado esperado:
+# M(4)=0, M(5)=1, M(6)=1, M(7)=2, M(8)=3, M(9)=5
+#
+# Dados:
+# M(0)=count, M(1)=a, M(2)=b, M(3)=temp, M(4..9)=saida
 
 6
 0
 1
-0    # temp (addr 10)
+0
+0
+1
+0
+0
+0
+0
 
-# Instruções (esqueleto para gerar manualmente os 6 termos)
-# next = F0 + F1; store; shift F0<-F1, F1<-next
+# F2
 LOAD M(1)
 ADD M(2)
-STOR M(10)   # temp = next
-
-# shift
+STOR M(3)
+STOR M(6)
 LOAD M(2)
-STOR M(1)    # F0 = old F1
-LOAD M(10)
-STOR M(2)    # F1 = next
+STOR M(1)
+LOAD M(3)
+STOR M(2)
 
-# Repita o bloco acima para quantos termos desejar (aqui mostramos um passo)
+# F3
+LOAD M(1)
+ADD M(2)
+STOR M(3)
+STOR M(7)
+LOAD M(2)
+STOR M(1)
+LOAD M(3)
+STOR M(2)
 
-# Observação: para um loop automático, usar contadores e JUMP/JUMP+ com endereços adequados.
+# F4
+LOAD M(1)
+ADD M(2)
+STOR M(3)
+STOR M(8)
+LOAD M(2)
+STOR M(1)
+LOAD M(3)
+STOR M(2)
+
+# F5
+LOAD M(1)
+ADD M(2)
+STOR M(3)
+STOR M(9)

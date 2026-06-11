@@ -5,16 +5,8 @@
 #include "leituraArquivo.h"
 
 
-static void removeComentario(char *linha);
-static void trim(char *s);
-static int isInteiro(const char *s, long *valor);
-static int decodificaString(const char *linha, char *mnemonico, int *endereco, int *posInicial);
-static void gravaInstrucao(Memoria *m, int *enderecoInstrucao, int *esquerdaLivre, ull instrucao);
-static int getOpcode(char *mnemonico, int posInicial);
-
-
 /*
-Remove os comentários da linha
+Remove os comentários de uma linha linha
 */
 static void removeComentario(char *linha) {
     char *comentario = strchr(linha, '#');
@@ -115,7 +107,6 @@ Verifica uma instrução e retorna seu opcode
 static int getOpcode(char *mnemonico, int posInicial) {
     if (strcmp(mnemonico, "LOAD MQ") == 0) {return 10;}
     else if (strcmp(mnemonico, "LOAD MQ,M") == 0) {return 9;}
-    else if (strcmp(mnemonico, "STOR M") == 0) {return 33;}
     else if (strcmp(mnemonico, "LOAD M") == 0) {return 1;}
     else if (strcmp(mnemonico, "LOAD -M") == 0) {return 2;}
     else if (strcmp(mnemonico, "LOAD |M") == 0) {return 3;}
@@ -139,6 +130,7 @@ static int getOpcode(char *mnemonico, int posInicial) {
     else if (strcmp(mnemonico, "STOR M") == 0) {
         if (posInicial == 8) {return 18;}
         if (posInicial == 28) {return 19;}
+        return 33;
     }
     return -1;
 }
@@ -178,9 +170,10 @@ void leArquivoPrograma(char *nomeArq, Memoria *m) {
         trim(linha);
         if (linha[0] == '\0') continue;
 
-        long valor;
+        long int valor;
         if (isInteiro(linha, &valor)) {
             m->memoria[enderecoData++] = (ull)valor;
+            printf("%ld\n", valor);
             continue;
         }
         
@@ -201,27 +194,7 @@ void leArquivoPrograma(char *nomeArq, Memoria *m) {
 
         ull instrucao = (((ull)opcode << 12) & 0xFF000) | ((ull)endereco & 0xFFF);
         gravaInstrucao(m, &enderecoInstrucao, &esquerdaLivre, instrucao);
+        printf("%s, %i, %i\n", mnemonico, endereco, posInicial);
     }
     fclose(arq);
 }
-// LOAD MQ
-// LOAD MQ,M(X)
-// STOR M(X)
-// LOAD M(X)
-// LOAD-M(X)
-// LOAD IM(X)I
-// LOAD -IM(X)I
-// JUMP M(X,0:19)
-// JUMP M(X,20:39)
-// JUMP + M(X,0: 19)
-// JUMP + M(X,20:39)
-// ADD M(X)
-// ADD IM(X)I
-// SUB M(X)
-// SUB IM(X)I
-// MUL M(X)
-// DIV M(X)
-// LSH
-// RSH
-// STOR M(X,8: 19)
-// STOR M(X,28:39)

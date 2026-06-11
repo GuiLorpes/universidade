@@ -1,57 +1,32 @@
-# Fatorial iterativo (n pequeno, exemplo para n=5)
-# Layout:
-# [0]=n
-# [10]=result (inicial 1)
-# [11]=i (inicial n)
-# [12]=const1 (1)
+# Fatorial de 5
+# Resultado esperado: M(1) = 120
+#
+# Dados:
+# M(0)=n, M(1)=resultado, M(2..5)=fatores usados
 
 5
-1   # result (addr 10)
-5   # i (addr 11)
-1   # const1 (addr 12)
+1
+5
+4
+3
+2
 
-# Instruções (sequenciais para n=5 — sem loop dinâmico)
-# result = result * 5 * 4 * 3 * 2 * 1
-LOAD M(10)
-MUL M(11)   # MQ/AC dependendo da sua implementação; verifique como MUL é tratado
-STOR M(10)
+LOAD M(1)
+MUL M(2)
+LOAD MQ
+STOR M(1)
 
-# i = 4
-LOAD M(11)
-SUB M(12)
-STOR M(11)
+LOAD M(1)
+MUL M(3)
+LOAD MQ
+STOR M(1)
 
-LOAD M(10)
-MUL M(11)
-STOR M(10)
+LOAD M(1)
+MUL M(4)
+LOAD MQ
+STOR M(1)
 
-# i = 3
-LOAD M(11)
-SUB M(12)
-STOR M(11)
-
-LOAD M(10)
-MUL M(11)
-STOR M(10)
-
-# i = 2
-LOAD M(11)
-SUB M(12)
-STOR M(11)
-
-LOAD M(10)
-MUL M(11)
-STOR M(10)
-
-# i = 1
-LOAD M(11)
-SUB M(12)
-STOR M(11)
-
-LOAD M(10)
-MUL M(11)
-STOR M(10)
-
-# Resultado em [10]
-
-# Nota: adapte instruções de multiplicação conforme sua implementação de MUL (AC/MQ). Este arquivo é um exemplo estático que evita loops dinâmicos.
+LOAD M(1)
+MUL M(5)
+LOAD MQ
+STOR M(1)

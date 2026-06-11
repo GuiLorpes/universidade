@@ -5,7 +5,7 @@
 #define TAM_PALAVRA 40
 
 void alocaMemoria(Memoria *m) {
-    m->memoria = malloc(TAM_MEMORIA * sizeof(ull));
+    m->memoria = calloc(TAM_MEMORIA, sizeof(ull));
     if (m->memoria == NULL) {
         printf("Erro ao alocar memória");
     }

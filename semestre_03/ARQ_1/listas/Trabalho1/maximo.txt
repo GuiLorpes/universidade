@@ -1,8 +1,9 @@
-# Máximo de N números (exemplo estático)
-# Layout:
-# [0]=N
-# [1..5]=valores
-# [10]=max (inicializado com valor[1])
+# Maximo de 5 numeros
+# Entrada: 3, 7, 2, 8, 6
+# Resultado esperado: M(6) = 8
+#
+# Dados:
+# M(0)=N, M(1..5)=valores, M(6)=max
 
 5
 3
@@ -10,45 +11,39 @@
 2
 8
 6
-3    # max inicial (addr 10) = valor[1]
+0
 
-# Instruções (sequenciais)
-# Estratégia simples (sem loop dinâmico): compara e atualiza max manualmente
 LOAD M(1)
-STOR M(10)    # max = valor1
+STOR M(6)
 
-# comparar valor2 com max
+# Se M(2) >= max, atualiza max.
 LOAD M(2)
-SUB M(10)
-JUMP +M(30)   # se AC >= 0, pular para label 30 (não implementar labels aqui — ajuste local)
+SUB M(6)
+JUMP +M(103, 0:19)
+JUMP M(104, 0:19)
 LOAD M(2)
-STOR M(10)
-# (30)
+STOR M(6)
 
-# comparar valor3
+# Se M(3) >= max, atualiza max.
 LOAD M(3)
-SUB M(10)
-JUMP +M(40)
+SUB M(6)
+JUMP +M(106, 0:19)
+JUMP M(107, 0:19)
 LOAD M(3)
-STOR M(10)
-# (40)
+STOR M(6)
 
-# comparar valor4
+# Se M(4) >= max, atualiza max.
 LOAD M(4)
-SUB M(10)
-JUMP +M(50)
+SUB M(6)
+JUMP +M(109, 0:19)
+JUMP M(110, 0:19)
 LOAD M(4)
-STOR M(10)
-# (50)
+STOR M(6)
 
-# comparar valor5
+# Se M(5) >= max, atualiza max.
 LOAD M(5)
-SUB M(10)
-JUMP +M(60)
+SUB M(6)
+JUMP +M(112, 0:19)
+JUMP M(113, 0:19)
 LOAD M(5)
-STOR M(10)
-# (60)
-
-# Resultado final em [10]
-
-# Observação: os saltos JUMP +M precisam de endereços válidos; substitua (30),(40)... pelos endereços corretos de instrução quando montar na memória.
+STOR M(6)

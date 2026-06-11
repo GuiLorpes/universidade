@@ -3,12 +3,13 @@
 #include <stdio.h>
 
 typedef unsigned long long int ull;
+typedef long long int ll;
 typedef unsigned long int ul;
 typedef unsigned int ui;
 
 typedef struct {
-    ull AC;
-    ull MQ;
+    ll AC;
+    ll MQ;
     ul PC;
     ull MBR;
     ui IR;
