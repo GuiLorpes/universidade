@@ -673,9 +673,259 @@ Maneiras de otimizar a o ciclo de instruções
         \item É possivel ter niveis diferentes de cache, localizações diferentes, 
         e organizações diferentes.
     \end{itemize}
+\end{itemize}
+Cache
+\begin{itemize}
+    \item Armazena dados e instruções
+    \item As instruções tem tempos fixos para a execução de acordo com os 
+    circuitos eletronicos do processador
+    \item A memória cache não deixa as instruções mais rápidas, deixa o programa 
+    mais eficiente
+    \item Localidade: 
+    \begin{itemize}
+        \item Na memória cache temos dois tipos de localidade:
+        \begin{enumerate}
+            \item Temporal -- Uma região de memória de um determinado dado será 
+            acessado com uma constância maior
+            \begin{itemize}
+                \item Ex.: 
+                \begin{verbatim}
+        for (int i = 10; i <= 10000; i++) {
+            soma += 1;
+        }\end{verbatim}
+                \item Nesse caso, \verb|soma| é uma variável temporal
+            \end{itemize}
+            
+            \item Espacial -- Os dados próximos ao dado que foi acessado 
+            anteriormente, serão acessados também
+            \begin{itemize}
+                \item Ex.: 
+                \begin{verbatim}
+        for (int i = 10; i <= 10000; i++) {
+            v[i] = i;
+        }\end{verbatim}
+                \item Nesse caso, \verb|v[i]| é uma variável espacial
+            \end{itemize}
+            
+        \end{enumerate}
+        \item Quando o programa possui uma função JUMP, a memória cache busca 
+        os dados aos arredores do endereço do JUMP, porém, não é sempre que a 
+        cache acessa a memória correta
+        \begin{itemize}
+            \item Falha (miss) -- Quando o dado ou instrução que o processador 
+            precisa não está na Cache
+            \item Acerto (hit) -- Quando o dado ou instrução que o processador 
+            precisa está na Cache
+        \end{itemize}
+    \end{itemize}
+    \item Fluxo
+    \item Hierarquia
+    \begin{itemize}
+        \item Processador $\rightarrow$ Cache N1 $\rightarrow$ Cache N2 
+        $\rightarrow$ Cache N3 $\rightarrow$ RAM
+    \end{itemize}
+    \item Organização
+    \begin{itemize}
+        \item Organizada em linhas, onde cada linha é um bloco da memória
+        \item Atualmente as máquinas usam em média 3 níveis de memória cache, 
+        onde:
+        \begin{enumerate}
+            \item O nivel um normalmente é dividido em dados e instruções
+            \item O nivel dois é unificado, onde não tem um espaço especial 
+            para ou dados ou instruções
+            \item O nível três também é unificado
+        \end{enumerate}
+        \item A cache não possui palavras, ela possui linhas, que normalmente 
+        contem um numero maior de palavras
+    \end{itemize}
+    \item Políticas de Substituição:
+    \begin{itemize}
+        \item LRU -- Least Recently Used
+        \begin{itemize}
+            \item Retira a linha que está a mais tempo sem ser utilizada
+        \end{itemize}
+        \item FIFO -- First in, First out
+        \begin{itemize}
+            \item Retira a linha que está na memória a mais tempo
+        \end{itemize}
+        \item Random
+        \item LFU -- Less Frequently Used
+        \begin{itemize}
+            \item Retira a linha que foi usada com a menor frequencia dentro do 
+            programa
+        \end{itemize}
+        \item Dependendo da localidade, esses algoritmos podem ser mais e menos 
+        eficientes, aumentando os hits ou misses.
+        \item gem5 -- Fazer testes, usando o modo SE
+    \end{itemize}
+    \item Estratégias de escritas:
+    \begin{enumerate}[label=\alph*.]
+        \item Write Back
+        \begin{itemize}
+            \item Mais complexa, porém tem custo de memória mais baixo
+            \item Cada bloco só é armazenado por linha de cache
+        \end{itemize}
+        \item Write Through
+        \begin{itemize}
+            \item Mais simples mas com custo de memória mais alto.
+            \item 
+        \end{itemize}
+    \end{enumerate}
+    \item Estratégias de Mapeamento de Cache
+    \begin{itemize}
+        \item Decide em qual linha um bloco de memória será armazenado na cache
+        \item Temos 3 tipos de mapeamento
+        \begin{enumerate}
+            \item Direto
+            \begin{itemize}
+                \item Um bloco de memória é sempre armazenado na mesma linha
+                \item Utiliza de um endereço:
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{|l|c|r|}
+                        \hline
+                        Tag & $K$Bits & Palavra \\ \hline
+                    \end{tabular}
+                \end{table}
+                \item Tag indica 
+                \item Os Kbits indicam em qual linha de cache o bloco será 
+                armazenado
+                \item Palavra indica qual palavra do bloco de memória será 
+                acessado
+                \item No mapeamento direto não é util nenhum tipo de politica 
+                de substituição, já que o bloco de memória sempre cai na mesma 
+                linha
+                \item Dentro do mapemento direto, dois endereços podem acabar 
+                em uma mesma linha, e retirar outro endereço que já estava lá e 
+                que é util ao programa.
+                \begin{itemize}
+                    \item Isso pode gerar um problema denomindado \textbf{Trashing}, 
+                    onde a eficiencia de um programa pode cair devido a constante 
+                    troca nas linhas.
+                    \item Esse problema pode ser resolvido utilizando do 
+                    mapeamento Associativo
+                \end{itemize}
+            \end{itemize}
+            \item Associativo
+            \begin{itemize}
+                \item Um bloco é associado a uma linha qualquer da Cache
+                \item É necessário realizar buscas para encontrar o bloco
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{|l|r|}
+                        \hline
+                        Tag & Palavra \\ \hline
+                    \end{tabular}
+                \end{table}
+                \item No associativo, a \textbf{tag} é maior que por mapeamento 
+                direto
+            \end{itemize}
+            \item Associativo por conjunto
+            \begin{itemize}
+                \item Junção do direto e do associativo
+                \item As linhas são organizadas por conjunto também
+                \item Um bloco sempre cai em determinado conjunto de linhas, 
+                porém pode cair em qualquer linha dentro desse conjunto
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{|l|c|r|}
+                        \hline
+                        Tag & Conjunto & Palavra \\ \hline
+                    \end{tabular}
+                \end{table}
+            \end{itemize}
+            xTamanho da memória = $2^n$ bytes\\
+            Tamanho da cache = $2^s$ linhas\\
+            Tamanho da linha = $2^w$ bytes
+            \vspace{12pt}
+
+            Um endereço possui $n$ bits, onde armazena um offset de $w$ bits, 
+            um indice para uma linha de $s$ bytes, e uma tag de $n-s-w$ bits
+
+            Para encontrar o endereço, ele procura pela linha dada por $s$, 
+            onde ao encontrar a linha, ele faz vai até o bloco $w$ de memória, 
+            porém, como podem 
     
+        \end{enumerate}
+
+    \end{itemize}
 \end{itemize}
 
+Em uma instrução, quando coloca o endereço em parenteses, quer dizer que, o 
+dado que será usado na operação está dentro do endereço do registrador entre 
+parenteses
+
+
+\section{Conjunto de Instruções}
+\begin{itemize}
+    \item ISA
+    \item CISC e RISC
+    \begin{itemize}
+        \item CISC -- Complexo
+        \begin{itemize}
+            \item Intel (CISC)
+            \item Complexidade nas instruções devido ao acesso de memória 
+            custoso.
+            \item Uma instrução pode ter uma ou mais tarefas
+            \item Um dos parâmetros pode ser um dos locais da memória \\ 
+            \begin{scriptsize}
+                Assembly -- Linguagem de Programação\\
+                Assembler -- Montagem da linguagem
+            \end{scriptsize}
+            \item Unidade de Controle microprogramada em software -- Uma memória 
+            con-tém o microprograma e ao receber uma instrução, envia para essa 
+            memória e envia para o banco de registradores e para a ULA realizar 
+            as operações
+        \end{itemize}
+        \item RISC -- Reduzido
+        \begin{itemize}
+            \item ARM (RISC)
+            \item Simplificar as instruções
+            \item Possui apenas duas instruções para acesso de memória
+            \item Unidade de Controle microprogramada em hardware -- 
+        \end{itemize}        
+        \item x86 - 64 -- As instruções possuem 64 bits
+        \item 16 registradores -- Registradores de Propósito Geral\\
+        \begin{scriptsize}
+            Registradores de Propósito Geral podem ser usados no código, já 
+            os de Propósito Especifico, não é possivel usar para coisas além 
+            de leitura 
+        \end{scriptsize}
+        \begin{itemize}
+            \item AX -- 16 bits
+            \item BX -- 16 bits
+            \item CX -- 16 bits
+            \item DX -- 16 bits
+            \item SI -- 16 bits
+            \item DI -- 16 bits
+            \item SP -- 16 bits
+            \item BP -- 16 bits
+            \item R8 -- R15
+        \end{itemize}
+        \item Em arquiteturas de 16 bits, só existem os 8 primeiros registradores, 
+        para transformar em uma arquitetura de 32 bits basta usar o prefixo E  
+        dos registradores, que transforma os registradores em 32 bits, e para 
+        uma arquitetura de 64 bits, basta colocar o prefixo R, nessa arquitetura 
+        também exite os 8 registradores do R8 ao R15
+        \item AX, BX, CX e DX são utilizados para instruções 
+        aritméticas.
+        \begin{itemize}
+            \item Algumas convenções são, CX é utilizado para contadores, AX é 
+            utilizado como valor de retorno.
+        \end{itemize}
+        \item SI e DI são registradores usados para indexar memória, normalmente 
+        o SI possui o endereço e o DI possui o dado
+        \item SP e BP são utilizados para o conceito de pilha, próximo ao que é 
+        visto em estrutura de dados, serve para conter informaçãos da função 
+        corrente como parâmetros e variáveis locais.
+        \begin{itemize}
+            \item Nesse conceito de pilha, não é necessário desempilhar para 
+            verificar os elementos de fora do topo da pilha, BP (Base Pointer) 
+            é utilizado para fazer essa movimentação
+        \end{itemize}
+        \item Registradores específicos
+    \end{itemize}
+\end{itemize}
 
 
 \end{document}
