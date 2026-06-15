@@ -1,0 +1,22 @@
+info:
+  name: post
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:8080/pedidos
+  body:
+    type: json
+    data: |-
+      {
+        "id" : 69, 
+        "item" : "suco de abacaxota"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
