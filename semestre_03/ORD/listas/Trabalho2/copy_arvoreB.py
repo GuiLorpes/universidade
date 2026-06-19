@@ -3,10 +3,23 @@ from dataclasses import dataclass
 import io
 import os
 import sys
+from struct import pack, unpack, calcsize
+
+## Variáveis Globais ##
 
 ORDEM = 5
 ARQUIVO = "games.dat"
-ARVORE = "arvoreGames.dat"
+ARVORE = "arvoreB.dat"
+
+# Variáveis Struct #
+
+FORMATO_CAB = 'i'         # RRN do topo da árvore B 
+FORMATO_ELEM = '2is'      # Valor de 8 bytes para id e offset + '|' 
+FORMATO_FILHA = 'is'      # Valor de 4 bytes + '|'
+SIZE_OF_CAB = calcsize(FORMATO_CAB)
+SIZE_OF_ELEM = calcsize(FORMATO_ELEM)
+SIZE_OF_FILHA = calcsize(FORMATO_FILHA)
+SIZE_OF_PAGINA = SIZE_OF_ELEM * (ORDEM -1) + SIZE_OF_FILHA * ORDEM
 
 
 @dataclass
@@ -18,13 +31,11 @@ class Elemento:
 @dataclass
 class Pagina:
     chaves: list[Elemento]     # Lista com os elementos da página
-    filhas: list[Arvore]          # Uma lista com RRN de cada filho no arquivo 
+    filhas: list[int]          # Uma lista com o rrn das páginas filhas 
     rrn: int                   # RRN da página atual
     def __init__(self):
         self.chaves = []
         self.filhas = [None] * ORDEM
-
-Arvore = Pagina | None
 
 def criaListaOffsetID() -> list[tuple[int,int]]:
     '''
@@ -36,79 +47,84 @@ def criaListaOffsetID() -> list[tuple[int,int]]:
     try:
         with open(ARQUIVO, 'rb') as arq:
             offset = 0
-            bufferTamReg = arq.read(2)
-            
-            while bufferTamReg:
-                tamRegistro = int.from_bytes(bufferTamReg, 'little')
-                atual = arq.tell()
-                primeiro_byte = arq.read(1)
-                # Verifica se o primeiro byte do registro é '*' para indicar que 
-                # foi removido
-                if primeiro_byte == b'*': 
-                    # Foi removido, vai pro proximo registro
-                    arq.seek(tamRegistro - 1, os.SEEK_CUR)
-                else:
-                    # Não foi removido então volta pra posição inicial 
-                    arq.seek(atual, os.SEEK_SET)
-                    registro = arq.read(tamRegistro).decode().split('|')
-                    chave = (offset, int(registro[0]))
-                    chaves.append(chave)
+            tamRegistro = int.from_bytes(arq.read(2), 'little')
+            while tamRegistro > 0:
+                registro =  (arq.read(tamRegistro).decode()).split('|')
+                chave = (offset, int(registro[0]))
+                chaves.append(chave)
                 offset += tamRegistro + 2
-                bufferTamReg = arq.read(2)
-
+                tamRegistro = int.from_bytes(arq.read(2), 'little') 
     except FileNotFoundError as e:
         print(f"Erro: {e}")
     return chaves
 
 
-def buscaElemento(p: Arvore, e: Elemento) -> tuple[bool, int, int]:
+def buscaElemento(id: int, rrn: int | None) -> tuple[bool, int]:
     ''' 
-    Procura por *e* em *p*, caso encontre retorna True, o RRN e o indice dele, 
-    caso contrário, retorna False, -1, -1 
+    Procura por *id* em *ARVORE*, caso encontre retorna True e seu offset, caso 
+    contrário, retorna False e -1
     '''
-    # Se a árvore for vazia, não encontrou o elemento
-    if p is None:
-        return False, -1, -1
-
-
-    i = 0
-    # Procura pelo elemento na página
-    while i < len(p.chaves) and p.chaves[i].id < e.id:
-        i += 1
-
-    # Encontrou o elemento
-    if i < len(p.chaves) and p.chaves[i].id == e:
-        return True, p.rrn, i
+    try:
+        with open(ARVORE, 'rb+') as arvore:
+            # Primeira chamada da função
+            if rrn is None:
+                rrn = unpack(FORMATO_CAB, arvore.read(SIZE_OF_CAB))[0]
+            # Segunda chamada da função
+            if rrn is -1:
+                return False, -1
+                
+            offsetRaiz = rrn * SIZE_OF_PAGINA
+            arvore.seek(offsetRaiz, os.SEEK_SET)
+            i = 0
+            while i < (ORDEM - 1):
+                idArvore, offset, _ = unpack(FORMATO_ELEM, arvore.read(SIZE_OF_ELEM))
+                if id == idArvore:
+                    return True, offset
+                if id < idArvore or idArvore == -1:
+                    filha = (ORDEM - i - 2) * SIZE_OF_ELEM + i * SIZE_OF_FILHA 
+                    arvore.seek(filha, os.SEEK_CUR)
+                    rrnFilha = unpack(FORMATO_FILHA, arvore.read(SIZE_OF_FILHA))[0]
+                    return buscaElemento(id, rrnFilha)
+                i += 1
+            if i == ORDEM - 1:
+                filha = i * SIZE_OF_FILHA
+                arvore.seek(filha, os.SEEK_CUR)
+                rrnFilha = unpack(FORMATO_FILHA, arvore.read(SIZE_OF_FILHA))[0]
+                return buscaElemento(id, rrnFilha)
+            return False, -1
+    except FileNotFoundError as e:
+        print(f"Erro: {e}")
+        return False, -1
     
-    # Não encontrou o elemento, procura na árvore filha
-    else:
-        return buscaElemento(p.filhas[i], e)
+    
+def insereElemento(e: Elemento) -> tuple[bool, Pagina]:
+    '''
+    Insere o elemento *e* na *ARVORE*, caso o id do elemento *e* já exista na 
+    *ARVORE*, *e* será descartado 
+    '''
+    return True, Pagina()
 
 
-def insereElemento()
-
-
-
-
-
-
-
-
-def isFolha(p: Arvore) -> bool:
+def isFolha(p: Pagina) -> bool:
     ''' Verifica se *p* é uma folha (não possui filhas) '''
+    if p is None:
+        return True
     for filha in p.filhas:
-        if filha != -1:
+        if filha is not None:
             return False
     return True
 
 
-def exibeArvore(p: Arvore) -> None:
-    print("Arvore")
-
+def exibeArvore() -> None:
+    try:
+        with open(ARVORE, 'rb') as arvore:
+            print("Arvore")
+    except FileNotFoundError as e:
+        print(f"Erro: {e}")
 
 def realizaOperacoes(nomeArq: str) -> None:
     try:
-        with open(nomeArq, 'r') as arq:
+        with open(nomeArq, 'r') as arq, open(ARVORE, 'r+b'):
             for linha in arq:
                 linha = linha.strip()
                 if not linha or linha.startswith('#'):
@@ -121,7 +137,8 @@ def realizaOperacoes(nomeArq: str) -> None:
                 argumento = operacao[1]
                 match comando:
                     case 'b':
-                        # imprimeResultado(comando, argumento, [rPrimario])
+                        
+                        # imprimeResultado(comando, argumento)
                         break
 
                     case 'i':
@@ -140,17 +157,25 @@ def realizaOperacoes(nomeArq: str) -> None:
 
 
 def main() -> None:
-    if len(sys.argv) < 2:
-        sys.exit(f"Erro! Uso: {sys.argv[0]} <operador>")
-    match sys.argv[1]:
-        case '-b':
-            chaves = criaListaOffsetID()
-            # constroiIndices(chaves)
-        case '-e':
-            if len(sys.argv) != 3:
-                sys.exit(f"Erro! Uso: {sys.argv[0]} <-e> <operações>")
-            else:
-                realizaOperacoes(sys.argv[2])
+    buscaElemento(1)
+    # if len(sys.argv) < 2:
+    #     sys.exit(f"Erro! Uso: {sys.argv[0]} <operador>")
+    # match sys.argv[1]:
+    #     case '-b':
+    #         chaves = criaListaOffsetID()
+    #         for offset, id in chaves:
+    #             e = Elemento(id, offset)
+
+
+    #         # constroiIndices(chaves)
+    #     case '-e':
+    #         if len(sys.argv) != 3:
+    #             sys.exit(f"Erro! Uso: {sys.argv[0]} <-e> <operações>")
+    #         else:
+    #             realizaOperacoes(sys.argv[2])
+    # 
+    #      case -p:
+    #          exibeArvore() 
 
 
 if __name__ == "__main__":
