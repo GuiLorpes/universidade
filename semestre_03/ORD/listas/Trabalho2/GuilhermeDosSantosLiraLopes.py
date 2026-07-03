@@ -7,7 +7,7 @@ from struct import pack, unpack, calcsize
 
 ## Variáveis Globais ##
 
-ORDEM = 10
+ORDEM = 5
 ARQUIVO = "games.dat"
 ARVORE = "arvoreB.dat"
 
@@ -104,7 +104,7 @@ def buscaElemento(id: int, rrn: int | None) -> tuple[bool, int]:
         return False, -1
 
 
-def novoRRN(arvore: io.BufferedReader) -> int:
+def novoRRN(arvore: io.BufferedRandom) -> int:
     fim = arvore.seek(0, os.SEEK_END)
     return (fim - 4) // SIZE_OF_PAGINA
 
@@ -137,7 +137,7 @@ def dividePagina(p: Pagina) -> tuple[Pagina, Elemento, Pagina]:
     return pagEsq, promovido, pagDir
 
 
-def lePagina(arvore: io.BufferedReader, rrn: int) -> Pagina:
+def lePagina(arvore: io.BufferedRandom, rrn: int) -> Pagina:
     ''' Lê os valores da página no *rrn* em *arvore* '''
     offset = SIZE_OF_CAB + (rrn * SIZE_OF_PAGINA)
     arvore.seek(offset, os.SEEK_SET)
@@ -167,7 +167,7 @@ def lePagina(arvore: io.BufferedReader, rrn: int) -> Pagina:
     return p
 
 
-def gravaPagina(arvore: io.BufferedReader, p: Pagina) -> None:
+def gravaPagina(arvore: io.BufferedRandom, p: Pagina) -> None:
     ''' Grava *p* na *arvore* em seu respectivo rrn '''
     offset = 4 + (p.rrn * SIZE_OF_PAGINA)
     arvore.seek(offset,os.SEEK_SET)
@@ -182,7 +182,7 @@ def gravaPagina(arvore: io.BufferedReader, p: Pagina) -> None:
         arvore.write(pack(FORMATO_FILHA, p.filhas[i], b'|'))
 
 
-def insereNaPagina(arvore: io.BufferedReader,e: Elemento, rrn: int) -> \
+def insereNaPagina(arvore: io.BufferedRandom,e: Elemento, rrn: int) -> \
     tuple[Elemento, int] | None:
     '''
     Insere *e* na página presente no *rrn* em *arvore*, caso houver promoção, 
@@ -267,7 +267,7 @@ def insereElemento(e: Elemento) -> bool:
             
     except FileNotFoundError as e:
         print(f"Erro: {e}") 
-    return False, None
+    return False
 
 
 def criaArvore(chaves: list[Elemento]) -> None:

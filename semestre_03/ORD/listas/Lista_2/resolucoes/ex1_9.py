@@ -49,7 +49,8 @@ def removeEspacosExtra(nomeArq: str) -> None:
 def lePython(arqPython: str) -> None:
     try:
         buffer = ''
-        nomeTxt = arqPython[:-2] + 'txt'
+        nomeTxt = 'fodase.txt'
+        # nomeTxt = arqPython[:-2] + 'txt'
         with open(arqPython, 'r') as arqPy:
             c = arqPy.read(1)
             while c:
@@ -57,7 +58,8 @@ def lePython(arqPython: str) -> None:
                     while c != '\n':
                         c = arqPy.read(1)
                     if c == '\n':
-                        arqPy.write(c)
+                        buffer += c
+                        c = arqPy.read(1)
                 else:
                     buffer += c
                     c = arqPy.read(1)
@@ -76,7 +78,7 @@ def quebraLinux(nomeArq: str) -> None:
     '''
     try:
         with open(nomeArq, 'rb') as arq:
-            arqNovo = open('WIN' + nomeArq, 'wb')
+            arqNovo = open('LINUX' + nomeArq, 'wb')
             c = arq.read(1)
             while c:
                 if c == b'\r': 
@@ -102,7 +104,7 @@ def quebraWindows(nomeArq: str) -> None:
     '''
     try:
         with open(nomeArq, 'rb') as arq:
-            arqNovo = open('LINUX' + nomeArq, 'wb')
+            arqNovo = open('WIN' + nomeArq, 'wb')
             c = arq.read(1)
             while c:
                 if c == b'\n':

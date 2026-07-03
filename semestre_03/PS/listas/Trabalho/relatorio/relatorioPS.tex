@@ -1,0 +1,178 @@
+\documentclass[12pt]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{indentfirst}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[letterpaper,
+            top=1.5cm,
+            bottom=1.5cm,
+            left=2.75cm,
+            right=2.75cm,
+            marginparwidth=1.75cm]{geometry}
+        
+
+\begin{document}
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    % 1. Institution/Department
+    \Large\textbf{Universidade Estadual de Maringá} \\
+    \large Ciência da Computação \\
+    \vspace{5cm}
+    
+    % 3. Main Title
+    \Huge\textbf{Relatório do Trabalho de Programação de Sistemas} \\
+    \vspace{5cm}
+    
+    % 4. Author and Supervisor Info
+    \begin{minipage}{0.4\textwidth}
+        \begin{flushleft} \large
+            Alunos:\\
+            Guilherme S. L. Lopes -- RA143630\\
+            Lucas Nakamura Batista -- RA143494\\
+        \end{flushleft}
+    \end{minipage}
+    ~
+    \begin{minipage}{0.4\textwidth}
+        \begin{flushright} \large
+            Professor: \\
+            Ronaldo A. L. Gonçalves
+        \end{flushright}
+    \end{minipage}
+    
+    \vfill % Pushes the remaining content to the bottom of the page
+    
+    % 5. Date / Footer
+    \large \today \\
+\end{titlepage}
+
+\section{Funcionamento Geral e Modular}
+\subsection{Funcionamento Geral}
+O trabalho realizado consiste em uma "calculadora" de determinantes de matrizes 
+de qualquer ordem. Nosso programa funciona utilizando de uma leitura de um 
+arquivo .txt com uma tabela de números, e ao selecionar uma ordem $m$, pegamos 
+as $m$ linhas e $m$ colunas dessa tabela, e fazemos o cálculo do determinante 
+da matriz resultante dessa seleção.
+
+Após realizar a seleção da matriz, o calculo do determinante é feito de forma 
+simples, usando do Teorema de Laplace e da Regra de Sarrus. Ao jogar a matriz 
+no software, ele compara a ordem, caso ela seja de um valor superior a quatro, 
+será feito o cálculo usando o Teorema de Laplace, e caso seja menor, fará ou 
+por Regra de Sarrus, ou caso for de ordem 2 ou 1, fará o calculo do determinante 
+usando da multiplicação da diagonal principal menos a diagonal secundária, ou 
+retornará o numéro da matriz unidade.
+
+Caso a matriz estiver na condição para calcular utilizando do Laplace, ela cria 
+uma matriz resultande da exclusão da linha e da coluna da matriz original, e 
+calcula o determinante dessa matriz determinante de forma recursiva, até chegar 
+em uma matriz de ordem 3. Após calcular o determinante da matriz resultante, é 
+feito o calculo do cofator, multiplicando o determinante por $-1$ elevado a 
+linha mais a coluna do elemento do cofator.
+
+\subsection{Funcionamento Modular}
+\begin{itemize}
+    \item \verb|Matriz criaMatriz(int ordem);|
+    \begin{itemize}
+        \item Recebe como parâmetro um inteiro representando a ordem da matriz, 
+        aloca dinamicamente na memória os espaços para a linha e coluna do 
+        tamanho da \verb|ordem| e retorna essa matriz.
+    \end{itemize}
+    \item \verb|void alocaValoresMatriz(Matriz *matriz, int ordem);|
+    \begin{itemize}
+        \item Recebe como parâmetro uma matriz vazia e a ordem dessa matriz, lê 
+        o arquivo "\verb|matriz.txt|" que contém diversos valores diferentes 
+        que estão ordenados por linha e coluna, verifica a ordem da matriz e 
+        aloca os elementos de suas respectivas posições.
+    \end{itemize}
+    \item \verb|double calculaMatriz(Matriz m, int ordem);|
+    \begin{itemize}
+        \item Recebe uma matriz e calcula seu determinante. Se a ordem for maior 
+        que 3, ela chama o cálculo por Teorema de Laplace. Se a ordem for 3, 
+        usa a Regra de Sarrus. Se for 2, aplica a fórmula direta $a_{11}a_{22} - 
+        a_{12}a_{21}$. Se for 1, retorna o único elemento da matriz.
+    \end{itemize}
+    \item \verb|double calculaSarrus(Matriz m);|
+    \begin{itemize}
+        \item Define dois valores, um com a soma dos produtos das diagonais 
+        principais e outro com a soma dos produtos das diagonais secundárias.
+        \[
+        \left\{
+        \begin{array}{l}
+        a = (a_{11} \cdot a_{22} \cdot a_{33}) + (a_{12} \cdot a_{23} \cdot 
+        a_{31}) + (a_{13} \cdot a_{21} \cdot a_{32}) \\
+        b = (a_{31} \cdot a_{22} \cdot a_{13}) + (a_{32} \cdot a_{23} \cdot 
+        a_{11}) + (a_{33} \cdot a_{21} \cdot a_{12})
+        \end{array}
+        \right.
+        \]
+        Depois retorna o valor da subtração de $a$ por $b$ ($a-b$)
+    \end{itemize}
+    \item \verb|double calculaLaplace(Matriz mat, int ordem);|
+    \begin{itemize}
+        \item Cria uma matriz resultante da exclusão da linha $i$ e da coluna 
+        $j$, após isso calcula o determinante dessa matriz resultante, multiplica 
+        pelo item $a_{ij}$ da matriz original, e multiplica por $(-1)^{i + j}$.
+    \end{itemize}
+    \item \verb|Matriz matrizResultante(Matriz mat, int i, int j, int ordem);|
+    \begin{itemize}
+        \item Cria a matriz resultante excluindo a linha $i$ e a coluna $j$, mas 
+        mantendo os outros elementos.
+    \end{itemize}
+    \item \verb|void exibirMatriz(Matriz matriz, int ordem);|
+    \begin{itemize}
+        \item Exibe a matriz selecionada pelo usuário formatada, com os números 
+        em suas respectivas linhas e colunas.
+    \end{itemize}
+    \item \verb|void esvaziaMemoria(Matriz matriz, int ordem);|
+    \begin{itemize}
+        \item Esvazia a memória de uma matriz, percorrendo os vetores iniciais 
+        dando free neles, e no fim dando um free na matriz.
+    \end{itemize}
+\end{itemize}
+
+\section{Atividades dos Participantes}
+No trabalho, as contribuições dos alunos Guilherme e Lucas foram as implementações 
+das seguintes funções: 
+\subsection{Guilherme dos Santos Lira Lopes}
+\begin{itemize}
+    \item \verb|alocaValoresMatriz|
+    \item \verb|calculaMatriz|  
+    \item \verb|exibirMatriz|
+    \item \verb|calculaSarrus|
+    \item \verb|esvaziaMemoria|
+\end{itemize}
+
+\subsection{Lucas Nakamura Batista}
+\begin{itemize}
+    \item \verb|criaMatriz|
+    \item \verb|calculaLaplace|
+    \item \verb|matrizResultante|
+    \item \verb|potencia|
+\end{itemize}
+
+Ao fim da implementação das funções, nos juntamos para corrigir quaisquer erros 
+restantes, por exemplo o código não funcionava corretamete depois de uma certa 
+ordem, ou ele retornava um valor próximo do resultado correto devido a diferença 
+entre o float -- o que estávamos usando até então -- e o double.
+
+\section{Comentários Gerais}
+Nesse trabalho, nossa maior dificuldade foi na implementação do calculo de Laplace, 
+visto que é um processo trabalhoso, e também a correção de alguns erros, como 
+quando uma matriz era de uma ordem acima de 5, essa matriz não era alocada 
+corretamente, e também o supramencionado erro de arredondamento do float, que 
+deixava o resultado incorreto. 
+
+De certa forma não achamos que o trabalho tinha uma dificuldade tão elevada, 
+com exceção de Laplace e na correção de erros, além disso devido a nossa 
+implementação, o tempo de execução para calcular matrizes de ordem acima de 11 
+fica extremamente elevado e não é possivel obter o resultado, essa é a única 
+coisa que encontramos que não funciona dentro do nosso código.
+
+\end{document}

@@ -1,0 +1,24 @@
+OBS: Vale até 2 pontos adicionais (até a nota máxima) na nota final do Primeiro 
+Trabalho.
+
+Altere a estrutura de fila dinâmica desenvolvida em aula (pratica 21) de forma 
+a implementar uma lista encadeada dinâmica, com as seguintes propriedades:
+
+1) o dado não será simples, tipo int ou float, mas do tipo struct. Devera haver 
+3 tipos de dados do tipo struct, com campos e tamanho total diferentes, conforme 
+segue:
+   tipo 1: CPF, RG, Nome, idade, Celular e Profissao, nessa ordem.
+   tipo 2: Nome, CPF e Endereco Completo (CEP, Rua, Bairro), nessa ordem.
+   tipo 3: Empresa, Nomes (próprio, pai e mae), CPF e Salario (float), nessa ordem.
+
+se necessário, insira um campo de tipo do dado no struct.
+
+2) implemente criarLista(), mostrarLista(), inserirDado(), atualizarDado() e 
+removerDado(). Os dados devem ser inseridos e removidos, usando o CPF como chave. 
+O dados devem estar ordenados por CPF. A atualização da lista deve permitir a 
+troca do tipo de registro, não de CPF, e não pode ser implementada usando a 
+remoção seguida de inserção.
+
+3) na alocação dinâmica, utilize o maior espaço de struct para os nós da lista. 
+Os elementos da lista podem ser de qualquer um desses tipos. A lista não é 
+duplamente encadeada e é controlado por um único ponteiro inicial

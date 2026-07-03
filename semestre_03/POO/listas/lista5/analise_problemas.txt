@@ -1,0 +1,13 @@
+
+Model
+ - Classe Produto:
+   - Entidade;
+   - vai conter um id para o produto, o nome desse produto e seu valor;
+
+ - Class Orcamento:
+   - Entidade;
+   - Vai conter um valor para a compra, depende da soma dos valores dos produtos;
+
+Controller
+ - Classe ProdutoService
+   - Metodos lerTodosProdutos, lerProdutoPorID, inserirProduto

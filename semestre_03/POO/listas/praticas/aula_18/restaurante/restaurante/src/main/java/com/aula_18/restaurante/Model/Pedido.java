@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 public class Pedido {
     @Id
     private int id; 
-    
     private String item;
 
 

@@ -925,7 +925,153 @@ parenteses
         \end{itemize}
         \item Registradores específicos
     \end{itemize}
+    \item Formato -- Uma instrução é normalmente uma palavra formada por $x$ 
+    bits, dentro da palavra existe um opcode, e diversos outros endereços
+    \item Tipos de Endereço:
+    \begin{itemize}
+        \item Imediato -- Já possui o valor que será processado.
+        \item Registrador -- Possui um registrador.
+        \item Direto -- Possui um indicador para um endereço de memória que 
+        possui o dado.
+        \item Indireto -- Possui um indicador para um endereço em um registrador, 
+        que indica outro endereço onde está o dado.
+        \item Deslocamento -- Endereço indireto, porem com uma soma ao valor de 
+        memória
+        \item Deslocamento e escala -- Endereço indireto, porem com uma escala 
+        (Soma se ao endereço $x \times y$)
+        \item Rip-relativo -- Endereço de Deslocamento porem somente para 
+        arquiteturas 64 bits
+    \end{itemize}
+    \item Instruções
+    \begin{itemize}
+        \item A 
+        \begin{itemize}
+            \item add
+            \item sub
+            \item div
+            \item mul
+        \end{itemize}
+        \item L
+        \begin{itemize}
+            \item sll
+            \item shr
+            \item not
+            \item and
+            \item or
+            \item xor
+            \item \ldots
+        \end{itemize}
+        \item C
+        \begin{itemize}
+            \item Jump
+            \item J?
+            \begin{itemize}
+                \item e
+                \item g
+                \item l
+                \item ge
+                \item le
+                \item z
+                \item \ldots
+            \end{itemize}
+        \end{itemize}
+        \item M
+        \begin{itemize}
+            \item mov 0, D
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+mov 0, ecx;\\
+add 1, ecx : inicio;\\
+cmp ecx, 100;\\
+je fim;\\
+mov x, eax;\\
+add x, eax;\\
+add ecx, eax;\\
+jump inicio;\\
+mov eax, [0x1092] : fim;
+
+sintaxe AS, cartão de referencia assembler
+
+diretivas:
+\begin{itemize}
+    \item .section
+    \begin{itemize}
+        \item .data -- Onde é declarado as variaveis (variavel : tipo da 
+        variavel e valor da variavel)
+        \item .bss -- Onde é declarado variáveis não iniciados
+        \item .text -- Onde é escrito o codigo (funções começam com \verb|_|)
+        \begin{itemize}
+            \item O codigo no assembly sempre começa com um \verb|_start| global
+        \end{itemize}
+    \end{itemize}
+    \item .glob -- indica uma função que pode ser usada no arquivo todo
+    \item .ascii (asciz -- tem um \verb|\0| no final, ascii não coloca o 
+    terminador automaticamente)
+    \item .byte -- 1
+    \item .word -- 2
+    \item .long -- 4
+    \item .equ -- 8
 \end{itemize}
 
+sintaxe:
+\begin{itemize}
+    \item AT\&T
+    \item Intel
+\end{itemize}
+
+bss -- área estática
+
+heap -- área da memoria alocada pelo usuário (malloc)
+
+registrador -- \% nome do registrador
+
+numero imediato -- \$ numero
+
+
+mov, O, D
+
+add O, D
+
+sub O, D
+
+cmp O, D
+
+jmp R
+
+j? R
+
+call R -- Salva o endereço de retorno
+
+ret -- Captura o endereço de retorno 
+
+int N syscall -- interrupção
+\begin{itemize}
+    \item int \$0x80 -- indica alguma interrupção 
+\end{itemize}
+
+cada funcionalidade que eu desejo deve ser armazenada no registrador eax
+
+após uma função pode colocar um indicador do tipo da variavel (ex.: para mover 
+um long ficaria movL)
+
+final do codigo (exit):
+\begin{verbatim}
+    movl $1, %eax
+    movl $0, %ebx
+    int $0x80 \end{verbatim}
+
+como compila:
+\begin{itemize}[label=\$]
+    \item as teste.s -o teste.o
+    \item ld teste.o -o teste
+\end{itemize}
+
+Exemplos
+\begin{enumerate}
+    \item ler 2 numeros e imprimir a soma
+    \item fibonacci
+    \item multiplicação de matrizes
+\end{enumerate}
 
 \end{document}

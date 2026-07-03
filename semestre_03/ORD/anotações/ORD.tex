@@ -977,9 +977,9 @@ PROGRAMA escreve_fluxo:
 \end{itemize}
     \subsection{Busca Binária em memória}
     \begin{itemize}
-        \item Função que recebe um valoe  a ser buscado e uma lista ordenada 
-        valoe
-        \item Retorna \dots
+        \item Função que recebe um valor $x$ a ser buscado e uma lista ordenada 
+        $v$
+        \item Retorna um indice $m$ tal que $v[m] == x$
     \end{itemize}
     \subsection{Busca binária em um arquivo}
     \begin{itemize}
@@ -993,7 +993,8 @@ PROGRAMA escreve_fluxo:
         \begin{itemize}
             \item Em um arquivo de n registros
             \begin{itemize}
-                \item Busca binaria: O($\log_2n$), pior caso $\lfloor \log_2n \rfloor$
+                \item Busca binaria: O($\log_2n$), pior caso $\lfloor \log_2n 
+                \rfloor$
                 \begin{itemize}
                     \item Em cada chute elimina-se metade das possibilidades
                 \end{itemize}
@@ -1019,14 +1020,82 @@ PROGRAMA escreve_fluxo:
             \end{enumerate}
         \end{itemize}
     \end{itemize}
-\section()
+
+\section{Arvore B}
 \begin{itemize}
-    \item Objetivo
+    \item Problema dos indices lineares $\Rightarrow$ Como podemos manter 
+    indices de forma eficiente quando não podem permanecer na memória?
     \begin{itemize}
-        \item Processar de forma coordenada duas ou mais listas sequenciais para produzir uma lista unica como saida
+        \item Processar de forma coordenada duas ou mais listas sequenciais 
+        para produzir uma lista unica como saida
         \begin{itemize}
             \item Por ex., duas ou mais listas de chaves primarias
         \end{itemize}
     \end{itemize}
 \end{itemize}
+    \subsection{Busca e Inserção em Árvore B}
+        \begin{itemize}
+            \item Possivel estrutura de página de árvore-B em Python
+            \begin{verbatim}
+    class Pagina:
+        def __init__(self) -> None:
+            self.numChaves: int = 0
+            self.chaves: list = [NULL] * (ordem-1)
+            self.filhos: list = [NULL] * ordem\end{verbatim}
+            \item Parte de uma árvore-B de ordem 4:
+            \item \textbf{imagem}
+            \item O arquivo da árvore-B:
+            \begin{itemize}
+                \item Registros de tamanho fixo
+                \item Cada registro armazena uma página da árvore-B
+                \item \textbf{imagem}
+            \end{itemize}
+            \item Algoritmo de busca na árvore-b
+            \begin{itemize}
+                \item Utiliza recursão para descer na árvore
+            \end{itemize}
+            \item A busca sempre inicia na página raiz
+            \item Para cada página lida, busca-se internamente pela chave
+            \begin{itemize}
+                \item Se a chave for encontrada na página, 
+                \begin{itemize}
+                    \item a
+                \end{itemize}
+            \end{itemize}
+            
+
+
+            \begin{scriptsize}
+                No trabalho, a indexação dos itens da árvore, terá que indexar a 
+            chave, e os filhos das chaves com seus byteoffsets
+            \end{scriptsize} 
+        \end{itemize}
+        \subsubsection{Inserção, divisão, promoção}
+        \begin{itemize}
+            \item Algoritmo de inserção na árvore-b
+            \begin{itemize}
+                \item Começa com uma busca e prossegue até alcançar uma folha
+                \begin{itemize}
+                    \item Se encontrar a chave, gera um erro e termina
+                \end{itemize}
+                \item Uma vez localizada a posição de insere ()
+            \end{itemize}
+        \end{itemize}
+    \subsection{Tipos de Acesso}
+    \begin{itemize}
+        \item Até este ponto, vimos como organizar um arquivo para dois tipos 
+        de acesso: sequencial e indexado
+        \item Um arquivo sequencial não utiliza nenhuma estrutura auxiliar
+        \begin{itemize}
+            \item Se o arquivo estiver ordenado, é possivel fazer uma busca 
+            binária $\rightarrow$ mais rápida que a sequencial, mas impõe 
+            restrições
+            \item O acesso sequencial ordenado é mais rápido
+        \end{itemize}
+    \end{itemize}
+    \subsection[Árvore B+]{Árvore B\textsuperscript{+}}
+        \subsubsection{Remoção}
+    Na arvore B+ não tem refatoração após a inserção
+
+    
 \end{document}

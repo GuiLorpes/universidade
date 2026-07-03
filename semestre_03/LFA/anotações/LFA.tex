@@ -650,73 +650,398 @@ Site do Professor: \url{http://www.din.uem.br/yandre}
 
 \section{Gramática}
 \begin{itemize}
-    \item Mecanismo geror que permite definir formalmente uma linguagem
-    \item Atraves de um gramatica pode-se gerar todas as sentenças da linguagem 
+    \item Mecanismo gerador que permite definir formalmente uma linguagem
+    \item Através de uma gramática pode-se gerar todas as sentenças da linguagem 
     definida por ela
-    \item Modelo muito apicdo na especificação de linguagens computacionais
-    \item Formalmente, gramática é uma quadrupla $G=<V,T,P,S>$, onde:
+    \item Modelo muito aplicado na especificação de linguagens computacionais
+    \item Formalmente, gramática é uma quadrupla $G = (V,T,P,S)$ onde:
     \begin{itemize}
-        \item $V$ é um conjunto finito de simbolos não-terminais (ou variáveis)
-        (corresponde com os estados no AFD)
-        \item $T$ é um conjunto finito de simbolos terminais disjunto de $V$
-        (correponde com o alfabeto no AFD)
+        \item $V$ é um conjunto finito de símbolos não-terminais (ou variáveis)
+        \item $T$ é um conjunto finito de símbolos terminais disjunto de $V$
         \item $P$ é um conjunto finito de pares, denominados regras de produção 
-        tal que a primeira componente é palavra de $(V\cup T)^+$ e a segunda 
-        componente é a palavra de $(V \cup T)^*$ (corresponde ao $\delta$ no AFD)
-        \item $S$ é um elemento de $V$, denominado simbolo inicial (ou simbolo 
-        de partida) (corresponde ao $S_0$ no AFD)
+        tal que a primeira componente é uma palavra de $(V\cup T)^+$ e a segunda 
+        componente é uma palavra $(V\cup T)^*$
+        \item $S$ é um elemento de $V$, denominado símbolo inicial (ou símbolo 
+        de partida)
     \end{itemize}
-    \item Os simbolos de T equivalem  aqueles que aparecem nos programas de uma 
-    linguagem de programação. É o alfabeto em cima do qual a linguagem é 
-    definida
-    \item Os elementos de V são simbolos auxiliares \dots
+    \item Os símbolos de $T$ equivalem aqueles que aparecem nos programas de 
+    uma linguagem de programação. É o alfabeto em cima do qual a linguagem é 
+    definida 
+    \item Os elementos de $V$ são símbolos auxiliares que são criados para 
+    permitir a definição das regras da linguagem. Eles correspondem à 
+    "catergorias sintáticas" da linguagem definida
+    \begin{itemize}
+        \item Português: sentença, predicado, verbo, \ldots;
+        \item Pascal: programa, bloco, procedimento, \ldots;
+    \end{itemize}
     \item Uma regra de produção $(\alpha, \beta)$ é representada por $\alpha 
-    \rightarrow \beta$
+    \rightarrow \beta$ 
     \item As regras de produção definem as condições de geração das sentenças
-    \item A aplicação de uma regra de produção é denominada derivação
+    \item A aplicação de uma regra de produçãp é denominada derivação
     \item Uma regra $\alpha \rightarrow \beta$ indica que $\alpha$ pode ser 
-    substituido por $\beta$ semrpre que $\alpha$ aparecer
-    \item Enquanto houver simbolo não-terminal na cadeia em derivação, esta 
+    substituído por $\beta$ sempre que $\alpha$ aparecer
+    \item Enquanto houver símbolo não-terminal na cadeia em derivação, esta 
     derivação não terá terminado
     \item O simbolo inicial é o simbolo através do qual deve iniciar o processo 
     de derivação de uma sentença
     \item Observações:
     \begin{itemize}
-        \item $V\cap T = \varnothing$
-        \item Os elemento ed T são os terminais. Procuraremos representá-los 
-        por letras minusculas (a, b, c, d, \ldots)
-        \item Os elementos de V são os não terminais. Procuraremos representá-
-        los por letra maiúsculas (A, B, C, D, \ldots)
-        \item As cadeias mistas, isto é, aquelas que contem simbolos de $V$ e 
-        simbolos de $T$ (cadeias pertencentes à ($V \cup T)^*$) serão 
+        \item $V \cap T = \varnothing$
+        \item Os elementos de $T$ são os terminais. Procuraremos representá-los 
+        por letras minúsculas (a,b,c,d, \ldots)
+        \item Os elementos de $V$ são os não-terminais. Procuraremos 
+        representá-los por letras maiúsculas (A,B,C,D, \ldots)
+        \item As cadeias mistas, isto é, aquelas que contém simbolos de $V$ e 
+        simbolos de $T$ (cadeias pertencentes à $(V \cup T)^*$) serão 
         representadas por letras gregas ($\alpha$, $\beta$, $\gamma$, $\delta$, 
         \ldots)
     \end{itemize}
-    \item Geração direta $(\Rightarrow)$:
+    \item Exemplo:
     \begin{itemize}
-        \item Considere $\alpha, \beta, \gamma, \delta \in (V \cup T)^*$
-        \item Uma cadeia $\alpha\gamma\beta$ gera diretamente $(\Rightarrow)$ 
-        uma cadeia $\alpha\delta\beta$ se e somente se: 
-        \[\gamma \rightarrow \delta \in P\] 
+        \item $G_1 = (\{S,A,B\}, \{a,b\}, P, S)$ onde:
+        \begin{itemize}
+            \item $P = \{1) S \rightarrow AB \\
+            2) A \rightarrow a \\
+            3) B \rightarrow b\}$
+        \end{itemize}
+        \item Quais as cadeias terminais geradas por esta gramática?
+        \begin{itemize}[label=R:]
+            \item $ab$
+        \end{itemize}
     \end{itemize}
-    \item Geração $(\Rightarrow^*)$:
+    \item Descrição de linguagens:
+    \begin{enumerate}
+        \item $G_1 = (\{A,B\}, \{a,b,c\}, P, A)$ onde:
+        
+            $P = \{1) A\rightarrow aB \\
+                2) B \rightarrow bB \\
+                3) B \rightarrow c \}$
+
+        \item $G_2 = (\{S,A,B,C\}, \{a,b,c\}, P, S)$ onde:
+        
+            $P = \{1) S\rightarrow A \\
+                2) A \rightarrow BaC \\
+                3) B \rightarrow bB \\
+                4) B \rightarrow b \\
+                5) C \rightarrow cC \\
+                6) C \rightarrow c\}$
+    \end{enumerate}
+    \begin{itemize}
+        \item A linguagem gerada pela gramática $G_1$ descrita acima, poderia 
+        ser expressa da seguinte forma: $L(G_1) = \{ab^nc, n \geq 0\}$
+        \item A linguagem gerada pela gramática $G_2$ descrita acima, poderia 
+        ser expressa da seguinte forma: $L(G_2) = \{b^mac^n, m \geq 1, n \geq 1\}$
+    \end{itemize}
+    \item Geração direta ($\Rightarrow$):
     \begin{itemize}
         \item Considere $\alpha, \beta, \gamma, \delta \in (V \cup T)^*$
-        \item Uma cadeia $\alpha$ gera $(\Rightarrow^*)$ uma cadeia $\beta$ se 
+        \item Uma cadeia $\alpha\gamma\beta$ gera diretamente ($\Rightarrow$) 
+        uma cadeia $\alpha\delta\beta$ se e somente se: 
+        \[\gamma \rightarrow \delta \in P\]
+    \end{itemize}
+    \item Geração ($\Rightarrow^*$):
+    \begin{itemize}
+        \item Uma cadeia $\alpha$ gera ($\Rightarrow^*$) uma cadeia $\beta$ se 
         e somente se:
-        \[\exists \gamma_1, \gamma_2, \ldots, \gamma_n \text{ tal que }\]
-        \[\alpha \Rightarrow \gamma_1 \Rightarrow \gamma_2 \Rightarrow \ldots 
-        \Rightarrow \gamma_n \Rightarrow \beta | n \geq 0\]
+        \[\exists \gamma_1,\gamma_2, \ldots, \gamma_n | \alpha \rightarrow 
+        \gamma_1 \rightarrow \gamma_2 \rightarrow \ldots \rightarrow \gamma_n 
+        \rightarrow \beta, n \geq 0\]
     \end{itemize}
     \item Definições:
     \begin{itemize}
-        \item Forma sentencial: uma cadeia $\alpha \in (V \cup T)^*$ é uma forma 
-        sentencial de uma gramática se e somente se $S \Rightarrow^*\alpha$, ou 
-        seja, $\alpha$ é um "embrião" para alguma sentença gerada pela gramática 
-        ou a própria sentença 
-        \item Sentença: uma forma sentencial $\alpha$, é uma sentença de G se e 
-        somente se $\alpha \in T^*$. Portanto, as cadeias terminais geradas pela 
-        gramática são as sentenças de G
+        \item Forma sentencial: uma cadeia $\alpha \in (V \cup T)^*$ é uma 
+        forma sentencial de uma gramática se e somente se $S \Rightarrow^* 
+        \alpha$, ou seja, $\alpha$ é um "embrião" para alguma sentença gerada 
+        pela gramática ou a própria sentença
+        \item Sentença: uma fora sentencial $\alpha$, é uma sentença de $G$ se 
+        e somente se $\alpha \in T^*$. Portanto, as cadeias terminais geradas 
+        pela gramática são as sentenças de $G$
+    \end{itemize}
+    \item Tipos de Gramática
+    \begin{itemize}
+        \item A cada classe de linguagem da Hierarquia de Chomsky é associado 
+        um tipo de gramática
+        \item Gramática com Estrutura de Frase -- GEF ou Tipo 0
+        \begin{itemize}
+            \item São as gramáticas onde todas as regras de produção 
+            pertencentes ao conjunto P são da forma:
+            \[
+            \alpha \rightarrow \beta \text{ onde } \beta \in (V\cup T)^* \wedge \\
+                                                \alpha \in (V\cup T)^+
+            \]
+            \item Os próximos tipos de gramática são GEFs com restrições
+        \end{itemize}
+        \item Gramática Sensivel ao Contexto -- GSC ou Tipo 1
+        \begin{itemize}
+            \item São as gramáticas onde todas as regras de produção 
+            pertencentes ao conjunto $P$ são da forma:
+            \[
+            \alpha \rightarrow \beta \text{ tal que }|\beta|\geq |\alpha| 
+            \text{ exceto quando } \beta = \lambda \]
+            \[
+            \beta \in (V\cup T)^* \]
+            \[
+            \alpha \in (V\cup T)^+
+            \]
+            \item Exemplo:
+            
+            \( S \rightarrow aSBC \\
+            S \rightarrow aBC \\
+            CB \rightarrow BC \\
+            aB \rightarrow ab \\
+            bB \rightarrow bb \\
+            bC \rightarrow bc \\
+            cC \rightarrow cc \)
+
+            Gera a linguagem: $L(G) = \{a^nb^nc^n|n\geq 0\}$
+        \end{itemize}
+        \item Gramática Livre de Contexto -- GLC ou Tipo 2
+        \begin{itemize}
+            \item São as gramáticas onde todas as regras de produção pertencentes 
+            ao conjunto $P$ são da forma:
+            \[A \rightarrow \beta \text{ onde } \]
+            \[\beta \in (V\cup T)^*\]
+            \[A \in V\]
+            \item Exemplos:
+            \begin{itemize}
+                \item \(S \rightarrow AB \\
+                    A \rightarrow 0A11 \\
+                    A \rightarrow \lambda \\
+                    B \rightarrow 0B \\
+                    B \rightarrow \lambda\)
+                \item \(S \rightarrow aB \\
+                    S \rightarrow bA \\
+                    A \rightarrow a \\
+                    A \rightarrow aS \\
+                    A \rightarrow bAA \\
+                    B \rightarrow b \\
+                    B \rightarrow bS \\
+                    B \rightarrow aBB\)
+            \end{itemize}
+            \item O próximo tipo de gramática é GLC com restrições
+        \end{itemize}
+        \item Gramática Regular -- GR ou Tipo 3
+        \begin{itemize}
+            \item Uma linguagem regular é uma linguagem que pode ser descruta 
+            por uma gramática linear
+            \item Tipos de gramática linear:
+            \begin{itemize}
+                \item Gramática Linear à Direita -- GLD
+                \item Gramática Linear à Esquerda -- GLE
+                \item Gramática Linear Unitária à Direita -- GLUD
+                \item Gramática Linear Unitária à Esquerda -- GLUE
+            \end{itemize}
+            \item Seja $G = (V,T,P,S)$ e sejam $A$ e $B$ elementos de $V$, e 
+            $w$ uma cadeia de $T^*$, então:
+            \begin{itemize}
+                \item GLD -- $A \rightarrow wB \vee A \rightarrow w$
+                \item GLE -- $A \rightarrow Bw \vee A \rightarrow w$
+                \item GLUD -- $A \rightarrow wB \vee (A \rightarrow w \wedge |w| 
+                \leq 1)$
+                \item GLUE -- $A \rightarrow Bw \vee (A \rightarrow w \wedge |w| 
+                \leq 1)$
+            \end{itemize}
+        \end{itemize}
     \end{itemize}
 \end{itemize}
+
+
+\section{Algoritmo de reconhecimento para LLC}
+\begin{itemize}
+    \item Algoritmo de Cocke-Younger-Kasami
+    \begin{itemize}
+        \item Desenvolivdo independentemente por Cocke, Younger e Kasami em 1965
+        \item Trabalha sobre uma GLC na Forma Normal de Chomsky (pré-requisito)
+        \begin{itemize}
+            \item Portanto, o algoritmo atende LLCs que não possuem a palavra 
+            vazia
+        \end{itemize}
+        \item Realiza uma analise ascendente (bottom-up) das cadeias
+        \item O algoritmo parte da cadeia a ser analisada e regride nas produções 
+        formando uma tabela triangular
+        \item Quando o triangulo estiver completo, a cadeia é aceita se o simbolo 
+        de partida da gramatica estiver no topo do mesmo
+        \item O estado inicial precisa estar no topo da tabela
+        \item Considerando as dimensões "r" e "s" da tabela, conforme ilustra 
+        a figura a seguir:
+        \begin{enumerate}
+            \item Regressão dos terminais
+            \item Regressão dos não terminais
+        \end{enumerate}
+    \end{itemize}
+\end{itemize}
+
+\section{Autômato com Pilha}
+\begin{itemize}
+    \item São formalismos (máquinas) capazes de reconhecer as Linguagens Livres 
+    de Contexto
+    \item Maior poder que os Autômatos Finitos, pois possuem "um espaço de 
+    armazenamento" extra que é utilizado durante o processamento de uma cadeia
+    \item Possui uma pilha que caracteriza uma memória auxiliar onde pode-se 
+    inserir e remover informações
+    \item Mesmo poder de reconhecimento das GLCs
+    \item Definição:
+    \begin{itemize}
+        \item AP é uma sextupla $<\Sigma, \Gamma, S, S_0, \delta, B>$, onde:
+        \begin{itemize}
+            \item $\Sigma$ é o alfabeto de entrada do AP;
+            \item $\Gamma$ é o alfabeto da pilha;
+            \item $S$ é o conjunto finito não vazio de estados do AP;
+            \item $S_0$ é o estado inicial, $S_0 \in S$;
+            \item $\delta$ é a função de transição de estados, $\delta: S 
+            \times (\Sigma \cup \{\lambda\}) \times \Gamma \rightarrow$ 
+            Conjunto de subconjuntos finitos de $S \times \Gamma^*$
+            \item $B$ é o simbolo da base da pilha, $B \in \Gamma$ 
+        \end{itemize}
+    \end{itemize}
+    \item Ao contrário da fita de entrada, a pilha pode ser lida e alterada 
+    durante um processamento
+    \item O autômato verifica o conteúdo do topo da pilha, retira-o e substitui 
+    por uma cadeia $\alpha \in \Gamma^*$. 
+    \begin{itemize}
+        \item Se $\alpha = A$, e $A \in \ Gamma$, então o simbolo do topo é 
+        substituido por $A$ e a cabeça de leitura escrita continua posicionada 
+        no mesmo lugar
+        \item Se $\alpha = A_1A_2\ldots A_n, n > 1$ então o simbolo do topo da 
+        pilha é retirado, sendo $A_n$, colocado em seu lugar $A_{n-1}$ na posição 
+        seguinte, e assim por diante. A cabeça é deslocada para a posição ocupada 
+        por $A_1$ que é então o novo topo da pilha
+        \item Se $a = \lambda$ então o símbolo do topo da pilha é retirado, 
+        fazendo a pilha descrescer
+    \end{itemize}
+    \item A função de transição $\delta$, é função do estado corrente, da letra 
+    corrente na fita de entrada e do símbolo no topo da pilha.
+    \item Além disso, esta função determina não só o próximo estado que o AP 
+    assume, mas também como o topo da pilha deve ser substituído.
+    \item O AP inicia sua operação num estado inicial especial denotado por 
+    $S_0$ e com um único símbolo na pilha, denotado por $B$.
+    \item A configuração de um AP é dada por uma tripla $<s,x,\alpha>$ onde $s$ 
+    é o estado corrente, $x$ é a cadeia da fita que falta ser processada e 
+    $\alpha$ é o conteúdo da pilha, com o topo no inicio de $\alpha$
+    \item O AP anda ou move-se de uma configuração para outra através da 
+    aplicação de uma função de transição.
+    \item Se o AP está na configuração $<s, ay, A\beta>$ e temos que 
+    $\delta(s,a,A)=<t,\gamma>$ e denota-se $<s,ay,A\beta> \vdash <t,y, \gamma 
+    \beta>$.
+    \item Se o AP move-se de uma configuração $<s_1, x_1, \alpha_1>$ para uma 
+    configuração $<s_2, x_2, \alpha_2>$ por meio de um número finitos de 
+    movimentos, denotamos: 
+    \[
+    <s_1, x_1, \alpha_1> \vdash^* 2<s_2, x_2, \alpha_2>
+    \]\\
+    \begin{small}
+        OBS.: $\vdash \equiv \Rightarrow$, $\vdash^* \equiv \Rightarrow^*$        
+    \end{small}
+    \item Se o valor de $\delta$ para uma determinada configuração for 
+    $\varnothing$ o AP para.
+    \item Note que, segundo esta definição, APs não possuem estados finais como 
+    os AFs
+    \item Assim, uma cadeia $x$ é aceita se, ao chegar no final do processamento 
+    da mesma, a pilha estiver vazia, independentemente do estado que em o AP se 
+    encontra
+    \item Formalmente temos que:
+    \begin{itemize}
+        \item Dado o AP $P = <\Sigma, \Gamma, S, S_0, \delta, B>$ e a cadeia 
+        $x$ sobre $\Sigma$, diz-se que $x$ é aceita por $P$ se e somente se 
+        $\exists s \in S \text{ tal que} <S_0, x, B> \vdash^*<s, \gamma, 
+        \gamma>$. Caso contrário, $x$ é rejeitada.
+        \item Dado o AP $P = <\Sigma, \Gamma, S, S_0, \delta, B>$, a linguagem 
+        $L(P)$ definida por $P$ é:  
+        \[
+        \{x \in \Sigma^* | \exists s \in S \exists <S_0, x, B> \vdash^* <s, 
+        \gamma, \gamma>\}
+        \]
+    \end{itemize}
+\end{itemize}
+
+\section{Máquina de Turing}
+\begin{itemize}
+    \item Introduzida por Alan Turing em 1936
+    \item Ferramenta para estudar a capacidade dos processos algorítmicos
+    \item Modelo abstrato, concebido antes mesmo de uma implementação tecnológica
+    \item Formaliza a ideia de uma pessoa que realiza cálculos
+    \begin{itemize}
+        \item Simulação de uma situação na qual uma pessoa, equipada com um 
+        instrumento de escrita e um apagador, realiza cálculos numa folha de 
+        papel
+        \item "A Máquina de Turing ainda hoje é aceita como a formalização de 
+        um procedimento efetivo, ou seja, uma sequencia finita de instruções, 
+        as quais podem ser realizadas mecanicamente, em tempo finito
+    \end{itemize}
+    \item MT pode ser vista como a mais simples "máquina de computação", servindo
+    para determinar quais funções são computáveis e quais não são.
+    \item Outros modelos foram propostos, mas todos mostraram ter, no máximo, 
+    poder computacional equivalente ao da MT 
+    \item Estas são chamadas Máquinas Universais:
+    \begin{itemize}
+        \item Máquinas capazes de expressar a solução para qualquer problema 
+        algorítmico
+    \end{itemize}
+    \item A Máquina de Turing consiste de:
+    \begin{itemize}
+        \item Uma Unidade de Controle
+        \begin{itemize}
+            \item Pode ler e escrever símbolos em uma fita por meio de um 
+            cabeçote de leitura e gravação e pode se deslocar para a esquerda 
+            ou direita
+        \end{itemize}
+        \item A fita estende-se infinitamente em uma das extremidades e é 
+        dividida em células. Utilizada como dispositivo de entrada, saída e 
+        memória de trabalho
+        \begin{itemize}
+            \item Estas células podem armazenar qualquer elemento de um conjunto 
+            finito de símbolos, um alfabeto
+        \end{itemize}
+        \item Programa ou Função de Transição: função que comanda as leituras 
+        e gravações, o sentido de movimento da cabeça e define o estado da 
+        máquina que será ativado
+        \item[] imagem
+    \end{itemize}
+    \item Funcionamento da Máquina de Turing
+    \begin{itemize}
+        \item A MT deve assumir sempre um estado, pertencente à um conjunto 
+        finito de estados
+        \item O processamento de uma MT começa sempre em um estado especial, 
+        chamado estado inicial
+        \item Inicialmente a primeira célula da fita é preenchida com "$\langle$", 
+        que indica o início da mesma
+        \item A cabeça de leitura é posicionada inicialmente na segunda célula 
+        da fita, a célula seguinte a "$\langle$"
+        \item As células em branco, que não fazem parte da palavra a ser 
+        processada, são preenchidas com o símbolo "$\beta$"
+        \item O processamento em uma MT consiste em:
+        \begin{itemize}
+            \item Observar o estado e o símbolo corrente da fita (aquele em que 
+            o cabeçote está posicionado)
+            \item Escrever um símbolo nesta célula da fita
+            \item Mover o cebeçote para a esquerda ou direita
+            \item Definir o estado corrente
+        \end{itemize}
+        \item A ação exata a ser executada é determinada por um programa (função 
+        de transição) que comunica à unidade de controle o que deve ser feito 
+        com base na configuração (estado $+$ símbolo corrente da fita) em que a 
+        MT se encontra
+        \item O processamento cessa quando a máquina atinge uma configuração 
+        para a qual não existe função prevista, neste caso
+        \begin{itemize}
+            \item Se a máquina estiver com um estado final ativo, a cadeia de 
+            entrada é aceita
+            \item Se o estado ativo não for final, a cadeia de entrada não é 
+            aceita
+            \item Se a máquina não parar (looping), a cadeia de entrada não é 
+            aceita
+        \end{itemize}
+        \item Definição da MT, uma óctupla:
+        \begin{itemize}
+            \item $\Sigma$: alfabeto de símbolos de entrada
+            \item $S$: conjunto de estados possíveis, o qual é finito
+            \item $\delta$: programa ou função de transição
+            \[
+            \delta: S \times(\Sigma \cup V \cup \{\beta,\langle\}) \rightarrow 
+            S \times(\Sigma \cup V \cup \{\beta,\langle\}) \times \{E,D\}
+            \]
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
 \end{document}
