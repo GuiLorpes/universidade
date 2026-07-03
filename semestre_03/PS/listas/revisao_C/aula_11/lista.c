@@ -70,6 +70,42 @@ char* getCPF(void *dado, int tipoDado) {
     return NULL;
 }
 
+void liberaDado(void *dado, int tipoDado) {
+    if (dado == NULL) return;
+
+    switch (tipoDado) {
+        case 1: {
+            Tipo1 *t = (Tipo1 *)dado;
+            free(t->cpf);
+            free(t->rg);
+            free(t->nome);
+            free(t->numCelular);
+            free(t->profissao);
+            free(t);
+            break;
+        }
+        case 2: {
+            Tipo2 *t = (Tipo2 *)dado;
+            free(t->nome);
+            free(t->cpf);
+            free(t->cep);
+            free(t->rua);
+            free(t->bairro);
+            free(t);
+            break;
+        }
+        case 3: {
+            Tipo3 *t = (Tipo3 *)dado;
+            free(t->empresa);
+            free(t->nomeProprio);
+            free(t->nomeMae);
+            free(t->nomePai);
+            free(t->cpf);
+            free(t);
+            break;
+        }
+    }
+}
 
 void exibeLista(Lista l) {
     printf("["); 
@@ -369,51 +405,171 @@ int editarElemento(Lista *l, char *cpf) {
     
     while (q != NULL) {
         if (comparaCPF == 0) {
-            int tipo = q->tipoDado;
+            int tipoAtual = q->tipoDado;
+            int novoTipo;
             printf("Editando elemento com CPF: %s\n", cpf);
+            printf("Qual tipo deseja usar? | 1 | 2 | 3 |\n");
+            scanf("%i", &novoTipo);
             getchar();
-            
-            switch (tipo) {
-                case 1: {
-                    Tipo1 *dado = (Tipo1 *)q->dado;
-                    printf("RG -> ");
-                    fgets(dado->rg, 16, stdin);
-                    printf("Nome -> ");
-                    fgets(dado->nome, 256, stdin);
-                    printf("Idade -> ");
-                    scanf("%i", &dado->idade);
-                    getchar();
-                    printf("Número de celular -> ");
-                    fgets(dado->numCelular, 24, stdin);
-                    printf("Profissão -> ");
-                    fgets(dado->profissao, 256, stdin);
-                    break;
+            while (novoTipo != 1 && novoTipo != 2 && novoTipo != 3) {
+                printf("Tipo inserido inválido! Tipos válidos: | 1 | 2 | 3 |\n");
+                printf("Qual tipo deseja usar? | 1 | 2 | 3 |\n");
+                scanf("%i", &novoTipo);
+                getchar();
+            }
+
+            if (novoTipo != tipoAtual) {
+                void *novoDado = NULL;
+
+                switch (novoTipo) {
+                    case 1: {
+                        Tipo1 *dado = (Tipo1 *)malloc(sizeof(Tipo1));
+                        dado->cpf = (char *)malloc(20);
+                        dado->rg = (char *)malloc(16);
+                        dado->nome = (char *)malloc(256);
+                        dado->numCelular = (char *)malloc(24);
+                        dado->profissao = (char *)malloc(256);
+
+                        if (tipoAtual == 2) {
+                            Tipo2 *antigo = (Tipo2 *)q->dado;
+                            strcpy(dado->cpf, antigo->cpf);
+                        } else if (tipoAtual == 3) {
+                            Tipo3 *antigo = (Tipo3 *)q->dado;
+                            strcpy(dado->cpf, antigo->cpf);
+                        } else {
+                            Tipo1 *antigo = (Tipo1 *)q->dado;
+                            strcpy(dado->cpf, antigo->cpf);
+                        }
+
+                        printf("RG -> ");
+                        fgets(dado->rg, 16, stdin);
+                        printf("Nome -> ");
+                        fgets(dado->nome, 256, stdin);
+                        printf("Idade -> ");
+                        scanf("%i", &dado->idade);
+                        getchar();
+                        printf("Número de celular -> ");
+                        fgets(dado->numCelular, 24, stdin);
+                        printf("Profissão -> ");
+                        fgets(dado->profissao, 256, stdin);
+
+                        novoDado = (void *)dado;
+                        break;
+                    }
+                    case 2: {
+                        Tipo2 *dado = (Tipo2 *)malloc(sizeof(Tipo2));
+                        dado->nome = (char *)malloc(256);
+                        dado->cpf = (char *)malloc(20);
+                        dado->cep = (char *)malloc(15);
+                        dado->bairro = (char *)malloc(256);
+                        dado->rua = (char *)malloc(256);
+
+                        if (tipoAtual == 1) {
+                            Tipo1 *antigo = (Tipo1 *)q->dado;
+                            strcpy(dado->cpf, antigo->cpf);
+                        } else if (tipoAtual == 3) {
+                            Tipo3 *antigo = (Tipo3 *)q->dado;
+                            strcpy(dado->cpf, antigo->cpf);
+                        } else {
+                            Tipo2 *antigo = (Tipo2 *)q->dado;
+                            strcpy(dado->cpf, antigo->cpf);
+                        }
+
+                        printf("Nome -> ");
+                        fgets(dado->nome, 256, stdin);
+                        printf("CEP -> ");
+                        fgets(dado->cep, 15, stdin);
+                        printf("Rua -> ");
+                        fgets(dado->rua, 256, stdin);
+                        printf("Bairro -> ");
+                        fgets(dado->bairro, 256, stdin);
+
+                        novoDado = (void *)dado;
+                        break;
+                    }
+                    case 3: {
+                        Tipo3 *dado = (Tipo3 *)malloc(sizeof(Tipo3));
+                        dado->empresa = (char *)malloc(256);
+                        dado->nomeProprio = (char *)malloc(256);
+                        dado->nomeMae = (char *)malloc(256);
+                        dado->nomePai = (char *)malloc(256);
+                        dado->cpf = (char *)malloc(20);
+
+                        if (tipoAtual == 1) {
+                            Tipo1 *antigo = (Tipo1 *)q->dado;
+                            strcpy(dado->cpf, antigo->cpf);
+                        } else if (tipoAtual == 2) {
+                            Tipo2 *antigo = (Tipo2 *)q->dado;
+                            strcpy(dado->cpf, antigo->cpf);
+                        } else {
+                            Tipo3 *antigo = (Tipo3 *)q->dado;
+                            strcpy(dado->cpf, antigo->cpf);
+                        }
+
+                        printf("Empresa -> ");
+                        fgets(dado->empresa, 256, stdin);
+                        printf("Nome -> ");
+                        fgets(dado->nomeProprio, 256, stdin);
+                        printf("Nome da mãe -> ");
+                        fgets(dado->nomeMae, 256, stdin);
+                        printf("Nome do pai -> ");
+                        fgets(dado->nomePai, 256, stdin);
+                        printf("Salário -> ");
+                        scanf("%f", &dado->salario);
+                        getchar();
+
+                        novoDado = (void *)dado;
+                        break;
+                    }
                 }
-                case 2: {
-                    Tipo2 *dado = (Tipo2 *)q->dado;
-                    printf("Nome -> ");
-                    fgets(dado->nome, 256, stdin);
-                    printf("CEP -> ");
-                    fgets(dado->cep, 15, stdin);
-                    printf("Rua -> ");
-                    fgets(dado->rua, 256, stdin);
-                    printf("Bairro -> ");
-                    fgets(dado->bairro, 256, stdin);
-                    break;
-                }
-                case 3: {
-                    Tipo3 *dado = (Tipo3 *)q->dado;
-                    printf("Empresa -> ");
-                    fgets(dado->empresa, 256, stdin);
-                    printf("Nome -> ");
-                    fgets(dado->nomeProprio, 256, stdin);
-                    printf("Nome da mãe -> ");
-                    fgets(dado->nomeMae, 256, stdin);
-                    printf("Nome do pai -> ");
-                    fgets(dado->nomePai, 256, stdin);
-                    printf("Salário -> ");
-                    scanf("%f", &dado->salario);
-                    break;
+
+                liberaDado(q->dado, tipoAtual);
+                q->dado = novoDado;
+                q->tipoDado = novoTipo;
+            } else {
+                switch (tipoAtual) {
+                    case 1: {
+                        Tipo1 *dado = (Tipo1 *)q->dado;
+                        printf("RG -> ");
+                        fgets(dado->rg, 16, stdin);
+                        printf("Nome -> ");
+                        fgets(dado->nome, 256, stdin);
+                        printf("Idade -> ");
+                        scanf("%i", &dado->idade);
+                        getchar();
+                        printf("Número de celular -> ");
+                        fgets(dado->numCelular, 24, stdin);
+                        printf("Profissão -> ");
+                        fgets(dado->profissao, 256, stdin);
+                        break;
+                    }
+                    case 2: {
+                        Tipo2 *dado = (Tipo2 *)q->dado;
+                        printf("Nome -> ");
+                        fgets(dado->nome, 256, stdin);
+                        printf("CEP -> ");
+                        fgets(dado->cep, 15, stdin);
+                        printf("Rua -> ");
+                        fgets(dado->rua, 256, stdin);
+                        printf("Bairro -> ");
+                        fgets(dado->bairro, 256, stdin);
+                        break;
+                    }
+                    case 3: {
+                        Tipo3 *dado = (Tipo3 *)q->dado;
+                        printf("Empresa -> ");
+                        fgets(dado->empresa, 256, stdin);
+                        printf("Nome -> ");
+                        fgets(dado->nomeProprio, 256, stdin);
+                        printf("Nome da mãe -> ");
+                        fgets(dado->nomeMae, 256, stdin);
+                        printf("Nome do pai -> ");
+                        fgets(dado->nomePai, 256, stdin);
+                        printf("Salário -> ");
+                        scanf("%f", &dado->salario);
+                        getchar();
+                        break;
+                    }
                 }
             }
             return 1;
@@ -435,6 +591,7 @@ int main() {
         printf("QUAL OPERAÇÃO DESEJA REALIZAR?\n1 -> INSERIR\n2 -> REMOVER\n");
         printf("3 -> EDITAR\n4 -> VER LISTA\n0 -> SAIR\n");
         scanf("%i", &op);
+        getchar();
         switch (op) {
             case 1:
                 int tipoDado;
@@ -451,7 +608,7 @@ int main() {
             case 2: 
                 char cpfRemover[20];
                 printf("DIGITE O CPF QUE DESEJA REMOVER: \n");
-                scanf("%s", cpfRemover);
+                fgets(cpfRemover, 20, stdin);
                 if (removeElemento(&l, cpfRemover)) {
                     printf("ELEMENTO REMOVIDO!\n");
                 }
@@ -461,7 +618,7 @@ int main() {
             case 3: 
                 char cpfEditar[20];
                 printf("DIGITE O CPF QUE DESEJA EDITAR: \n");
-                scanf("%s", cpfEditar);
+                fgets(cpfEditar, 20, stdin);
                 if (editarElemento(&l, cpfEditar)) {
                     printf("ELEMENTO ATUALIZADO!\n");
                 }
