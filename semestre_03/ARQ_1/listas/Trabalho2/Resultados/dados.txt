@@ -1,0 +1,78 @@
+3MM_0_MINI_WEIGHTED_LRU    hits:37696762  misses:  525271  media hits:  0.9863  vel. exec: 30.07
+3MM_0_MINI_FIFO            hits:37695735  misses:  526298  media hits:  0.9862  vel. exec: 28.67
+3MM_0_MINI_LFU             hits:37696831  misses:  525202  media hits:  0.9863  vel. exec: 28.85
+3MM_0_MINI_LRU             hits:37696762  misses:  525271  media hits:  0.9863  vel. exec: 28.76
+3MM_0_MINI_MRU             hits:37662973  misses:  559060  media hits:  0.9854  vel. exec: 29.01
+3MM_0_MINI_RANDOM          hits:37694634  misses:  527399  media hits:  0.9862  vel. exec: 28.78
+3MM_0_SMALL_WEIGHTED_LRU   hits:48269146  misses:  562633  media hits:  0.9885  vel. exec: 38.23
+3MM_0_SMALL_FIFO           hits:48266267  misses:  565512  media hits:  0.9884  vel. exec: 38.37
+3MM_0_SMALL_LFU            hits:48198685  misses:  633094  media hits:  0.9870  vel. exec: 38.64
+3MM_0_SMALL_LRU            hits:48269146  misses:  562633  media hits:  0.9885  vel. exec: 38.48
+3MM_0_SMALL_MRU            hits:48114344  misses:  717435  media hits:  0.9853  vel. exec: 38.79
+3MM_0_SMALL_RANDOM         hits:48269663  misses:  562116  media hits:  0.9885  vel. exec: 38.52
+
+HEAT-3D_0_MINI_WEIGHTED_LRU     hits:38545131  misses:  525196  media hits:  0.9866  vel. exec: 30.07
+HEAT-3D_0_MINI_FIFO             hits:38544099  misses:  526228  media hits:  0.9865  vel. exec: 30.92
+HEAT-3D_0_MINI_LFU              hits:38544905  misses:  525422  media hits:  0.9866  vel. exec: 30.32
+HEAT-3D_0_MINI_LRU              hits:38545131  misses:  525196  media hits:  0.9866  vel. exec: 30.11
+HEAT-3D_0_MINI_MRU              hits:38505154  misses:  565173  media hits:  0.9855  vel. exec: 30.47
+HEAT-3D_0_MINI_RANDOM           hits:38542978  misses:  527349  media hits:  0.9865  vel. exec: 30.01
+HEAT-3D_0_SMALL_WEIGHTED_LRU    hits:66389822  misses:  672330  media hits:  0.9900  vel. exec: 76.58
+HEAT-3D_0_SMALL_FIFO            hits:66387984  misses:  674168  media hits:  0.9899  vel. exec: 75.36
+HEAT-3D_0_SMALL_LFU             hits:66396835  misses:  665317  media hits:  0.9901  vel. exec: 75.35
+HEAT-3D_0_SMALL_LRU             hits:66389822  misses:  672330  media hits:  0.9900  vel. exec: 75.57
+HEAT-3D_0_SMALL_MRU             hits:66249322  misses:  812830  media hits:  0.9879  vel. exec: 75.85
+HEAT-3D_0_SMALL_RANDOM          hits:66387103  misses:  675049  media hits:  0.9899  vel. exec: 75.05
+
+FDTD-2D_0_MINI_WEIGHTED_LRU     hits:38064291  misses:  525292  media hits:  0.9864  vel. exec: 28.92
+FDTD-2D_0_MINI_FIFO             hits:38063204  misses:  526379  media hits:  0.9864  vel. exec: 28.92
+FDTD-2D_0_MINI_LFU              hits:38063959  misses:  525624  media hits:  0.9864  vel. exec: 29.31
+FDTD-2D_0_MINI_LRU              hits:38064291  misses:  525292  media hits:  0.9864  vel. exec: 29.17
+FDTD-2D_0_MINI_MRU              hits:38029880  misses:  559703  media hits:  0.9855  vel. exec: 29.22
+FDTD-2D_0_MINI_RANDOM           hits:38062112  misses:  527471  media hits:  0.9863  vel. exec: 28.90
+FDTD-2D_0_SMALL_WEIGHTED_LRU    hits:50619859  misses:  693833  media hits:  0.9865  vel. exec: 44.02
+FDTD-2D_0_SMALL_FIFO            hits:50618148  misses:  695544  media hits:  0.9864  vel. exec: 43.57
+FDTD-2D_0_SMALL_LFU             hits:50640192  misses:  673500  media hits:  0.9869  vel. exec: 43.59
+FDTD-2D_0_SMALL_LRU             hits:50619859  misses:  693833  media hits:  0.9865  vel. exec: 44.33
+FDTD-2D_0_SMALL_MRU             hits:50562730  misses:  750962  media hits:  0.9854  vel. exec: 43.99
+FDTD-2D_0_SMALL_RANDOM          hits:50622998  misses:  690694  media hits:  0.9865  vel. exec: 43.48
+
+3MM_3_MINI_WEIGHTED_LRU    hits: 3744323  misses:  525280  media hits:  0.8770  vel. exec: 6.98
+3MM_3_MINI_FIFO            hits: 3744323  misses:  525280  media hits:  0.8770  vel. exec: 6.95
+3MM_3_MINI_LFU             hits: 3744386  misses:  525217  media hits:  0.8770  vel. exec: 7.00
+3MM_3_MINI_LRU             hits: 3744323  misses:  525280  media hits:  0.8770  vel. exec: 7.01
+3MM_3_MINI_MRU             hits: 3743596  misses:  526007  media hits:  0.8768  vel. exec: 7.04
+3MM_3_MINI_RANDOM          hits: 3744262  misses:  525341  media hits:  0.8770  vel. exec: 6.93
+3MM_3_SMALL_WEIGHTED_LRU   hits: 5290288  misses:  562268  media hits:  0.9039  vel. exec: 9.06
+3MM_3_SMALL_FIFO           hits: 5289066  misses:  563490  media hits:  0.9037  vel. exec: 8.99
+3MM_3_SMALL_LFU            hits: 5227096  misses:  625460  media hits:  0.8931  vel. exec: 9.19
+3MM_3_SMALL_LRU            hits: 5290288  misses:  562268  media hits:  0.9039  vel. exec: 9.05
+3MM_3_SMALL_MRU            hits: 5211741  misses:  640815  media hits:  0.8905  vel. exec: 9.01
+3MM_3_SMALL_RANDOM         hits: 5294229  misses:  558327  media hits:  0.9046  vel. exec: 8.94
+
+HEAT-3D_3_MINI_WEIGHTED_LRU    hits: 3824270  misses:  525194  media hits:  0.8793  vel. exec: 7.25
+HEAT-3D_3_MINI_FIFO            hits: 3824264  misses:  525200  media hits:  0.8792  vel. exec: 7.12
+HEAT-3D_3_MINI_LFU             hits: 3824146  misses:  525318  media hits:  0.8792  vel. exec: 7.27
+HEAT-3D_3_MINI_LRU             hits: 3824270  misses:  525194  media hits:  0.8793  vel. exec: 7.19
+HEAT-3D_3_MINI_MRU             hits: 3819547  misses:  529917  media hits:  0.8782  vel. exec: 7.10
+HEAT-3D_3_MINI_RANDOM          hits: 3824189  misses:  525275  media hits:  0.8792  vel. exec: 7.10
+HEAT-3D_3_SMALL_WEIGHTED_LRU   hits: 7277732  misses:  672492  media hits:  0.9154  vel. exec: 10.27
+HEAT-3D_3_SMALL_FIFO           hits: 7277543  misses:  672681  media hits:  0.9154  vel. exec: 10.15
+HEAT-3D_3_SMALL_LFU            hits: 7292580  misses:  657644  media hits:  0.9173  vel. exec: 10.21
+HEAT-3D_3_SMALL_LRU            hits: 7277732  misses:  672492  media hits:  0.9154  vel. exec: 10.24
+HEAT-3D_3_SMALL_MRU            hits: 7274282  misses:  675942  media hits:  0.9150  vel. exec: 10.27
+HEAT-3D_3_SMALL_RANDOM         hits: 7278493  misses:  671731  media hits:  0.9155  vel. exec: 10.14
+
+FDTD-2D_3_MINI_WEIGHTED_LRU    hits: 3836860  misses:  525184  media hits:  0.8796  vel. exec: 7.03
+FDTD-2D_3_MINI_FIFO            hits: 3836852  misses:  525192  media hits:  0.8796  vel. exec: 6.95
+FDTD-2D_3_MINI_LFU             hits: 3835989  misses:  526055  media hits:  0.8794  vel. exec: 7.01
+FDTD-2D_3_MINI_LRU             hits: 3836860  misses:  525184  media hits:  0.8796  vel. exec: 7.03
+FDTD-2D_3_MINI_MRU             hits: 3834353  misses:  527691  media hits:  0.8790  vel. exec: 7.02
+FDTD-2D_3_MINI_RANDOM          hits: 3836810  misses:  525234  media hits:  0.8796  vel. exec: 6.97
+FDTD-2D_3_SMALL_WEIGHTED_LRU   hits: 6156975  misses:  693884  media hits:  0.8987  vel. exec: 9.15
+FDTD-2D_3_SMALL_FIFO           hits: 6156970  misses:  693889  media hits:  0.8987  vel. exec: 9.03
+FDTD-2D_3_SMALL_LFU            hits: 6177743  misses:  673116  media hits:  0.9017  vel. exec: 9.08
+FDTD-2D_3_SMALL_LRU            hits: 6156975  misses:  693884  media hits:  0.8987  vel. exec: 9.18
+FDTD-2D_3_SMALL_MRU            hits: 6161666  misses:  689193  media hits:  0.8994  vel. exec: 9.14
+FDTD-2D_3_SMALL_RANDOM         hits: 6163656  misses:  687203  media hits:  0.8997  vel. exec: 8.99
+

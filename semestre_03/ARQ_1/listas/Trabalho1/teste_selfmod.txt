@@ -1,0 +1,34 @@
+# Teste abrangente: alteracao de endereco em instrucoes
+# Cobre STOR M(x, 8:19) e STOR M(x, 28:39).
+# Resultados esperados: M[3]=42 e M[5]=77.
+
+42
+77
+0
+0
+0
+5
+
+# Altera o endereco da instrucao esquerda em M(105)
+# Antes: LOAD M(0). Depois: LOAD M(2), entao M[3] recebe 42.
+LOAD M(2)
+STOR M(105, 8:19)
+JUMP M(105, 0:19)
+LOAD M(0)
+LOAD M(0)
+LOAD M(0)
+LOAD M(0)
+LOAD M(0)
+LOAD M(0)
+LOAD M(0)
+LOAD M(1)
+STOR M(3)
+
+# Altera o endereco da instrucao direita em M(108)
+# Antes: STOR M(4). Depois: STOR M(5), entao M[5] recebe 77.
+LOAD M(5)
+STOR M(108, 28:39)
+JUMP M(108, 0:19)
+LOAD M(0)
+LOAD M(1)
+STOR M(4)

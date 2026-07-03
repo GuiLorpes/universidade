@@ -1,0 +1,45 @@
+# Teste abrangente: JUMP e JUMP+ para metade esquerda e direita
+# Cobre salto tomado e salto nao tomado.
+# Resultados esperados: M[3]=1, M[4]=-1, M[6]=-1, M[7]=1
+# M[2] e M[5] devem permanecer 0.
+
+1
+-1
+0
+0
+0
+0
+0
+0
+
+# JUMP+ tomado para esquerda: pula para M(102, 0:19)
+LOAD M(0)
+JUMP +M(102, 0:19)
+LOAD M(1)
+STOR M(2)
+
+# JUMP+ tomado para direita: pula para M(104, 20:39)
+LOAD M(0)
+JUMP +M(104, 20:39)
+LOAD M(1)
+STOR M(2)
+LOAD M(1)
+STOR M(3)
+
+# JUMP+ nao tomado: executa o JUMP normal da direita
+LOAD M(1)
+JUMP +M(107, 0:19)
+STOR M(4)
+JUMP M(108, 20:39)
+LOAD M(0)
+STOR M(5)
+
+# JUMP incondicional para esquerda
+LOAD M(0)
+STOR M(6)
+JUMP M(111, 0:19)
+STOR M(5)
+LOAD M(0)
+LOAD M(0)
+LOAD M(0)
+STOR M(7)

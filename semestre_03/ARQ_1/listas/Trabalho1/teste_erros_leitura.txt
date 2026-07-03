@@ -1,0 +1,12 @@
+# Teste com erros de leitura no meio do arquivo.
+# O leitor deve acusar erro e continuar com as instrucoes validas.
+# Resultado esperado: M[1]=2.
+
+1
+0
+
+LOAD M(0)
+BOGUS M(1)
+ADD M(0)
+LOAD M(0
+STOR M(1)

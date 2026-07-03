@@ -1,0 +1,45 @@
+# Soma de todos os elementos de um vetor
+# M[0] tamanho vetor
+# M[1] contador
+# M[2] constante 1
+# M[3] ponteiro para o inicio do vetor
+# M[4] resultado
+# M[5]... vetor
+
+6 # Vetor de tamanho 6
+0 # Contador começa em 0
+1 
+5 # Vetor começa na posição 5
+0 # Resultado (30)
+9
+7
+1
+0
+6
+7
+
+# Vetor: [9,7,1,0,6,7]; resultado esperado = 30
+
+# Laço de repetição (for (i < n))
+LOAD M(1)             # 100e
+SUB M(0)              # 100d
+JUMP +M(107, 0:19)    # 101e
+
+    # Carrega o resultado e soma com o item do vetor, armazena no resultado
+    LOAD M(4)             # 101d
+    ADD M(5)              # 102e
+    STOR M(4)             # 102d
+
+    # Atualiza o endereço da instrução 2e para o próximo elemento do vetor
+    LOAD M(3)             # 103e
+    ADD M(2)              # 103d
+    STOR M(3)             # 104e
+    STOR M(102, 8:19)     # 104d
+
+    # Atualiza o contador
+    LOAD M(1)             # 105e
+    ADD M(2)              # 105d
+    STOR M(1)             # 106e
+    JUMP M(100, 0:19)     # 106d
+
+

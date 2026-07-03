@@ -1,0 +1,11 @@
+# Teste de erro de execucao: divisao por zero.
+# Atualmente este teste deve quebrar com excecao de ponto flutuante.
+# Use para validar uma protecao futura no case DIV M.
+
+7
+0
+0
+
+LOAD M(0)
+DIV M(1)
+STOR M(2)

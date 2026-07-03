@@ -1,0 +1,77 @@
+# Teste abrangente: transferencia, aritmetica, MQ, DIV, LSH e RSH
+# Resultados esperados:
+# M[10]=7, M[11]=-3, M[12]=5, M[13]=-5
+# M[14]=10, M[15]=12, M[16]=4, M[17]=2
+# M[18]=6, M[19]=2, M[20]=1, M[21]=4, M[22]=3
+
+7
+3
+-5
+2
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+
+LOAD MQ,M(0)
+LOAD MQ
+STOR M(10)
+
+LOAD -M(1)
+STOR M(11)
+
+LOAD |M(2)
+STOR M(12)
+
+LOAD -|M(2)
+STOR M(13)
+
+LOAD M(0)
+ADD M(1)
+STOR M(14)
+
+LOAD M(0)
+ADD |M(2)
+STOR M(15)
+
+LOAD M(0)
+SUB M(1)
+STOR M(16)
+
+LOAD M(0)
+SUB |M(2)
+STOR M(17)
+
+LOAD M(1)
+MUL M(3)
+LOAD MQ
+STOR M(18)
+
+LOAD M(0)
+DIV M(1)
+STOR M(20)
+LOAD MQ
+STOR M(19)
+
+LOAD M(3)
+LSH
+STOR M(21)
+
+LOAD M(0)
+RSH
+STOR M(22)

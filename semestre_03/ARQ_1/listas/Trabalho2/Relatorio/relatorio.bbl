@@ -1,0 +1,26 @@
+\begin{thebibliography}{}
+
+\bibitem[Binkert et~al. 2011]{Binkert:2011:gem5}
+Binkert, N.~L., Beckmann, B.~M., Black, G., Reinhardt, S.~K., Saidi, A.~G.,
+  Basu, A., Hestness, J., Hower, D., Krishna, T., Sardashti, S., Sen, R.,
+  Sewell, K., Altaf, M. S.~B., Vaish, N., Hill, M.~D., and Wood, D.~A. (2011).
+\newblock The gem5 simulator.
+\newblock {\em {SIGARCH} Comput. Archit. News}, 39(2):1--7.
+
+\bibitem[Luo et~al. 2007]{article}
+Luo, Y., Changsheng, X., and Chengfeng, Z. (2007).
+\newblock Weighted cache replace algorithm for storage system.
+\newblock {\em International Journal of Computational Intelligence Systems}.
+
+\bibitem[Pouchet and Yuki 2016]{polybench}
+Pouchet, L.-N. and Yuki, T. (2016).
+\newblock {PolyBench/C}: The polyhedral benchmark suite.
+\newblock \url{https://www.cs.colostate.edu/~pouchet/software/polybench/}.
+\newblock Version 4.2.1.
+
+\bibitem[Stallings 2017]{stallings2017arquitetura}
+Stallings, W. (2017).
+\newblock {\em Arquitetura e Organização de Computadores}.
+\newblock Pearson Education do Brasil, São Paulo, 10 edition.
+
+\end{thebibliography}

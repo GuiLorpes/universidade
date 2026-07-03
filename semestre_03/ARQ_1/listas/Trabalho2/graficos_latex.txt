@@ -1,0 +1,179 @@
+\documentclass[tikz,border=5pt]{standalone}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+\begin{axis}[
+ybar,
+bar width=6pt,
+width=20cm,
+height=10cm,
+ylabel={Taxa média de hits (\%)},
+ymin=85,
+ymax=100,
+xtick=data,
+xticklabel style={
+    rotate=90,
+    anchor=east,
+    font=\footnotesize
+},
+legend style={
+    at={(0.5,1.08)},
+    anchor=south,
+    legend columns=2
+},
+grid=major,
+nodes near coords,
+every node near coord/.append style={
+    font=\tiny,
+    rotate=90,
+},
+symbolic x coords={
+M3W,M3F,M3L,M3R,M3M,M3A,
+MHW,MHF,MHL,MHR,MHM,MHA,
+MFW,MFF,MFL,MFR,MFM,MFA,
+
+S3W,S3F,S3L,S3R,S3M,S3A,
+SHW,SHF,SHL,SHR,SHM,SHA,
+SFW,SFF,SFL,SFR,SFM,SFA
+}
+]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% O0
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\addplot[
+fill=blue!70,
+fill opacity=0.55,
+draw=blue
+]
+coordinates{
+
+(M3W,98.63)
+(M3F,98.62)
+(M3L,98.63)
+(M3R,98.63)
+(M3M,98.54)
+(M3A,98.62)
+
+(MHW,98.66)
+(MHF,98.65)
+(MHL,98.66)
+(MHR,98.66)
+(MHM,98.55)
+(MHA,98.65)
+
+(MFW,98.64)
+(MFF,98.64)
+(MFL,98.64)
+(MFR,98.64)
+(MFM,98.55)
+(MFA,98.63)
+
+(S3W,98.85)
+(S3F,98.84)
+(S3L,98.70)
+(S3R,98.85)
+(S3M,98.53)
+(S3A,98.85)
+
+(SHW,99.00)
+(SHF,98.99)
+(SHL,99.01)
+(SHR,99.00)
+(SHM,98.79)
+(SHA,98.99)
+
+(SFW,98.65)
+(SFF,98.64)
+(SFL,98.69)
+(SFR,98.65)
+(SFM,98.54)
+(SFA,98.65)
+};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% O3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\addplot[
+fill=red,
+fill opacity=0.45,
+draw=red
+]
+coordinates{
+
+(M3W,87.70)
+(M3F,87.70)
+(M3L,87.70)
+(M3R,87.70)
+(M3M,87.68)
+(M3A,87.70)
+
+(MHW,87.93)
+(MHF,87.92)
+(MHL,87.92)
+(MHR,87.93)
+(MHM,87.82)
+(MHA,87.92)
+
+(MFW,87.96)
+(MFF,87.96)
+(MFL,87.94)
+(MFR,87.96)
+(MFM,87.90)
+(MFA,87.96)
+
+(S3W,90.39)
+(S3F,90.37)
+(S3L,89.31)
+(S3R,90.39)
+(S3M,89.05)
+(S3A,90.46)
+
+(SHW,91.54)
+(SHF,91.54)
+(SHL,91.73)
+(SHR,91.54)
+(SHM,91.50)
+(SHA,91.55)
+
+(SFW,89.87)
+(SFF,89.87)
+(SFL,90.17)
+(SFR,89.87)
+(SFM,89.94)
+(SFA,89.97)
+};
+
+\legend{O0,O3}
+
+\end{axis}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% AGRUPAMENTOS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% MINI
+\node at (3.6,-1.3) {\Large\textbf{3MM}};
+\node at (9.7,-1.3) {\Large\textbf{HEAT-3D}};
+\node at (15.8,-1.3) {\Large\textbf{FDTD-2D}};
+
+\node at (9.7,-2.2) {\Huge\textbf{MINI}};
+
+% SMALL
+\node at (22.2,-1.3) {\Large\textbf{3MM}};
+\node at (28.3,-1.3) {\Large\textbf{HEAT-3D}};
+\node at (34.4,-1.3) {\Large\textbf{FDTD-2D}};
+
+\node at (28.3,-2.2) {\Huge\textbf{SMALL}};
+
+\end{tikzpicture}
+
+\end{document}

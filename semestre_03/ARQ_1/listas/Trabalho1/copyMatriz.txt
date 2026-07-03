@@ -1,0 +1,99 @@
+
+# Multiplicação de matrizes m x n e n x p
+
+# M[0] = m
+# M[1] = n
+# M[2] = p
+# M[3] = constante 1
+# M[4] = i
+# M[5] = j
+# M[6] = k
+# M[7] = ponteiro matriz A
+# M[8] = ponteiro matriz B
+# M[9] = ponteiro matriz C
+# M[10] = a[i][k]
+# M[11] = b[k][j]
+# M[12] = c[i][j]
+# M[13] = temp
+# M[20] = inicio A
+# M[x] = inicio B   // x = 20 + m * n
+# M[y] = inicio C   // y = x + n * p
+
+2
+2
+3
+1
+0
+0
+0
+20
+24
+30
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+2     # [[2,2],[3,3]]
+2
+3
+3
+1     # [[1,1,1],[2,2,2]]
+1
+1
+2
+2
+2
+# Resultado: [[6,6,6],[9,9,9]]
+
+
+# Instruções
+
+# Aloca a[i][k], b[k][j] e c[i][j]
+LOAD M(7)
+STOR M(10)
+LOAD M(8)
+STOR M(11)
+LOAD M(9)
+STOR M(12)
+
+# for (i < m)
+LOAD M(4)
+SUB M(0) 
+JUMP +M(300)
+    # for (j < p)              
+    LOAD M(5)
+    SUB M(2)
+    JUMP +M()
+        # for (k < n)
+        LOAD M(6)
+        SUB M(1)
+        JUMP +M()
+            # c[i][j] <- a[i][k] * b[k][j]
+            LOAD M(10)
+            MUL M(11)
+            LOAD MQ()
+            STOR M(13)
+            LOAD M(12)
+            STOR M(,8:9)
+            LOAD M(13)
+            STOR M(0)
+        LOAD M(6)
+        ADD M(3)
+        JUMP M(103, 0:19)
+    LOAD M(5)
+    ADD M(3)
+    JUMP M(101, 20:39)
+LOAD M(4)
+ADD M(3)
+JUMP M(103, 0:19)
+
+
+
+
+

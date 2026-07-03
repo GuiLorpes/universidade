@@ -2,6 +2,9 @@ veremos somente as coisas da cache para os procedimentos de substituição
 vamos usar o syscall emulation
  - "Chamada ao sistema"
 
+no polybench pode desabilitar o excecução na tela
+e ativar o time
+
 relatorio no máximo 4 paginas
  - Resumo
  - Introdução
@@ -21,3 +24,26 @@ vou fazer:
 - 3mm
 - fdtd-2d
 - head-3d
+
+politicas de substituição no gem5
+1. bip
+2. brrip
+3. dueling
+4. fifo *
+5. lfu *
+6. lru *
+7. mru *
+8. random *
+9. ship
+10. tree_plru
+11. weighted_tree ++
+
+fazer todas com asterisco e mais uma das outras 6, vou provavelmente usar 
+weighted_tree
+
+referencias usadas:
+ - gem5
+ - Improving Cache Hits On Replacement Blocks Using Weighted LRU-LFU Combinations, 
+   Marvin Chandra Wijaya
+
+O0 compilação eficiente / O3 menos otimizado

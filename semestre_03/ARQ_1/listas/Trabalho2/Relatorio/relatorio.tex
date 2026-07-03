@@ -1,0 +1,255 @@
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+\usepackage{graphicx,url}
+\usepackage{float}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{tikz}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+
+\pgfplotsset{compat=1.18}
+
+\sloppy
+
+\title{Análise dos Diferentes Procedimentos de Substituição de Memória Cache 
+para Determinados Algoritmos}
+\author{Guilherme S. L. Lopes -- RA143630}
+\address{Universidade Estadual de Maringá -- UEM}
+
+\begin{document}
+
+\maketitle
+
+\begin{resumo}
+Este trabalho estuda como diferentes políticas de substituição afetam o 
+desempenho de um computador. Foram realizados testes com o simulador gem5 
+utilizando seis políticas diferentes e três tipos de programas. Os resultados 
+mostraram que a forma como o código é compilado torna a execução muito mais 
+rápida, chegando a reduzir o tempo em até 85\%, mesmo que isso diminua a taxa 
+de acertos na cache. Além disso, percebeu-se que aumentar a quantidade de dados 
+processados melhorou levemente a eficiência da cache.
+\end{resumo}
+
+\section{Introdução}
+A memória cache foi desenvolvida com o intuito de aumentar a eficiência de um 
+computador, diminuindo a quantia necessária de buscas na memória principal 
+transferindo um bloco de memória por vez, ao invés de apenas uma única palavra
+\cite{stallings2017arquitetura}.
+
+Tendo isso em mente, foram-se desenvolvidas ao longo do tempo diversas formas de 
+manipular a cache, visto que quando ela se enche, é necessário fazer uma troca 
+nos blocos que estão sendo alocados nela, essas técnicas são chamadas de 
+políticas de substituição. Como existem inúmeros diferentes algoritmos, nem 
+todas as políticas são úteis, as vezes inclusive sendo realizado mais buscas 
+que o necessário, fazendo com que a cache tenha seu um efeito contrário à seu 
+propósito, por isso é importante avaliar quando uma política é útil e quando 
+ela não é.
+
+Pensando na efetividade das políticas de substituição, foi-se feita uma pesquisa 
+para averiguar, qual é mais eficiente em programas de multiplicação de matrizes 
+consecutivas, de cálculo de implementação de propagação de ondas e de cálculo 
+de difusão de calor num espaço 3D -- 3mm, fdtd-2d e heat-3d respectivamente 
+\cite{polybench} -- a fim de averiguar qual melhor se aplica a esses três.
+
+\section{Experimentos}
+    \subsection{Metodologia}
+    Para esse estudo foi utilizado o simulador gem5 \cite{Binkert:2011:gem5}, 
+    onde foi configurado uma máquina virtual com um processador single-core 
+    com velocidade de clock de 3GHz, uma RAM com frequencia de 1600MHz e 
+    capacidade de memória de 8GB e, com níveis L1 e L2 da cache com tamanho de 
+    32KiB. 
+
+    Com essas configurações, foi feito testes usando o polybench nos algoritmos 
+    supracitados, usando de entrada mini e small datasets, com os tipos de 
+    compilação O0 e O3, sendo uma compilação padrão, sem otimizações, e uma 
+    compilação com a maior quantia de otimização, respectivamente.
+
+    No experimento, serão usados 6 políticas de substituição: FIFO, LFU, LRU, 
+    MRU, RANDOM e WEIGHTED LRU. Dentro dessas, a única não vista em sala foi a 
+    ultima citada, que consiste em uma variação da LRU padrão, onde é inserido 
+    pesos nos blocos a serem retirados, o com o menor peso é evitado e quando 
+    há dois com pesos iguais, evita-se o mais antigo \cite{article}.
+
+    \subsection{Resultados}
+    
+    \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    % --- Eixo base: O0 (barras largas, fundo) ---
+    \begin{axis}[
+        ybar,
+        bar width=6pt,
+        width=\columnwidth,
+        height=6cm,
+        ymin=75, ymax=100,
+        ylabel={Taxa de hits (\%)},
+        ylabel style={font=\small},
+        xtick={1,2,3,4,5,6},
+        xticklabels={3MM\\Mini, 3MM\\Small, HEAT-3D\\Mini,
+                    HEAT-3D\\Small, FDTD-2D\\Mini, FDTD-2D\\Small},
+        x tick label style={align=center, font=\scriptsize},
+        y tick label style={font=\scriptsize},
+        ymajorgrids=true,
+        grid style={dashed, gray!30},
+        enlarge x limits=0.12,
+        legend style={
+            at={(0.5,-0.32)}, anchor=north,
+            legend columns=6, font=\scriptsize,
+        },
+        legend cell align={left},
+    ]
+    \addplot[fill=blue!30,   draw=blue!50] coordinates{(1,98.63)(2,98.85)(3,98.66)(4,99.00)(5,98.64)(6,98.65)};
+    \addplot[fill=teal!30,   draw=teal!50] coordinates{(1,98.62)(2,98.84)(3,98.65)(4,98.99)(5,98.64)(6,98.64)};
+    \addplot[fill=orange!30, draw=orange!55] coordinates{(1,98.63)(2,98.70)(3,98.66)(4,99.01)(5,98.64)(6,98.69)};
+    \addplot[fill=violet!30, draw=violet!50] coordinates{(1,98.63)(2,98.85)(3,98.66)(4,99.00)(5,98.64)(6,98.65)};
+    \addplot[fill=red!30,    draw=red!50] coordinates{(1,98.54)(2,98.53)(3,98.55)(4,98.79)(5,98.55)(6,98.54)};
+    \addplot[fill=brown!30,  draw=brown!50] coordinates{(1,98.62)(2,98.85)(3,98.65)(4,98.99)(5,98.63)(6,98.65)};
+    \legend{W-LRU O0, FIFO O0, LFU O0, LRU O0, MRU O0, RANDOM O0}
+    \end{axis}
+
+    % --- Eixo sobreposto: O3 (barras estreitas, frente) ---
+    \begin{axis}[
+        ybar,
+        bar width=6pt,
+        width=\columnwidth,
+        height=6cm,
+        ymin=75, ymax=100,
+        ylabel={},
+        xticklabels={,,},         % oculta xticks duplicados
+        yticklabels={,,},         % oculta yticks duplicados
+        axis x line=none,
+        axis y line=none,
+        enlarge x limits=0.12,
+        legend style={
+            at={(0.5,-0.45)}, anchor=north,
+            legend columns=6, font=\scriptsize,
+        },
+        legend cell align={left},
+    ]
+    \addplot[fill=blue!80,   draw=blue!95]   coordinates{(1,87.70)(2,90.39)(3,87.93)(4,91.54)(5,87.96)(6,89.87)};
+    \addplot[fill=teal!80,   draw=teal!95]   coordinates{(1,87.70)(2,90.37)(3,87.92)(4,91.54)(5,87.96)(6,89.87)};
+    \addplot[fill=orange!80, draw=orange!95] coordinates{(1,87.70)(2,89.31)(3,87.92)(4,91.73)(5,87.94)(6,90.17)};
+    \addplot[fill=violet!80, draw=violet!95] coordinates{(1,87.70)(2,90.39)(3,87.93)(4,91.54)(5,87.96)(6,89.87)};
+    \addplot[fill=red!80,    draw=red!95]    coordinates{(1,87.68)(2,89.05)(3,87.82)(4,91.50)(5,87.90)(6,89.94)};
+    \addplot[fill=brown!80,  draw=brown!95]  coordinates{(1,87.70)(2,90.46)(3,87.92)(4,91.55)(5,87.96)(6,89.97)};
+    \legend{W-LRU O3, FIFO O3, LFU O3, LRU O3, MRU O3, RANDOM O3}
+    \end{axis}
+
+    \end{tikzpicture}
+    \caption{Taxa de hits por política}
+    \label{fig:hits_overlap}
+    \end{figure}
+
+    \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    % --- O0: fundo ---
+    \begin{axis}[
+        ybar,
+        bar width=6pt,
+        width=\columnwidth,
+        height=6cm,
+        ymin=0, ymax=90,
+        ylabel={Tempo de execução (s)},
+        ylabel style={font=\small},
+        xtick={1,2,3,4,5,6},
+        xticklabels={3MM\\Mini, 3MM\\Small, HEAT-3D\\Mini,
+                    HEAT-3D\\Small, FDTD-2D\\Mini, FDTD-2D\\Small},
+        x tick label style={align=center, font=\scriptsize},
+        y tick label style={font=\scriptsize},
+        ymajorgrids=true,
+        grid style={dashed, gray!30},
+        enlarge x limits=0.12,
+        legend style={
+            at={(0.5,-0.32)}, anchor=north,
+            legend columns=6, font=\scriptsize,
+        },
+        legend cell align={left},
+    ]
+    \addplot[fill=blue!30,   draw=blue!50] coordinates{(1,30.07)(2,38.23)(3,30.07)(4,76.58)(5,28.92)(6,44.02)};
+    \addplot[fill=teal!30,   draw=teal!50] coordinates{(1,28.67)(2,38.37)(3,30.92)(4,75.36)(5,28.92)(6,43.57)};
+    \addplot[fill=orange!30, draw=orange!55] coordinates{(1,28.85)(2,38.64)(3,30.32)(4,75.35)(5,29.31)(6,43.59)};
+    \addplot[fill=violet!30, draw=violet!50] coordinates{(1,28.76)(2,38.48)(3,30.11)(4,75.57)(5,29.17)(6,44.33)};
+    \addplot[fill=red!30,    draw=red!50] coordinates{(1,29.01)(2,38.79)(3,30.47)(4,75.85)(5,29.22)(6,43.99)};
+    \addplot[fill=brown!30,  draw=brown!50] coordinates{(1,28.78)(2,38.52)(3,30.01)(4,75.05)(5,28.90)(6,43.48)};
+    \legend{W-LRU O0, FIFO O0, LFU O0, LRU O0, MRU O0, RANDOM O0}
+    \end{axis}
+
+    % --- O3: frente ---
+    \begin{axis}[
+        ybar,
+        bar width=6pt,
+        width=\columnwidth,
+        height=6cm,
+        ymin=0, ymax=90,
+        ylabel={},
+        xticklabels={,,},
+        yticklabels={,,},
+        axis x line=none,
+        axis y line=none,
+        enlarge x limits=0.12,
+        legend style={
+            at={(0.5,-0.45)}, anchor=north,
+            legend columns=6, font=\scriptsize,
+        },
+        legend cell align={left},
+    ]
+    \addplot[fill=blue!80,   draw=blue!95]   coordinates{(1,6.98)(2,9.06)(3,7.25)(4,10.27)(5,7.03)(6,9.15)};
+    \addplot[fill=teal!80,   draw=teal!95]   coordinates{(1,6.95)(2,8.99)(3,7.12)(4,10.15)(5,6.95)(6,9.03)};
+    \addplot[fill=orange!80, draw=orange!95] coordinates{(1,7.00)(2,9.19)(3,7.27)(4,10.21)(5,7.01)(6,9.08)};
+    \addplot[fill=violet!80, draw=violet!95] coordinates{(1,7.01)(2,9.05)(3,7.19)(4,10.24)(5,7.03)(6,9.18)};
+    \addplot[fill=red!80,    draw=red!95]    coordinates{(1,7.04)(2,9.01)(3,7.10)(4,10.27)(5,7.02)(6,9.14)};
+    \addplot[fill=brown!80,  draw=brown!95]  coordinates{(1,6.93)(2,8.94)(3,7.10)(4,10.14)(5,6.97)(6,8.99)};
+    \legend{W-LRU O3, FIFO O3, LFU O3, LRU O3, MRU O3, RANDOM O3}
+    \end{axis}
+
+    \end{tikzpicture}
+    \caption{Tempo de execução por política}
+    \label{fig:exec_overlap}
+    \end{figure}
+
+    Como é possível observar na figura \ref{fig:hits_overlap}, usando o método 
+    de compilação com mais acertos de cache, foi justamente aquele com o menor 
+    nível de otimização, mantendo uma média de hits próxima dos 98\%, porém 
+    também aumentou exponencialmente o tempo necessário para a execução, visível 
+    na figura \ref{fig:exec_overlap}. 
+    
+    É interessante de se notar especialmente que com a compilação O3 que, por mais 
+    que teve uma taxa de hits menor, então era de se esperar um tempo de execução 
+    maior, devido a otimização na leitura dos algoritmos pelo compilador, o 
+    tempo de execução é no minimo menor que a metade, e no caso do heat-3d pra 
+    um dataset small, é aproximadamente 15\% do tempo de quando usamos a 
+    compilação O0. 
+
+    Outra possível observação é que para o dataset de tamanho small, a taxa de 
+    hits -- mesmo que não por muito -- foi maior, aumentando em cerca de 2 à 3\%, 
+    com 3 segundos a mais na execução em média. Como os algoritmos escolhidos 
+    são algoritmos mais complexos, com multiplicações continuas de matrizes e 
+    cálculos espaciais, a expectativa era que os o tempo de execução para o 
+    usando mais entradas seria obviamente maior, porém também é interessante 
+    notar que os hits também foram maiores, tendo aproximadamente um aumento de 
+    12 milhões de hits, com 150 mil misses a mais, excluindo a MRU, que teve em 
+    todos um aumento expressivo de misses, alcançando 300 mil a mais na média.
+
+\section{Conclusão}
+Analisando os dados, podemos ver que a taxa de hits na compilação O0 é melhor em 
+todos os algortimos, porém o elevado tempo de execução torna inviável dependendo 
+da quantia de vezes que é necessária rodá-lo. Um possível cenário onde possa ser 
+mais interessante o uso desse modo, é com algoritmos menores e menos complexos, 
+visto que o tempo necessário reduziria e os acertos da cache se manteriam elevados.
+
+Já para a compilação O3, mesmo mantendo uma quantia menores de acertos, o tempo 
+de execução se reduziu tanto a ponto de talvez ser mais viável utilizar esse 
+método para algoritmos complexos, sacrificando a taxa de hits para ganhar mais 
+execuções. Possivelmente, com um dataset maior ainda os acertos podem melhorar, 
+uma vez que teve um aumento no dataset mini para o dataset small, é possível 
+considerar uma outra pesquisa para verificar se com datasets maiores ainda, 
+essa ideia ainda é válida.   
+    
+
+\bibliographystyle{sbc}
+\bibliography{relatorio}
+
+\end{document}
