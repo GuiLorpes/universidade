@@ -349,39 +349,7 @@ int removeElemento(Lista *l, char *cpf) {
             }
             
             // Libera memória
-            int tipo = q->tipoDado;
-            switch (tipo) {
-                case 1: {
-                    Tipo1 *t = (Tipo1 *)q->dado;
-                    free(t->cpf);
-                    free(t->rg);
-                    free(t->nome);
-                    free(t->numCelular);
-                    free(t->profissao);
-                    free(t);
-                    break;
-                }
-                case 2: {
-                    Tipo2 *t = (Tipo2 *)q->dado;
-                    free(t->nome);
-                    free(t->cpf);
-                    free(t->cep);
-                    free(t->rua);
-                    free(t->bairro);
-                    free(t);
-                    break;
-                }
-                case 3: {
-                    Tipo3 *t = (Tipo3 *)q->dado;
-                    free(t->empresa);
-                    free(t->nomeProprio);
-                    free(t->nomeMae);
-                    free(t->nomePai);
-                    free(t->cpf);
-                    free(t);
-                    break;
-                }
-            }
+            liberaDado(q->dado, q->tipoDado);
             free(q);
             l->quantidadeElem--;
             return 1;
