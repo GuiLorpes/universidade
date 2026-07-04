@@ -1,5 +1,8 @@
-// Vídeo apresentação: https://drive.google.com/file/d/1IJu79qmIUNaKqjg_pvgKj0YUL_DhEAH9/view?usp=sharing
-
+/* 
+Aluno: Guilherme dos Santos Lira Lopes
+RA: 143630
+Vídeo apresentação: https://drive.google.com/file/d/1IJu79qmIUNaKqjg_pvgKj0YUL_DhEAH9/view?usp=sharing
+*/ 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

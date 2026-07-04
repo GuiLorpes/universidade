@@ -1,0 +1,2 @@
+* Forma de uso:
+O programa é bem simples, basta compilar e escolher o valor da ordem que deseja. A ordem no arquivo de entrada original vai até 15, porém devido a complexidade do código, os resultados só vão aparecer rapidamente até a ordem 11.
