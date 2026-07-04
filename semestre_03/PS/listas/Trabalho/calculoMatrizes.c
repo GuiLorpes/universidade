@@ -51,16 +51,13 @@ void esvaziaMemoria(Matriz matriz, int ordem) {
 /*Produz a matriz que resulta da remoção da *i-ésima* linha e *j-ésima* coluna
 da matriz *mat*, de ordem *ordem**/
 Matriz matrizResultante(Matriz mat, int i, int j, int ordem){
-    Matriz res = criaMatriz(ordem -1);// <---- ERRO DPS DAQUI 
-    //printf("\nresultante i = %i, j = %i\n", i, j);
+    Matriz res = criaMatriz(ordem -1);
     int res_k = 0;
     int res_l = 0;
     for (int k = 0;k< ordem;k++){
         if (k == i){continue;}
         for (int l = 0;l < ordem;l++){
             if (l == j){continue;}
-            //printf("%i, %i\n", res_k, res_l);
-            //printf("k%i, l%i\n", k, l);
             res[res_k][res_l] = mat[k][l];
             res_l++;
         }
@@ -73,8 +70,6 @@ Matriz matrizResultante(Matriz mat, int i, int j, int ordem){
 /*Retorna a determinante de uma matriz de ordem maior que 4*/
 double calculaLaplace(Matriz mat, int ordem) {
     double det = 0;
-    //printf("Calculando laplace");
-        //float* linha  = mat[0];
     for (int j = 0; j< ordem; j++){
         Matriz resultante = matrizResultante(mat, ordem-1, j, ordem);
         det += (calculaMatriz(resultante, ordem -1 ) * mat[ordem-1][j]) *  potencia(-1, (ordem-1) + j);
