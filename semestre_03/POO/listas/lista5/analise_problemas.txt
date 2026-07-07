@@ -9,5 +9,7 @@ Model
    - Vai conter um valor para a compra, depende da soma dos valores dos produtos;
 
 Controller
- - Classe ProdutoService
+ - Classe ProdutoController
    - Metodos lerTodosProdutos, lerProdutoPorID, inserirProduto
+ - Classe OrcamentoController
+   - Metodos 
