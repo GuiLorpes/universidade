@@ -1,0 +1,23 @@
+info:
+  name: get
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: http://localhost:8080/produtos
+  body:
+    type: json
+    data: |-
+      {
+        "id": 4,
+        "nome": "coxinha de carne",
+        "preco": 10.00
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
