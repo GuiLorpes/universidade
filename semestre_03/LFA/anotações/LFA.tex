@@ -880,6 +880,11 @@ Site do Professor: \url{http://www.din.uem.br/yandre}
     \item Possui uma pilha que caracteriza uma memória auxiliar onde pode-se 
     inserir e remover informações
     \item Mesmo poder de reconhecimento das GLCs
+    \item Um exemplo de LLC: $\{a^nb^n | n \geq 0\}$
+    \item Um AF não é capaz de reconhecer este tipo de linguagem devido à sua 
+    incapacidade de "recordar" (memorizar) informação sobre a cadeia analisada
+    \item Autômatos com Pilha (AP) possuem uma pilha para armazenar informação, 
+    adicionando poder aos AFs
     \item Definição:
     \begin{itemize}
         \item AP é uma sextupla $<\Sigma, \Gamma, S, S_0, \delta, B>$, onde:
@@ -1031,17 +1036,181 @@ Site do Professor: \url{http://www.din.uem.br/yandre}
             \item Se a máquina não parar (looping), a cadeia de entrada não é 
             aceita
         \end{itemize}
-        \item Definição da MT, uma óctupla:
+    \end{itemize}
+    \item Definição da MT, uma óctupla:
+    \begin{itemize}
+        \item $\Sigma$: alfabeto de símbolos de entrada
+        \item $S$: conjunto de estados possíveis, o qual é finito
+        \item $\delta$: programa ou função de transição
+        \[
+        \delta: S \times(\Sigma \cup V \cup \{\beta,\langle\}) \rightarrow 
+        S \times(\Sigma \cup V \cup \{\beta,\langle\}) \times \{E,D\}
+        \]
+        \item $s_0$: estado inicial da máquina, $s_0 \in S$
+        \item $F$: conjunto de estados finais, $F \subset S$
+        \item $V$: alfabeto auxiliar (pode ser vazio)
+        \item $\beta$: símbolo especial para células em branco
+        \item $\langle$: símbolo especial marcador de inicio da fita
+    \end{itemize}
+    \item A Máquina de Turing pode ser empregada como modelo de natureza 
+    reconhecedora ou transdutora
+    \begin{itemize}
+        \item Reconhecedora: processa a palavra de entrada aceitando-a ou 
+        rejeitando-a. Neste caso, o conjunto de palavras aceitas corresponde 
+        à linguagem descrita pela MT
+        \item Transdutora: máquina para computar uma função. Aplica uma 
+        função sobre o conteúdo inicial da fita e o resultado produzido é 
+        lançado na própria fita
+    \end{itemize}
+    \item Representação de MT por diagrama:
+    \begin{itemize}
+        \item Semelhante à representação de AFD
+        \item Os rótulos das setas, que representam as funções de transição 
+        são de acordo com a seguinte legenda:
+        \item[] imagem
+    \end{itemize}
+    \item Configuração instantânea de uma MT:
+    \begin{itemize}
+        \item Seja uma MT $M=(\Sigma, S, \delta, s_0, F, V, \beta, \langle)$
         \begin{itemize}
-            \item $\Sigma$: alfabeto de símbolos de entrada
-            \item $S$: conjunto de estados possíveis, o qual é finito
-            \item $\delta$: programa ou função de transição
-            \[
-            \delta: S \times(\Sigma \cup V \cup \{\beta,\langle\}) \rightarrow 
-            S \times(\Sigma \cup V \cup \{\beta,\langle\}) \times \{E,D\}
-            \]
+            \item A configuração instantânea é dada por um par 
+            $[e,x\underline{a}y]$, em que:
+            \begin{itemize}
+                \item $e \in S$ é o estado atual (ou ativo)
+                \item $x \in \{\Sigma \cup V \cup \{\beta, \langle\}\}^*$ 
+                é a palavra situada à esquerda da cabeça de leitura
+                \item $a \in \{\Sigma \cup V \cup \{\beta, \langle\}\}$ é 
+                o símbolo que se encontra sob a cabeça de leitura; $e$
+                \item $y \in \{\Sigma \cup V \cup \{\beta\}^*\}$ é a palavra 
+                à direta da cabeça de leitura até o último símbolo diferente 
+                de $\beta$; se não existir símbolo diferente de 
+                $\beta, y = \lambda$
+            \end{itemize}
+        \end{itemize}
+        \item Com isto, estabelece-se a relação $\vdash$ ("leva a")
+        \item No exemplo descrito, a função $\delta(S_0,1)=(S_0,0,D)$ levou a 
+        máquina da configuração $[S_0,\langle\underline{1}010]$ para a 
+        configuração $[S_0,\langle0\underline{0}10]$, assim pode-se escrever: 
+        \begin{itemize}
+            \item $[S_0,\langle\underline{1}010] \vdash 
+                   [S_0,\langle0\underline{0}10]$
+        \end{itemize}
+        \item Adicionalmente, pode-se estender as notações:
+        \begin{itemize}
+            \item $\vdash ^n$: quando através da aplicação de um número $n$ 
+            (conhecido) de funções uma configuração leva a outra
+            \begin{itemize}
+                \item $[S_0,\langle\underline{1}010] \vdash^1 
+                   [S_0,\langle0\underline{0}10]$
+                \item $[S_0,\langle\underline{1}010] \vdash^{10} 
+                   [S_f,\langle\underline{0}101]$
+            \end{itemize}
+            \item $\vdash ^*$: quando através da aplicação $n$ funções (com 
+            $n\geq 0$) uma configuração pode leva a outra
+        \end{itemize}
+    \end{itemize}
+    \item Considerações acerca da aceitação ou não de uma entrada:
+    \begin{itemize}
+        \item Considerando que o modelo de MT definido é determinístico, para 
+        uma dada entrada a MT deve parar sempre em um mesmo estado $e$
+        \item Com isto, se $e$ é estado final, a cadeia é aceita, caso contrário 
+        ela é rejeitada
+        \item Adicionalmenrem a MT pode não parar (entrar em looping). Neste 
+        caso, a entrada é rejeitada
+    \end{itemize}
+    \item Particularidades das MTs:
+    \begin{itemize}
+        \item Ao contrário de AFs e APs, não é necessário que a palavra de 
+        entrada seja toda lida para que possa ser aceita ou rejeitada
+        \item A classe de linguagem que MT é capaz de reconhecer é a classe das 
+        Linguagens Enumeráveis Recursivamente
+        \item Esta classecontém as linguagens regulares e livres de contexto 
+        como subclasses (conforme hierarquia de Chomsky)
+        \item Assim, toda linguagem que um AF ou AP reconhece, pode ser 
+        reconhecida por uma MT
+        \item Dada um LER, existe uma MT que para para qualquer entrada desta 
+        linguagem? Não!
+        \item Daí definiu-se uma subclasse para LERs, a classe das linguagens 
+        recursivas:
+        \begin{itemize}
+            \item Uma lingugem L é dita recursiva se existe uma MT que reconhece 
+            todas as palavras de L e para
+        \end{itemize}
+    \end{itemize}
+    \item Com a inclusão das linguagens recursivas, o diagrama da hierarquia de 
+    Chomsky poderia ser descrito da seguinte forma:
+    \item[] imagem
+    \item Classes de problemas:
+    \begin{itemize}
+        \item[] imagem
+        \item Exemplo de problema insolúvel:
+        \begin{itemize}
+            \item Problema da Parada (Halting Problem)
+            \begin{itemize}
+                \item Descrição: O Problema da Parada pergunta se, dado um programa 
+                $P$ e uma entrada $x$, o programa $P$ vai parar (ou seja, terminar 
+                a execução) ou continuar rodando indefinidamente quando é executado 
+                com a entrada $x$
+                \item Insolubilidade: Alan Turing provou que não existe um algoritmo 
+                real que resolva o Problema da Parada para todos os programas e 
+                todas as entradas possíveis. Isso significa que não existe uma 
+                máquina de Turing capaz de determinar, em todos os casos, se um 
+                programa vai parar ou não
+                \item Intuição: A ideia é que, para alguns programas, tentar 
+                determinar se eles param pode levar a contradições lógicas, tornando 
+                o problema indecidível. Portanto, o Problema da Parada é um exemplo 
+                de um problema computacional que é insolúvel
+            \end{itemize}
+            \item Problema do Caixeiro Viajante
+            \begin{itemize}
+                \item Encontrar o caminho mais curto que visita todos os pontos 
+                em um conjunto dado de pontos e retorna ao ponto de origem. 
+                Embora existam algoritmos que podem encontrar soluções 
+                aproximadas, encontrar a solução exata para grandes conjuntos 
+                de pontos é computacionalmente inviável em um tempo razoável
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    \item Formalismo reconhecedor para LSC:
+    \begin{itemize}
+        \item Uma linguagem é sensível ao contexto quando:
+        \begin{itemize}
+            \item Pode ser gerada por uma GSC; ou
+            \item Pode ser reconhecida por um Autôtmato Linearmente Limitado 
+            (ALL) ou Máquina de Turing com Fita Limitada
+        \end{itemize}
+        \item Um ALL é como a definição de MT estudada com a inclusão de :
+        \begin{itemize}
+            \item Um símbolo especial "$\rangle$" usado para marcar o final da 
+            fita
+            \item Possibilidade de não-determinismo na criação das funções
+        \end{itemize}
+    \end{itemize}
+    \item Máquina de Turing
+    \begin{itemize}
+        \item Dada a sua natureza conceitual, a MT pode ser implementada de 
+        diversas formas
+        \item Os computadores modernos são MT (exceto plo fato de terem memória 
+        finita)
+        \begin{itemize}
+            \item O processador corresponde à unidade de controle, cujos estados 
+            podem ser definidos pelos padrões de bits que podem ser associados 
+            aos registradores
+            \item A memória da máquina corresponde ao sistema de armazenamento 
+            em fita
+            \item Os padrões de bits (0 e 1) correspondem ao alfabeto da fita
+        \end{itemize}
+        \item A importância da MT para a Ciência da Computação:
+        \begin{itemize}
+            \item A potência computacional da MT é tão grande quanto a de 
+            qualquer sistema algorítmico
+            \item Se um problema não puder ser resolvido por uma MT, não poderá 
+            ser resolvido por qualquer sistema algorítmico
+            \item MT representa a fronteira teórica da capacidade computacional 
+            para as máquinas modernas reais
         \end{itemize}
     \end{itemize}
 \end{itemize}
+
 
 \end{document}
