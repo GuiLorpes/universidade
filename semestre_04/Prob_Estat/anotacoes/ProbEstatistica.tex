@@ -1,0 +1,155 @@
+\documentclass[12pt]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage{float}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{indentfirst}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[letterpaper,
+            top=1.5cm,
+            bottom=1.5cm,
+            left=2.75cm,
+            right=2.75cm,
+            marginparwidth=1.75cm]{geometry}
+
+\title{Probabilidade e Estatística}
+\author{Prof. Douglas}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Introdução a Estatística}
+\begin{itemize}
+    \item A estatistica envolve a coleta, organização, análise, interpretação e 
+    apresentação de dados
+    \item Seu proposito central é extrair conhecimento 
+    \item População: Conjunto completo de elementos investigados
+    \item Amostra: Subconjunto representativo da população
+    \item Variável de interesse: 
+\end{itemize}
+
+\section{Análise Exploratória de Dados}
+    \subsection{População e Amostra}
+    \begin{itemize}
+        \item População -- Conjunto completo de individuos ou unidades de 
+        interesse sobre os quais queremos obter informações.
+        \item Amostra -- Subconjunto selecionado da população, usado para obter 
+        informações e tirar conclusões sobre ela.
+        \item Unidade Amostral -- Cada elemento individual da amostra. Unidade 
+        sobre a qual as observações ou medições são realizadas.
+    \end{itemize}
+
+    \subsection{Amostragem}
+    \begin{itemize}
+        \item Probabilística
+        \begin{itemize}
+            \item Envolve seleção aleatória, garantindo que cada elemento da 
+            população tenha uma chance conhecida de ser incluído na amostra
+            \item Considerado um método científico rigoroso para coleta de dados
+        \end{itemize}
+        \item Não Probabilística
+        \begin{itemize}
+            \item Depende da escolha deliberada dos elementos pelo pesquisador, 
+            baseada em critérios e julgamento, sem garantia de representatividade 
+            estatística
+        \end{itemize}
+    \end{itemize}
+
+\subsubsection{Métodos de Amostragem}
+\begin{itemize}
+    \item Aleatória Simples
+    \begin{itemize}
+        \item Definição: Todos os elementos da população possuem a mesma 
+        probabilidade de serem selecionados
+        \item Como realizar:
+        \begin{itemize}
+            \item Numere todos os elementos da população
+            \[U=\{1,2,3,\dots,N\}\]
+            \begin{scriptsize}
+
+                $N$: Número de unidade amostral da população \\
+                $n$: Número de unidade amostral de amostras
+            \end{scriptsize}
+        \end{itemize}
+        \item O sorteio pode ser:
+        \begin{itemize}
+            \item Com reposição: o elemento retorna à população e pode ser 
+            sorteado novamente
+            \begin{itemize}
+                \item Número de amostras possíveis: $N^n$, logo:
+                \[
+                P(U = u_i) = \frac{1}{N^n}
+                \]
+            \end{itemize}
+            \item Sem reposição: o elemento não retorna e não poderá ser 
+            selecionado novamente
+            \begin{itemize}
+                \item Número de possiveis amostras:
+                \[
+                C(N, n) = \left(\begin{array}{c} N \\ n \end{array}\right)
+                = \frac{N!}{n!(N-n)!}
+                \]
+                logo,
+                \[
+                P(U = u_i) = \frac{1}{\left(\begin{array}{c} N \\ n \end{array}\right)}
+                \]
+                \item Observação: Uma combinação é uma seleção não ordenada de 
+                elementos
+            \end{itemize}
+        \end{itemize}
+        \item Vantagens: 
+        \begin{itemize}
+            \item Simples de aplicar
+            \item Permite medir a precisão das estimativas
+            \item Propriedades estatísticas bem conhecidas
+        \end{itemize}
+        \item Desvantagens:
+        \begin{itemize}
+            \item Requer lista completa da população
+            \item Pode ser caro se a amostra for muito dispersa
+            \item Não utiliza informações auxiliares
+        \end{itemize}
+        \item Qual deve ser o tamanho da amostra?
+        \begin{itemize}
+            \item O tamanho da amostra da
+        \end{itemize}
+    \end{itemize}
+    \item Sistemática
+    \begin{itemize}
+        \item Definição: Os elementos da população estão ordenados, e a seleção 
+        da amostra é realizada em intervalos regulares
+        \item Etapas:
+        \begin{enumerate}
+            \item Defina o tamanho da população ($N$)
+            \item Defina o tamanho da amostra ($n$)
+            \item Calcule o intervalo da seleção ($IS$)
+                \[IS = \frac{N}{n}\]
+            \item Escolha aleatoriamente o primeiro elemento entre 1 e $IS$
+            \item Selecione os demais elementos adicionado sucessivamente o 
+            intervalo $IS$
+        \end{enumerate}
+    \end{itemize}
+    \item Estratificada
+    \begin{itemize}
+        \item Definição: Divisão da população $U$ em $H$ grupos disjuntos e 
+        homogêneos, conhecidos como estratos. Entre os estratos, existem 
+        diferenças significativas, evidenciando a heterogeneidade da população
+        \item Passos do procedimento:
+        \begin{enumerate}
+            \item Selecionar uma amostra dentro de cada estrato, de forma 
+            independente
+            \item Formar a amostra final unindo todas as amostras selecionadas 
+            nos estratos
+            \item Dentro de cada estrato, podem ser usados diferentes métodos 
+            de coleta ou amostragem, conforme necessário
+        \end{enumerate}
+    \end{itemize}
+
+\end{itemize}
+    
+\end{document}

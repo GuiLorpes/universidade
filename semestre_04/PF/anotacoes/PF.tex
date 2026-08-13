@@ -1,0 +1,173 @@
+\documentclass[12pt]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[letterpaper,
+            top=1.5cm,
+            bottom=1.5cm,
+            left=2.75cm,
+            right=2.75cm,
+            marginparwidth=1.75cm]{geometry}
+
+\title{Programação Funcional}
+\author{Prof. Malbarbo}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\vspace{48pt}
+
+Dentro da programação não temos apenas uma forma de implementar um programa, 
+temos alguns diferentes paradigmas que podemos usar:
+\begin{itemize}[label=$\rightarrow$]
+    \item Programação Imperativa -- Os programas são descritos com sentenças 
+    que modificam o estado do programa
+    \item Programação Orientada a Objetos -- Os programas são descritos 
+    organizados em torno de objetos, classes e interações
+    \item Programação Funcional -- Os programas são descritos com aplicação 
+    e composição de funções
+    \begin{itemize}
+        \item Evita mudança de estado (mudança do valor das variáveis)
+        \item Evita efeitos colaterais, que são quaisquer efeitos que sejam 
+        observáveis além do valor de saída da função, como a mudança dos 
+        parâmetros e variáveis globais, exceções, entrada e saída, etc.
+    \end{itemize} 
+\end{itemize}
+
+\section{Por que usar o paradigma funcional?}
+Um paradigma de programação é uma ferramenta, e conhecer várias ferramentas 
+permite utilizar a mais adequada para cada problema, e muitas vezes o Python e 
+a programação imperativa têm problemas.
+\begin{itemize}
+    \item Mudança de estados:
+    \begin{itemize}
+        \item Devido a forma com que uma lista é alocada em Python, 
+        inconsistencias acontecem, como quando alocamos:
+        \begin{verbatim}
+    >>> lst = [0] * 3
+    >>> lst
+    [0, 0, 0]
+    >>> lst[1] = 10
+    >>> lst
+    [0, 10, 0]
+        \end{verbatim}
+        \item Porem, ao alocar uma lista dentro de lista:
+        \begin{verbatim}
+    >>> lst = [[]] * 3
+    >>> lst
+    [[], [], []]
+    >>> lst[1].append(2)
+    >>> lst
+    [[2], [2], [2]]
+        \end{verbatim}
+        \item Além disso, quando modificando uma lista usando 
+        \verb|adiciona_todos|
+        \begin{verbatim}
+def adiciona_todos(dest: list[int], fonte: list[int]):
+    ''' 
+    Adiciona todos os elementos de *fonte* no final de 
+    *dest* 
+    '''
+    for x in fonte:
+        dest.append(x)
+        \end{verbatim}
+        \begin{itemize}
+            \item Ao modificar lst usando uma lista diferente não temos 
+            problemas
+            \begin{verbatim}
+    >>> lst = [4, 3, 1]
+    >>> adiciona_todos(lst, [6, 2])
+    >>> lst
+    [4, 3, 1, 6, 2]
+            \end{verbatim}
+            \item Porém, ao adicionar lst nela mesma:
+            \begin{verbatim}
+    >>> adiciona_todos(lst, lst)
+    >>> lst
+            \end{verbatim}
+            A execução não acaba, visto que a lista se automodifica 
+            infinitamente.
+        \end{itemize}
+    \end{itemize}
+    \item Efeitos colaterais
+    \begin{itemize}
+        \item Dentro de uma função, como vimos, é possível mudar o valor de 
+        um dos parâmetros de entrada, dependendo da alteração, o mesmo 
+        código, dependendo da ordem que são realizadas as funções, temos 
+        resultados diferentes.
+        \begin{verbatim}
+def soma_indices(lst: list[int], a: int, b: int) -> int:
+    return indice(lst, b) + indice(lst, a)
+
+def soma_indices(lst: list[int], a: int, b: int) -> int:
+    return indice(lst, a) + indice(lst, b)
+        \end{verbatim}
+        Não é possível que as duas definições são equivalentes sem olhar o 
+        código da função \verb|indice|. Se ela tiver efeitos colaterais, 
+        então as definições não podem ser equivalentes.
+    \end{itemize}
+    \item Com os efeitos colaterias dificulta pensar localmente sobre o 
+    funcionamento do código, sem eles, podemos fazer isso.
+\end{itemize}
+
+\section{Fundamentos da Programação Funcional}
+O paradigma de programação funcional é baseado na definição e aplicação de funções
+\begin{itemize}
+    \item Função: Conjunto de expressões que mapeia valores de entrada para 
+    valores de saída
+    \item Expressão: Entidade sintática que quando avaliada (reduzida) produz um 
+    valor
+    \item Sentença: Operação que não retorna valor, apenas um efeito colateral 
+    (no Python, if, for, while, etc) -- Não temos sentenças no paradigma funcional
+\end{itemize}
+Uma expressão consiste em:
+\begin{itemize}
+    \item Um literal -- Valor que é representado diretamente no código, em geral, 
+    os literais utilizados para criar valores de tipos primitivos.
+    \item Uma função primitiva -- Função suportada diretamente pela linguagem 
+    de programação
+\end{itemize}
+Tipos primitivos:
+\begin{itemize}
+    \item No Gleam, os tipos primitivos sempre começam com letra maiúscula
+    \item Numero inteiro (Int)
+    \begin{itemize}
+        \item \verb|1345|
+        \item \verb|9_876|
+    \end{itemize}
+    \item Numero com ponto flutuante (Float)
+    \begin{itemize}
+        \item \verb|2.65|
+        \item \verb|2.0e12| 
+        \item \verb|7.4e-10|
+    \end{itemize}
+    \item Booleano (Bool)
+    \begin{itemize}
+        \item True
+        \item False
+    \end{itemize}
+    \item Strings (String)
+    \begin{itemize}
+        \item \verb|"din uem"|
+        \item \verb|"apenas \"um\" teste"|
+    \end{itemize}
+\end{itemize}
+Funções primitivas:
+\begin{itemize}
+    \item Operações com inteiros:
+    \begin{itemize}
+        \item \verb|+ (int.add)|
+        \item \verb|- (int.subtract)|
+        \item \verb|* / % > >= <= == !=| 
+    \end{itemize}
+\end{itemize}
+
+\end{document}
+
+
