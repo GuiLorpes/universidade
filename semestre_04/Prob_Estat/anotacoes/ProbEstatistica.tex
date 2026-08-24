@@ -24,14 +24,201 @@
 \maketitle
 
 \section{Introdução a Estatística}
-\begin{itemize}
-    \item A estatistica envolve a coleta, organização, análise, interpretação e 
-    apresentação de dados
-    \item Seu proposito central é extrair conhecimento 
-    \item População: Conjunto completo de elementos investigados
-    \item Amostra: Subconjunto representativo da população
-    \item Variável de interesse: 
-\end{itemize}
+    \subsection{O que é a estatística?}
+    \begin{itemize}
+        \item A Estatística envolve a coleta, organização, análise, interpretação 
+        e apresentação de dados.
+        \item Seu propósito central é extrair conhecimento dos dados disponíveis.
+        \item Finalidade: apoiar a tomada de decisões fundamentadas em evidências.
+        \item Fornece técnicas para resumir informações, identificar padrões e 
+        compreender tendências.
+    \end{itemize}
+    \subsection{Conceitos fundamentais}
+    \begin{itemize}
+        \item A estatistica envolve a coleta, organização, análise, interpretação 
+        e apresentação de dados
+        \item Seu proposito central é extrair conhecimento 
+        \item População: Conjunto completo de elementos investigados
+        \item Amostra: Subconjunto representativo da população
+        \item Variável de interesse: Caracteristica observada em cada indivíduo 
+        da amostra, que será analisada estatisticamente
+    \end{itemize}
+    \subsection{Etapas da Análise Estatística}
+    \begin{enumerate}
+        \item Definir a população de interesse
+        \item Estabelecer objetivos de pesquisa: investigar hipóteses, comparar 
+        grupos ou descrever fenômenos
+        \item Coleta de dados: por experimentos, questionários, observações ou 
+        fontes existentes
+        \item Organização dos dados: tabelas ou planilhas para facilitar análise
+        \item Análise dos dados:
+        \begin{itemize}
+            \item Análise exploratória: compreensão inicial via gráficos e tabelas
+            \item Análise inferencial: tirar conclusões sobre a população
+        \end{itemize}
+    \end{enumerate}
+    \subsection{Temas da Estatística}
+    \begin{itemize}
+        \item Estatística descritiva / análise exploratória
+        \begin{itemize}
+            \item Apresentação clara e concisa dos resultados via gráficos e 
+            tabelas
+        \end{itemize}
+        \item Probabilidade:
+        \begin{itemize}
+            \item Ferramentas para lidar e quantificar a incerteza
+        \end{itemize}
+        \item Inferência estatística:
+        \begin{itemize}
+            \item Estimação dos parâmetros desconhecidos
+            \item Formulação e teste de hipóteses
+            \item Generalização dos resultados da amostra para a população
+        \end{itemize}
+    \end{itemize}
+
+\section{Organização dos Dados e Tipos de Variáveis}
+    \subsection{Tipos de Variáveis}
+    \begin{enumerate}
+        \item Variáveis Qualitativas
+        \begin{itemize}
+            \item Definição: Descrevem categorias ou atributos e não representam 
+            medidas numéricas.
+            \begin{itemize}
+                \item Nominais:
+                \begin{itemize}
+                    \item Não possuem ordem natural
+                    \item As categorias apenas identificam grupos
+                    \item Exemplos: Sexo, estado civil, tipo sanguíneo, cor dos 
+                    olhos, \dots
+                \end{itemize}
+                \item Ordinais:
+                \begin{itemize}
+                    \item Possuem uma ordem ou hierarquia
+                    \item A distância entre categorias não é conhecida
+                    \item Exemplos: Escolaridade, grau de satisfação, faixas de 
+                    judô, medalhas olímpicas, \dots
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+        \item Variáveis Quantitativas
+        \begin{itemize}
+            \item Definição: Representam quantidades numéricas obtidas por 
+            medição ou contagem
+            \begin{itemize}
+                \item Contínuas:
+                \begin{itemize}
+                    \item Obtidas por medição
+                    \item Podem assumir qualquer valor dentro de um intervalo
+                    \item Exemplos: Altura, peso, temperatura, pressão arterial, 
+                    \dots
+                \end{itemize}
+                \item Discretas:
+                \begin{itemize}
+                    \item Obtidas por contagem
+                    \item Assumem valores separados (geralmente inteiros)
+                    \item Exemplos: Números de filhos, de acidentes, de veículos, 
+                    de consultas, \dots
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+    \end{enumerate}
+    \begin{scriptsize} 
+    Observação: A classificação depende da forma como a variável é medida ou 
+    registrada, e não apenas do seu nome.
+    \end{scriptsize}
+
+    \subsection{Organização dos Dados}
+    \begin{itemize}
+        \item A organização de uma base de dados é crucial para garantir 
+        eficiência na manipulação e análise das informações. Siga as etapas 
+        abaixo
+        \begin{enumerate}
+            \item Defina claramente o objetivo da base de dados: isso orientará 
+            as informações a serem armazenadas e a estrutura a ser adotada
+            \item Utilize planilhas eletrônicas (Excel, Google Planilhas, Bloco 
+            de Notas, etc.) para facilitar a organização e o acesso aos dados.
+            \item Descreva detalhadamente cada variável, especialmente se 
+            utilizar siglas ou abreviações, para garantir clareza e evitar 
+            ambiguidades.
+        \end{enumerate}
+    \end{itemize}
+    \subsubsection{Estrutura de uma Base de Dados}
+    \begin{itemize}
+        \item Uma base de dados pode ser representada como uma matriz:
+        \[ x = 
+        \begin{pmatrix}
+            x_{11} & x_{12} & \cdots & x_{1p} \\
+            x_{21} & x_{22} & \cdots & x_{2p} \\
+            \vdots & \vdots & \ddots & \vdots \\
+            x_{n1} & x_{n2} & \cdots & x_{np} \\
+        \end{pmatrix}
+        \]
+        \begin{itemize}
+            \item Cada linha representa uma observação (ou repetição do 
+            experimento)
+            \item Cada coluna representa uma variável
+            \item $n$ é o número de observações
+            \item $p$ é o número de variáveis medidas
+            \item O elemento $x_{ij}$ representa o valor da variável $j$ na 
+            observação $i$
+        \end{itemize}
+
+        \item Uma base de dados pode ser organizada em forma de tabela:
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{c|c|c|c}
+                Aluno & Idade & Altura (cm) & Peso (kg) \\ \hline
+                1 & 20 & 170 & 68 \\
+                2 & 22 & 175 & 72 \\
+                3 & 19 & 168 & 65 \\
+                4 & 21 & 180 & 80 \\ \hline
+            \end{tabular}    
+        \end{table}
+        \begin{itemize}
+            \item Cada linha representa uma observação (ou indivíduo)
+            \item Cada coluna representa uma variável
+            \item Matemáticamente, essa base de dados pode ser representada 
+            como uma matriz:
+            \[ x = 
+            \begin{pmatrix}
+                20 & 170 & 68 \\
+                22 & 175 & 72 \\
+                19 & 168 & 65 \\
+                21 & 180 & 80 \\
+            \end{pmatrix}
+            \]
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{De onde vêm os dados?}
+    \begin{enumerate}
+        \item Fontes Primárias:
+        \begin{itemize}
+            \item Dados coletados pelo próprio pesquisador para responder uma 
+            pergunta específica
+            \item Exemplos: Questionários, entrevistas, experimentos, observação 
+            direta
+        \end{itemize}
+        \item Fontes Secundárias:
+        \begin{itemize}
+            \item Dados já existentes, produzidos anteriormente para outros 
+            objetivos.
+            \item Exemplos: IBGE, DataSUS, prontuários, artigos científicos, 
+            big data
+        \end{itemize}
+    \end{enumerate}
+    \begin{itemize}
+        \item Conceitos Fundamentais
+        \begin{itemize}
+            \item Pesquisa: Processo sistemático de coleta, organização, análise 
+            e interpretação de dados para responder a uma pergunta científica
+            \item População: Conjunto completo de indivíduos ou unidades sobre 
+            os quais desejamos obter informações
+            \item Amostra: Subconjunto da população utilizado para realizar o 
+            estudo e tirar conclusões sobre o todo
+        \end{itemize}
+    \end{itemize}
+    
 
 \section{Análise Exploratória de Dados}
     \subsection{População e Amostra}
@@ -149,7 +336,26 @@
             de coleta ou amostragem, conforme necessário
         \end{enumerate}
     \end{itemize}
-
+    \item Por Conglomerados
 \end{itemize}
-    
+
+
+
+
+
+Quando tem um parenteses (Ex.: $x_{(1)}$) significa que está sendo usado a ordem
+
+
+\section{Medidas de Dispersão}
+\begin{itemize}
+    \item Objetivo: Fornecer informações sobre o quão afastados ou espalhados 
+    os valores estão em relação a media
+    \item Quais são as e
+\end{itemize}
+    \subsection{Variância e Réplicas}
+    \begin{itemize}
+        \item As réplicas permitem avaliar a variabilidade dos resultados dentro 
+        de cada tratamento
+        \item 
+    \end{itemize}
 \end{document}
