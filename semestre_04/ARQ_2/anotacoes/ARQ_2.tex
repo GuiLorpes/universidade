@@ -52,12 +52,106 @@ superescalares
     \end{itemize}
 \end{itemize}
 
-Trabalho 1 ou 11
+Arquiteturas Mestre - Escravo no geral não são simétricos, com cada escravo 
+tendo capacidades diferentes
 
-Polybench
-cBench
-NAS
+\section{Coerência da Cache}
+\subsection{Consistência e Coerência}
+\begin{itemize}
+    \item Consistência $\rightarrow$ Ordem das operações da Cache
+    \item Coerência $\rightarrow$ Qual dado deve ser lido
+    
+    \item Modelos de consistência
+    \begin{enumerate}
+        \item Sequencial
+        \begin{itemize}
+            \item Todo processador que vê a ordem, precisa ver a ordem de acordo 
+            com a sequencia que o programador ditou
+            \item A memória é atualizada constantemente para as variáveis usadas 
+            no código
+        \end{itemize}
+        \item Aquisição-Liberação
+        \begin{itemize}
+            \item Serve para otimizar o modelo sequencial
+            \item Aplica a consistência somente em determinados pontos
+        \end{itemize}
+    \end{enumerate}
+\end{itemize}
 
-rodinia
+
+\section{Processadores Superescalares}
+\begin{itemize}
+    \item Problemas do Paralelismo
+    \begin{enumerate}
+        \item Dependencia Verdadeira -- Leitura após escrita
+        \item Anti Dependencia -- Escrita após leitura
+        \item Dependencia de Saida -- Escrita após escrita
+    \end{enumerate}
+    \begin{itemize}
+        \item Como resolver:
+        \begin{itemize}
+            \item Renomeação de Registradores -- Elimina anti-dependencia e 
+            dependencia de saida 
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+    \subsection{Pipeline}
+    \begin{itemize}
+        \item Pipeline Escalar de 4 / 5 estágios:
+        \begin{verbatim}
+            B      D      Ex      Er
+            B      D  Bo  Ex      Er
+        \end{verbatim}
+        \begin{itemize}
+            \item Emissão -- 
+        \end{itemize}
+        \item No pipeline superescalar, a emissão realiza duas ações, envia a 
+        instrução para a estação reserva e renomeia os registradores (algoritmo 
+        de Tomasulo)
+        \begin{itemize}
+            \item A estação de reserva guarda uma instrução a ser emitida
+            \item Sempre é renomeado o registrador pois a instrução é sempre 
+            guardada na estação de reserva
+            \item Componentes:
+            \begin{enumerate}
+                \item Fila de Instruções
+                \item Estação de Reserva
+                \item Registradores -- Cada um desses registradores contem dois campos, um para o valor e outro para o 
+                \item Barramento Comum / Common Data Bus
+                \item L/S (Buffer Load/Store) -- Também tem dois campos, um valor e o indice da estação de reserva da instrução
+            \end{enumerate}
+            Quando uma instrução é completada, quer dizer que ao menos ela foi 
+            executada, quando uma instrução é finalizada quer dizer que já foi 
+            escrito os resultados
+
+            Busy -- Marca se a estação de reserva está ocupada ou não \\
+            Op -- Operador \\
+            Vj,Vk -- Quando é um valor direto, é o dado, j está na 1a pos e k na 
+            2a \\
+            Qj, Qk -- Quando o valor ainda não foi produzido, indica a posição 
+            na estação de reserva. \\
+            D -- Destination, destino da operação do registrador
+
+            A estação de reserva só tem espaço para uma instrução
+
+            \item Etapas do algoritmo de Tomasulo
+            \begin{enumerate}
+                \item Emissão
+                \begin{itemize}
+                    \item Próxima instrução da fila
+                    \item Estação de Reserva vazia/livre
+                    \item Não existe WAW ativo, com outras instruções já emitidas
+                \end{itemize}
+                \item Excecução
+                \begin{itemize}
+                    \item Operandos prontos
+                \end{itemize}
+                \item Escrita dos resultados
+                \begin{itemize}
+                    \item 
+                \end{itemize}
+            \end{enumerate}
+        \end{itemize}
+    \end{itemize}
 
 \end{document}

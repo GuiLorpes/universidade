@@ -65,3 +65,6 @@
    - Os efeitos colaterais podem afetar o desenvolvimento de um programa pois suas mudanças, quando não realizadas da forma que desejamos, pode atrapalhar achar e corrigir algum bug, pois o código não fica código localizado e afeta o tempo de desenvolvimento.
    ```
 12. Que dificuldades a ausência de mudança de estado podem gerar no desenvolvimento de um programa?
+   ```
+   - Como muitas vezes usamos mudança de estados sem nem perceber, essa ausência pode complicar a implementação de um código
+   ```

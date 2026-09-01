@@ -1,0 +1,114 @@
+\documentclass[12pt]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage[T1]{fontenc}
+\usepackage{indentfirst}
+\usepackage{amsfonts, amssymb, amsmath}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[letterpaper,
+            top=1.5cm,
+            bottom=1.5cm,
+            left=2.75cm,
+            right=2.75cm,
+            marginparwidth=1.75cm]{geometry}
+            
+\definecolor{azul}{RGB}{0, 90, 160}
+
+\title{Lista 1 -- Exercícios do Capítulo 2}
+\author{Prof. Douglas, Guilherme Lopes}
+\date{\today}
+
+\begin{document}
+
+\begin{enumerate} [label=\arabic*.]
+    \item Usando os dados da Tabela 1, construa a distribuição de freqüências 
+    das variáveis:
+        \begin{table}[H]
+            \centering
+            \small
+            \setlength{\tabcolsep}{3pt}
+            \label{tab:informacoes_empregados}
+            \resizebox{\textwidth}{!}{
+            \begin{tabular}{c|l|l|c|c|c|c|c}
+                \hline
+                Nº & Estado civil & Grau de instrução & Nº de filhos &
+                Salário & \multicolumn{2}{c}{Idade} & Região de procedência \\
+                & & & & (× sal. mín.) & anos & meses & \\
+                \hline
+                1  & solteiro & ensino fundamental & -- & 4,00  & 26 & 03 & interior \\
+                2  & casado   & ensino fundamental & 1  & 4,56  & 32 & 10 & capital \\
+                3  & casado   & ensino fundamental & 2  & 5,25  & 36 & 05 & capital \\
+                4  & solteiro & ensino médio       & -- & 5,73  & 20 & 10 & outra \\
+                5  & solteiro & ensino fundamental & -- & 6,26  & 40 & 07 & outra \\
+                6  & casado   & ensino fundamental & 0  & 6,66  & 28 & 00 & interior \\
+                7  & solteiro & ensino fundamental & -- & 6,86  & 41 & 00 & interior \\
+                8  & solteiro & ensino fundamental & -- & 7,39  & 43 & 04 & capital \\
+                9  & casado   & ensino médio       & 1  & 7,59  & 34 & 10 & capital \\
+                10 & solteiro & ensino médio       & -- & 7,44  & 23 & 06 & outra \\
+                11 & casado   & ensino médio       & 2  & 8,12  & 33 & 06 & interior \\
+                12 & solteiro & ensino fundamental & -- & 8,46  & 27 & 11 & capital \\
+                13 & solteiro & ensino médio       & -- & 8,74  & 37 & 05 & outra \\
+                14 & casado   & ensino fundamental & 3  & 8,95  & 44 & 02 & outra \\
+                15 & casado   & ensino médio       & 0  & 9,13  & 30 & 05 & interior \\
+                16 & solteiro & ensino médio       & -- & 9,35  & 38 & 08 & outra \\
+                17 & casado   & ensino médio       & 1  & 9,77  & 31 & 07 & capital \\
+                18 & casado   & ensino fundamental & 2  & 9,80  & 39 & 07 & outra \\
+                19 & solteiro & superior            & -- & 10,53 & 25 & 08 & interior \\
+                20 & solteiro & ensino médio       & -- & 10,76 & 37 & 04 & interior \\
+                21 & casado   & ensino médio       & 1  & 11,06 & 30 & 09 & outra \\
+                22 & solteiro & ensino médio       & -- & 11,59 & 34 & 02 & capital \\
+                23 & solteiro & ensino fundamental & -- & 12,00 & 41 & 00 & outra \\
+                24 & casado   & superior            & 0  & 12,79 & 26 & 01 & outra \\
+                25 & casado   & ensino médio       & 2  & 13,23 & 32 & 05 & interior \\
+                26 & casado   & ensino médio       & 2  & 13,60 & 35 & 00 & outra \\
+                27 & solteiro & ensino fundamental & -- & 13,85 & 46 & 07 & outra \\
+                28 & casado   & ensino médio       & 0  & 14,69 & 29 & 08 & interior \\
+                29 & casado   & ensino médio       & 5  & 14,71 & 40 & 06 & interior \\
+                30 & casado   & ensino médio       & 2  & 15,99 & 35 & 10 & capital \\
+                31 & solteiro & superior            & -- & 16,22 & 31 & 05 & outra \\
+                32 & casado   & ensino médio       & 1  & 16,61 & 36 & 04 & interior \\
+                33 & casado   & superior            & 3  & 17,26 & 43 & 07 & capital \\
+                34 & solteiro & superior            & -- & 18,75 & 33 & 07 & capital \\
+                35 & casado   & ensino médio       & 2  & 19,40 & 48 & 11 & capital \\
+                36 & casado   & superior            & 3  & 23,30 & 42 & 02 & interior \\
+                \bottomrule
+            \end{tabular}
+            }\small
+            \caption{Informações sobre estado civil, grau de instrução, número de 
+            filhos, salário (expresso como fração do salário mínimo), idade 
+            (medida em anos e meses) e procedência de 36 empregados da seção de 
+            orçamentos da Companhia MB.}
+        \end{table}
+        
+    \begin{enumerate}[label=\alph*)]
+        \item Estado civil.
+        \item Região de procedência.
+        \item Número de filhos dos empregados casados.
+        \item Idade.
+    \end{enumerate}
+    \vspace{28pt}
+    \item Contou-se o número de erros de impressão da primeira página de um jornal 
+    durante 50 dias, obtendo-se os resultados abaixo:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{*{10}{c} }
+            8 & 11 & 8 & 12 & 14 & 13 & 11 & 14 & 14 & 15 \\
+            6 & 10 & 14 & 19 & 6 & 12 & 7 & 5 & 8 & 8 \\
+            10 & 16 & 10 & 12 & 12 & 8 & 11 & 6 & 7 & 12 \\
+            7 & 10 & 14 & 5 & 12 & 7 & 9 & 12 & 11 & 9 \\
+            14 & 8 & 14 & 8 & 12 & 10 & 12 & 22 & 7 & 15 \\
+        \end{tabular}
+    \end{table}
+    \begin{enumerate}[label=\alph*)]
+        \item Represente os dados graficamente
+    \end{enumerate}
+
+\end{enumerate}
+
+\end{document}

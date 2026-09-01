@@ -9,8 +9,15 @@
 | Funcionários | matricula | nome | dataDeAdmissão | função |
 |--------------|-----------|------|----------------|--------|
 
-| FunçõesFuncionário | MECANICO | ATENDENTE |
+| FunçõesFuncionário | Mecanico | Atendente |
 |--------------------|----------|-----------|
+
+| Mecanico | ordensServiço | serviços |
+|----------|---------------|----------|
 
 | OrdemServiço | id | dataDeAbertura | dataDeEncerramento | status | veículo |
 |--------------|----|----------------|--------------------|--------|---------|
+
+| Serviço | descricao | valorReferencia | TipoServiço |
+|---------|-----------|-----------------|-------------|
+

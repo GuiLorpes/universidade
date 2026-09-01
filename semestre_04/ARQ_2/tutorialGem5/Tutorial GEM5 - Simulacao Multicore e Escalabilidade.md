@@ -24,15 +24,15 @@ Este tutorial ensina a avaliar a escalabilidade de uma aplicação paralela em m
 
 Para um problema de tamanho fixo, o speedup com $p$ núcleos é:
 
-\[
+$$
 S(p) = \frac{T(1)}{T(p)}
-\]
+$$
 
 A eficiência é:
 
-\[
+$$
 E(p) = \frac{S(p)}{p}
-\]
+$$
 
 Valores de eficiência abaixo de 1 são esperados. Eles refletem overhead de criação/sincronização de threads, regiões seriais e disputa por recursos.
 
@@ -40,9 +40,9 @@ Valores de eficiência abaixo de 1 são esperados. Eles refletem overhead de cri
 
 Se $f$ é a fração serial do programa, o limite teórico do speedup é:
 
-\[
+$$
 S(p) \leq \frac{1}{f + \frac{1-f}{p}}
-\]
+$$
 
 O experimento real também inclui efeitos de cache e de memória, que podem reduzir ainda mais o resultado.
 
